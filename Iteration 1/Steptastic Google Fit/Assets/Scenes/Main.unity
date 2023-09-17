@@ -448,7 +448,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deeplinkURL: unitydl://Steptastic
-  scopes: https://www.googleapis.com/auth/fitness.activity.read
+  scopes: activity%20profile%20settings
   editorAuthToken: 
 --- !u!4 &583102152
 Transform:
