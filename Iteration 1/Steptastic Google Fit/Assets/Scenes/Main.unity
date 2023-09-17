@@ -181,7 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Login to Google Fit
+  m_text: Login to Fitbit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -448,6 +448,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deeplinkURL: unitydl://Steptastic
+  scopes: https://www.googleapis.com/auth/fitness.activity.read
+  editorAuthToken: 
 --- !u!4 &583102152
 Transform:
   m_ObjectHideFlags: 0
@@ -788,7 +790,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 583102151}
         m_TargetAssemblyTypeName: ProcessDeepLinkMngr, Assembly-CSharp
-        m_MethodName: startLoginToGoogle
+        m_MethodName: startLoginToFitbit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
