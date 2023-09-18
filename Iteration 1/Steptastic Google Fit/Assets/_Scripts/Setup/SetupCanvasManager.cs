@@ -40,7 +40,7 @@ public class SetupCanvasManager : MonoBehaviour
 
         authCode.text = _accessToken;        
 
-        WebRequestManager.GoogleFit.getAccessToken(setAccessToken);
+        StartCoroutine(WebRequestManager.GoogleFit.getAccessToken(setAccessToken));
     }
 
     private void setAccessToken(JsonData json)
