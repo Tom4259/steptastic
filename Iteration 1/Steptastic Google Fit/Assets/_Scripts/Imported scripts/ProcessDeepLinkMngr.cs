@@ -17,7 +17,8 @@ public class ProcessDeepLinkMngr : MonoBehaviour
     [TextArea]
     public string editorAuthToken = "";
 
-    private string authURL = "https://www.fitbit.com/oauth2/authorize?";
+    private string authURL = "https://accounts.google.com/o/oauth2/v2/auth";
+    private string clientID = "452921919955-n5pr35harq133jfkf2kosvq4kbc724ps.apps.googleusercontent.com";
 
     private void Awake()
     {
@@ -44,24 +45,39 @@ public class ProcessDeepLinkMngr : MonoBehaviour
     public void startLoginToFitbit()
     {
         //add an editor token, so don't need to keep logging in to fitbit account on run
-        Application.OpenURL(authURL + "response_type=token&client_id=22C4ND&redirect_uri=unitydl%3A%2F%2FSteptastic&scope=" + scopes + "&expires_in=31536000");
+        Application.OpenURL(authURL + "?client_id=" + clientID + "&redirect_uri=https://steptastic-ad9d9.web.app&scope=https://www.googleapis.com/auth/fitness.activity.read&response_type=code") ;
     }
 
+
+    //demo return link
+    //https://steptastic-ad9d9.web.app/?code=4%2F0AfJohXlF9uJL5yPoEbD7LOZUhwzT5pIVfjN86bjd1kEWownIpAdUAcxrftkAo9Ky4op9Xg&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffitness.activity.read
     public void onDeepLinkActivated(string url)
     {
         // Update DeepLink Manager global variable, so URL can be accessed from anywhere.
         deeplinkURL = url;
+
+        Debug.Log(url);
+
         #region splitting returned data
 
         string[] returnedUrl = url.Split('&');
-        string access_token = returnedUrl[0].Split('=')[1];
-        string user_id = returnedUrl[1].Split('=')[1];
-        int expires_in = int.Parse(returnedUrl[returnedUrl.Length - 1].Split('=')[1]);
+        string authCode = returnedUrl[0].Split('=')[1];
+        //string user_id = returnedUrl[1].Split('=')[1];
+        //int expires_in = int.Parse(returnedUrl[returnedUrl.Length - 1].Split('=')[1]);
 
-        Debug.Log("access token: " + access_token);
-        Debug.Log("user id: " + user_id);
-        Debug.Log("expires in: " + expires_in);
+        Debug.Log("authCode: " + authCode);
+        //Debug.Log("user id: " + user_id);
+        //Debug.Log("expires in: " + expires_in);
+
+        saveValuesAndContinue(authCode);
 
         #endregion
+    }
+
+    private void saveValuesAndContinue(string authCode)
+    {
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.authorizationCode, authCode);
+
+        SetupCanvasManager.instance.onUserLoggedIn(authCode);
     }
 }
