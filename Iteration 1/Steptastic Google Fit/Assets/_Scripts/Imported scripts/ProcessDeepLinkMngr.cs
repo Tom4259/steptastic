@@ -10,8 +10,6 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 {
     public static ProcessDeepLinkMngr Instance { get; private set; }
     public string deeplinkURL = "unitydl://Steptastic";
-    [TextArea]
-    public string scopes = "activity%20profile%20settings";
 
     [Space]
     [TextArea]
@@ -42,7 +40,7 @@ public class ProcessDeepLinkMngr : MonoBehaviour
         }
     }
 
-    public void startLoginToFitbit()
+    public void startLoginToGoogleFit()
     {
         //add an editor token, so don't need to keep logging in to fitbit account on run
         Application.OpenURL(authURL + "?client_id=" + clientID + "&redirect_uri=https://steptastic-ad9d9.web.app&scope=https://www.googleapis.com/auth/fitness.activity.read&response_type=code") ;
@@ -62,12 +60,8 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 
         string[] returnedUrl = url.Split('&');
         string authCode = returnedUrl[0].Split('=')[1];
-        //string user_id = returnedUrl[1].Split('=')[1];
-        //int expires_in = int.Parse(returnedUrl[returnedUrl.Length - 1].Split('=')[1]);
 
         Debug.Log("authCode: " + authCode);
-        //Debug.Log("user id: " + user_id);
-        //Debug.Log("expires in: " + expires_in);
 
         saveValuesAndContinue(authCode);
 
