@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.SceneManagement;
-using UnityEngine.Networking;
-using UnityEngine.UI;
 
 public class ProcessDeepLinkMngr : MonoBehaviour
 {
@@ -13,7 +10,7 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 
     [Space]
     [TextArea]
-    public string setEditorToken;
+    public string editorToken;
 
     private string authURL = "https://accounts.google.com/o/oauth2/v2/auth";
     private string clientID = "452921919955-n5pr35harq133jfkf2kosvq4kbc724ps.apps.googleusercontent.com";
@@ -43,20 +40,21 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 
     public void startLoginToGoogleFit()
     {
-        //add an editor token, so don't need to keep logging in to fitbit account on run
-        if (Application.isEditor)
-        {
-            saveValuesAndContinue(setEditorToken);
-        }
-        else
-        {
-            WebRequestManager.GoogleFit.Authorization.getAuthorizationCode(authURL +
+        //add an editor token, so don't need to keep logging in to google account on emulator
+#if UNITY_EDITOR
+
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, editorToken);
+
+        SetupCanvasManager.instance.editorHasCode();
+
+#else
+        WebRequestManager.GoogleFit.Authorization.getAuthorizationCode(authURL +
                 "?client_id=" + clientID +
                 "&redirect_uri=https://steptastic-ad9d9.web.app" +
                 "&scope=" + scope +
                 "&response_type=code" +
                 "&access_type=offline");
-        }
+#endif
     }
 
 
@@ -67,14 +65,14 @@ public class ProcessDeepLinkMngr : MonoBehaviour
         // Update DeepLink Manager global variable, so URL can be accessed from anywhere.
         deeplinkURL = url;
 
-        Debug.Log(url);
+        //Debug.Log(url);
 
         #region splitting returned data
 
         string[] returnedUrl = url.Split('&');
         string authCode = returnedUrl[0].Split('=')[1];
 
-        Debug.Log("authCode: " + authCode);
+        //Debug.Log("authCode: " + authCode);
 
         saveValuesAndContinue(authCode);
 
@@ -83,12 +81,8 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 
     private void saveValuesAndContinue(string authCode)
     {
-        Debug.Log("setting editor auth code to: " + authCode);
-        Debug.Log("setting editor access token to: " + authCode);
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, authCode);
 
-        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.authorizationCode, authCode);
-        //PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Codes.accessToken, authCode);
-
-        SetupCanvasManager.instance.onUserLoggedIn(authCode);
+        StartCoroutine(WebRequestManager.GoogleFit.Authorization.exchangeAuthCodeForToken(SetupCanvasManager.instance.onUserLoggedIn));
     }
 }

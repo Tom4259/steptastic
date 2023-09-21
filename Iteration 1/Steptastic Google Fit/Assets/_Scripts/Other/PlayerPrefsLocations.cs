@@ -8,15 +8,17 @@ public class PlayerPrefsLocations : MonoBehaviour
     {
         public class Account
         {
-            /// <summary>
-            /// Data type: String
-            /// The auth code to get data from the user
-            /// </summary>
-            public static string authorizationCode = "user.account.authorizationCode";
+            
 
 
             public class Credentials
             {
+                /// <summary>
+                /// Data type: String
+                /// The auth code to get data from the user
+                /// </summary>
+                public static string authorizationCode = "user.account.authorizationCode";
+
                 /// <summary>
                 /// Data type: String
                 /// The token to access users data

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using LitJson;
+using System;
 
 public class SetupCanvasManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class SetupCanvasManager : MonoBehaviour
 
     public TMP_InputField authCode;
     public TMP_InputField accessToken;
+    public TMP_Text todaysStepCount;
 
     private void Awake()
     {
@@ -33,24 +35,46 @@ public class SetupCanvasManager : MonoBehaviour
         statsWindow.gameObject.SetActive(false);
     }
 
-    public void onUserLoggedIn(string _authCode)
+    public void onUserLoggedIn(string _)
     {
         loginWindow.gameObject.SetActive(false);
         statsWindow.gameObject.SetActive(true);
 
-        authCode.text = _authCode;
+        authCode.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode);
+        accessToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
 
-        StartCoroutine(WebRequestManager.GoogleFit.Authorization.exchangeAuthCodeForToken(collectedAccessToken));
-
+        getTodaySteps();
     }
 
-    private void collectedAccessToken()
+#if UNITY_EDITOR
+
+    public void editorHasCode()
     {
-        //StartCoroutine(WebRequestManager.GoogleFit.getStepsBetweenMillis("{\"aggregateBy\":[{\"dataTypeName\":\"com.google.step_count.delta\",\"dataSourceId\":\"derived:com.google.step_count.delta:com.google.android.gms:estimated_steps\"}],\"bucketByTime\":{\"durationMillis\":86400000},\"startTimeMillis\":1695205815838,\"endTimeMillis\":1695305815838}", setAccessToken));
+        loginWindow.gameObject.SetActive(false);
+        statsWindow.gameObject.SetActive(true);
+
+        authCode.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode);
+        accessToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
+
+        getTodaySteps();
     }
 
-    private void setAccessToken(JsonData json)
+#endif
+
+    private void getTodaySteps()
     {
-        Debug.Log(json.ToString());
+        long milliseconds = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+        long startTime = milliseconds - (DateTimeOffset.Now.Hour * 3600000);
+        long endTime = milliseconds;
+
+        string body = "{\"aggregateBy\":[{\"dataTypeName\":\"com.google.step_count.delta\",\"dataSourceId\":\"derived:com.google.step_count.delta:com.google.android.gms:estimated_steps\"}],\"bucketByTime\":{\"durationMillis\":86400000},\"startTimeMillis\":" + startTime + ",\"endTimeMillis\":" + endTime + "}";
+
+        StartCoroutine(WebRequestManager.GoogleFit.getStepsBetweenMillis(body, getTodaySteps)); ;
+    }
+
+    private void getTodaySteps(JsonData json)
+    {
+        todaysStepCount.text = "today's step coount: " + json["bucket"][0]["dataset"][0]["point"][0]["value"][0]["intVal"].ToString();
     }
 }

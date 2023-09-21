@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 using LitJson;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
 using System.Text;
 
 public class WebRequestManager : MonoBehaviour
@@ -25,12 +23,12 @@ public class WebRequestManager : MonoBehaviour
             }
 
 
-            public static IEnumerator exchangeAuthCodeForToken(UnityAction callback)
+            public static IEnumerator exchangeAuthCodeForToken(UnityAction<string> callback)
             {
                 WWWForm form = new WWWForm();
                 form.AddField("client_id", clientID);
                 form.AddField("client_secret", clientSecret);
-                form.AddField("code", PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.authorizationCode));
+                form.AddField("code", PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode));
                 form.AddField("grant_type", "authorization_code");
                 form.AddField("redirect_uri", redirectURL);
 
@@ -44,14 +42,14 @@ public class WebRequestManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(www.downloadHandler.text);
+                    //Debug.Log(www.downloadHandler.text);
 
-                    JsonData json = JsonMapper.ToJson("[" + www.downloadHandler.text + "]");
+                    JsonData json = JsonMapper.ToObject(www.downloadHandler.text);
 
                     PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, json["access_token"].ToString());
                     PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, json["refresh_token"].ToString());
 
-                    callback.Invoke();
+                    callback.Invoke(json["access_token"].ToString());
                 }
             }
 
@@ -103,11 +101,14 @@ public class WebRequestManager : MonoBehaviour
             }
         }
         */
-        public static IEnumerator getStepsBetweenMillis(JsonData body, UnityAction<JsonData> callback)
+
+        public static IEnumerator getStepsBetweenMillis(string body, UnityAction<JsonData> callback)
         {
-            UnityWebRequest www = UnityWebRequest.PostWwwForm("https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate", body.ToString()); ;
+            UnityWebRequest www = UnityWebRequest.PostWwwForm("https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate", body);
 
             www.SetRequestHeader("Authorization", "Bearer " + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken));
+            www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+            www.uploadHandler.contentType = "application/json";
 
             yield return www.SendWebRequest();
 
@@ -118,6 +119,7 @@ public class WebRequestManager : MonoBehaviour
             }
             else
             {
+                //Debug.Log(www.downloadHandler.text);
                 callback.Invoke(JsonMapper.ToObject(www.downloadHandler.text));
             }
         }
