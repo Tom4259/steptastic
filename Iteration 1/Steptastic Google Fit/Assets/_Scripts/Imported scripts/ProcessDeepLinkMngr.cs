@@ -13,7 +13,7 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 
     [Space]
     [TextArea]
-    public string editorAuthToken = "";
+    public string setEditorToken;
 
     private string authURL = "https://accounts.google.com/o/oauth2/v2/auth";
     private string clientID = "452921919955-n5pr35harq133jfkf2kosvq4kbc724ps.apps.googleusercontent.com";
@@ -43,7 +43,15 @@ public class ProcessDeepLinkMngr : MonoBehaviour
     public void startLoginToGoogleFit()
     {
         //add an editor token, so don't need to keep logging in to fitbit account on run
-        Application.OpenURL(authURL + "?client_id=" + clientID + "&redirect_uri=https://steptastic-ad9d9.web.app&scope=https://www.googleapis.com/auth/fitness.activity.read&response_type=code") ;
+        if (Application.isEditor)
+        {
+            saveValuesAndContinue(setEditorToken);
+        }
+        else
+        {
+            Application.OpenURL(authURL + "?client_id=" + clientID + "&redirect_uri=https://steptastic-ad9d9.web.app&scope=https://www.googleapis.com/auth/fitness.activity.read&response_type=code");
+
+        }
     }
 
 

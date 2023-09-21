@@ -40,7 +40,7 @@ public class SetupCanvasManager : MonoBehaviour
 
         authCode.text = _accessToken;        
 
-        StartCoroutine(WebRequestManager.GoogleFit.getAccessToken(setAccessToken));
+        StartCoroutine(WebRequestManager.GoogleFit.sendRequestToGoogle("https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate", "{\"aggregateBy\":[{\"dataTypeName\":\"com.google.step_count.delta\",\"dataSourceId\":\"derived:com.google.step_count.delta:com.google.android.gms:estimated_steps\"}],\"bucketByTime\":{\"durationMillis\":86400000},\"startTimeMillis\":1695205815838,\"endTimeMillis\":1695305815838}", setAccessToken));
     }
 
     private void setAccessToken(JsonData json)
