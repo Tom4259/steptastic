@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PlayerPrefsLocations : MonoBehaviour
 {
+    /// <summary>
+    /// This script is for the file locations of data i have saved to the users device
+    /// </summary>
     public class User
     {
         public class Account
         {
-            
-
-
             public class Credentials
             {
                 /// <summary>

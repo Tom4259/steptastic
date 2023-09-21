@@ -35,6 +35,10 @@ public class SetupCanvasManager : MonoBehaviour
         statsWindow.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// this method changes the screens that my application displays, and sets text boxes to important codes used for 
+    /// retrieving data
+    /// </summary>
     public void onUserLoggedIn(string _)
     {
         loginWindow.gameObject.SetActive(false);
@@ -47,7 +51,10 @@ public class SetupCanvasManager : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-
+    /// <summary>
+    /// this method is only for the unity editor, as it i would like it to behave differently to an actual android 
+    /// device
+    /// </summary>
     public void editorHasCode()
     {
         loginWindow.gameObject.SetActive(false);
@@ -61,6 +68,11 @@ public class SetupCanvasManager : MonoBehaviour
 
 #endif
 
+    /// <summary>
+    /// this method calculates the current time in milliseconds, and the start of the day, also in milliseconds, 
+    /// and sends a web request to google, fetching the number of steps the user has done so far today.
+    /// this is then displayed on the screen
+    /// </summary>
     private void getTodaySteps()
     {
         long milliseconds = DateTimeOffset.Now.ToUnixTimeMilliseconds();

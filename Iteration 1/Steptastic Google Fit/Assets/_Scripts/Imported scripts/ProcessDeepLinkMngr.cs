@@ -38,6 +38,9 @@ public class ProcessDeepLinkMngr : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// opens the oauth2 screen for the user to login to their google account and authorize my app to access their data
+    /// </summary>
     public void startLoginToGoogleFit()
     {
         //add an editor token, so don't need to keep logging in to google account on emulator
@@ -57,7 +60,10 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 #endif
     }
 
-
+    /// <summary>
+    /// when the user finishes authorizing my app, they will be directed to another site (which i have hosted) which 
+    /// points and shows that the site is associated with my application
+    /// </summary>
     //demo return link
     //https://steptastic-ad9d9.web.app/?code=4%2F0AfJohXlF9uJL5yPoEbD7LOZUhwzT5pIVfjN86bjd1kEWownIpAdUAcxrftkAo9Ky4op9Xg&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffitness.activity.read
     public void onDeepLinkActivated(string url)
@@ -79,6 +85,9 @@ public class ProcessDeepLinkMngr : MonoBehaviour
         #endregion
     }
 
+    /// <summary>
+    /// after splitting the values, the important ones are saved
+    /// </summary>
     private void saveValuesAndContinue(string authCode)
     {
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, authCode);
