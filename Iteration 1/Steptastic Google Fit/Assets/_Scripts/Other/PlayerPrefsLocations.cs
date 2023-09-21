@@ -15,7 +15,7 @@ public class PlayerPrefsLocations : MonoBehaviour
             public static string authorizationCode = "user.account.authorizationCode";
 
 
-            public class Codes
+            public class Credentials
             {
                 /// <summary>
                 /// Data type: String

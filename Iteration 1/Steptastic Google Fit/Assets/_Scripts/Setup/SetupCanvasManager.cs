@@ -33,18 +33,24 @@ public class SetupCanvasManager : MonoBehaviour
         statsWindow.gameObject.SetActive(false);
     }
 
-    public void onUserLoggedIn(string _accessToken)
+    public void onUserLoggedIn(string _authCode)
     {
         loginWindow.gameObject.SetActive(false);
         statsWindow.gameObject.SetActive(true);
 
-        authCode.text = _accessToken;        
+        authCode.text = _authCode;
 
-        StartCoroutine(WebRequestManager.GoogleFit.sendRequestToGoogle("https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate", "{\"aggregateBy\":[{\"dataTypeName\":\"com.google.step_count.delta\",\"dataSourceId\":\"derived:com.google.step_count.delta:com.google.android.gms:estimated_steps\"}],\"bucketByTime\":{\"durationMillis\":86400000},\"startTimeMillis\":1695205815838,\"endTimeMillis\":1695305815838}", setAccessToken));
+        StartCoroutine(WebRequestManager.GoogleFit.Authorization.exchangeAuthCodeForToken(collectedAccessToken));
+
+    }
+
+    private void collectedAccessToken()
+    {
+        //StartCoroutine(WebRequestManager.GoogleFit.getStepsBetweenMillis("{\"aggregateBy\":[{\"dataTypeName\":\"com.google.step_count.delta\",\"dataSourceId\":\"derived:com.google.step_count.delta:com.google.android.gms:estimated_steps\"}],\"bucketByTime\":{\"durationMillis\":86400000},\"startTimeMillis\":1695205815838,\"endTimeMillis\":1695305815838}", setAccessToken));
     }
 
     private void setAccessToken(JsonData json)
     {
-        accessToken.text = json["access_token"].ToString();
+        Debug.Log(json.ToString());
     }
 }
