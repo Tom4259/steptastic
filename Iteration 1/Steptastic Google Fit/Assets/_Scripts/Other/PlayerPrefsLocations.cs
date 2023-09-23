@@ -48,6 +48,15 @@ public class PlayerPrefsLocations : MonoBehaviour
 
         }
 
+        public class Permissions
+        {
+            /// <summary>
+            /// Data type: Bool
+            /// Returns true if the user has allowed access to location services
+            /// </summary>
+            public static string location = "user.permisssions.location";
+        }
+
         public class Challenge
         {
             public static string startLocation = "user.challenge.startlocation";
@@ -55,6 +64,22 @@ public class PlayerPrefsLocations : MonoBehaviour
             public static string endLocation = "user.challenge.endlocation";
 
             public static string startDate = "user.challenge.startdate";
+        }
+
+        public class CompletedWindows
+        {
+            //all of these are of data type Bool
+
+            /// <summary>
+            /// takes the user straight to the main screen if it returns true
+            /// </summary>
+            public static string mainScreen = "user.completedwindows.all";
+
+            public static string loggedIn = "user.completedwindows.loggedin";
+
+            public static string createdChallenge = "user.completedwindows.createdchallenge";
+
+            public static string requestedUserLocation = "user.completedwindows.requesteduserlocation";
         }
     }
 

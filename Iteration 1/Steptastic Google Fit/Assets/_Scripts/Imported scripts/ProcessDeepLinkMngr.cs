@@ -12,6 +12,8 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 
     [Space]
     [TextArea]
+    public string editorAuth;
+    [TextArea]
     public string editorToken;
     [TextArea]
     public string editorRefresh;
@@ -50,10 +52,11 @@ public class ProcessDeepLinkMngr : MonoBehaviour
         //add an editor token, so don't need to keep logging in to google account on emulator
 #if UNITY_EDITOR
 
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, editorAuth);
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, editorToken);
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, editorRefresh);
 
-        SetupCanvasManager.instance.editorHasCode();
+        saveValuesAndContinue(editorAuth);
 
 #else
         APIManager.GoogleFit.Authorization.GetAuthorizationCode(authURL +
@@ -97,6 +100,8 @@ public class ProcessDeepLinkMngr : MonoBehaviour
     {
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, authCode);
 
-        StartCoroutine(APIManager.GoogleFit.Authorization.ExchangeAuthCodeForToken(SetupCanvasManager.instance.onUserLoggedIn));
+        PlayerPrefsX.Save();
+
+        StartCoroutine(APIManager.GoogleFit.Authorization.ExchangeAuthCodeForToken(CanvasManager.instance.authenticateWindow.ExchangedAuthForToken));
     }
 }
