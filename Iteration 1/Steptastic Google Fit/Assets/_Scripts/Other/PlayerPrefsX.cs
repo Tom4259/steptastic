@@ -105,6 +105,31 @@ public class PlayerPrefsX
 
     #endregion
 
+    #region datetime
+
+    public static void SetDateTime(String name, DateTime value)
+    {
+        SetLong(name + ".datetime", value.ToBinary());
+    }
+
+    public static DateTime GetDateTime(String name)
+    {
+        return DateTime.FromBinary(GetLong(name + ".datetime"));
+    }
+
+    public static DateTime GetDateTime(String name, DateTime defualtValue)
+    {
+        return DateTime.FromBinary(GetLong(name + ".datetime", defualtValue.ToBinary()));
+    }
+
+    #endregion
+
+
+    public static void Save()
+    {
+        PlayerPrefs.Save();
+    }
+
 
     //end my code
 

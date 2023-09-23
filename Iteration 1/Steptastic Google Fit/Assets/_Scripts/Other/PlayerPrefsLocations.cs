@@ -11,6 +11,12 @@ public class PlayerPrefsLocations : MonoBehaviour
     {
         public class Account
         {
+            /// <summary>
+            /// Data type: Bool
+            /// If the user has logged in, returns true
+            /// </summary>
+            public static string authenticated = "user.account.authenticated";
+
             public class Credentials
             {
                 /// <summary>
@@ -31,8 +37,31 @@ public class PlayerPrefsLocations : MonoBehaviour
                 /// A refresh  token for the accessToken
                 /// </summary>
                 public static string refreshToken = "user.account.codes.refreshToken";
+
+
+                /// <summary>
+                /// Data type: DateTime
+                /// When the access token expires
+                /// </summary>
+                public static string expiresIn = "user.account.codes.expiresin";
             }
 
+        }
+
+        public class Challenge
+        {
+            public static string startLocation = "user.challenge.startlocation";
+
+            public static string endLocation = "user.challenge.endlocation";
+        }
+    }
+
+    public class Developer
+    {
+        public class Keys
+        {
+            public static string clientID = "developer.keys.clientid";
+            public static string clientSecret = "developer.keys.clientsecret";
         }
     }
 }

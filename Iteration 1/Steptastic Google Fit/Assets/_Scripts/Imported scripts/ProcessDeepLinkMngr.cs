@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using LitJson;
+using UnityEngine.Events;
 
 public class ProcessDeepLinkMngr : MonoBehaviour
 {
@@ -14,7 +16,7 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 
     private string authURL = "https://accounts.google.com/o/oauth2/v2/auth";
     private string clientID = "452921919955-n5pr35harq133jfkf2kosvq4kbc724ps.apps.googleusercontent.com";
-    private string scope = "https://www.googleapis.com/auth/fitness.activity.read";
+    private string scope = "https://www.googleapis.com/auth/fitness.activity.read https://www.googleapis.com/auth/fitness.location.read";
 
     private void Awake()
     {
@@ -51,7 +53,7 @@ public class ProcessDeepLinkMngr : MonoBehaviour
         SetupCanvasManager.instance.editorHasCode();
 
 #else
-        WebRequestManager.GoogleFit.Authorization.getAuthorizationCode(authURL +
+        APIManager.GoogleFit.Authorization.GetAuthorizationCode(authURL +
                 "?client_id=" + clientID +
                 "&redirect_uri=https://steptastic-ad9d9.web.app" +
                 "&scope=" + scope +
@@ -92,6 +94,6 @@ public class ProcessDeepLinkMngr : MonoBehaviour
     {
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, authCode);
 
-        StartCoroutine(WebRequestManager.GoogleFit.Authorization.exchangeAuthCodeForToken(SetupCanvasManager.instance.onUserLoggedIn));
+        StartCoroutine(APIManager.GoogleFit.Authorization.ExchangeAuthCodeForToken(SetupCanvasManager.instance.onUserLoggedIn));
     }
 }
