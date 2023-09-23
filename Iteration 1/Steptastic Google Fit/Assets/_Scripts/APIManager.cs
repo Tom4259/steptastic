@@ -136,7 +136,6 @@ public class APIManager : MonoBehaviour
 
                     //saving new access and refresh token to the users device
                     PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, json["access_token"].ToString());
-                    PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, json["refresh_token"].ToString());
                     PlayerPrefsX.SetDateTime(PlayerPrefsLocations.User.Account.Credentials.expiresIn, d);
 
                     callback.Invoke(json);
