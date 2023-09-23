@@ -53,6 +53,8 @@ public class PlayerPrefsLocations : MonoBehaviour
             public static string startLocation = "user.challenge.startlocation";
 
             public static string endLocation = "user.challenge.endlocation";
+
+            public static string startDate = "user.challenge.startdate";
         }
     }
 

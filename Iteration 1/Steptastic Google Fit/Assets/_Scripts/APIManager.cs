@@ -104,14 +104,17 @@ public class APIManager : MonoBehaviour
                 }
             }
 
-            //havent yet tested or coded this into my application
+            /// <summary>
+            /// when the access token expires, this methods is called. google then supplies my application with a new access token
+            /// to access the user's data with
+            /// </summary>
             public static IEnumerator RefreshAccessToken(UnityAction<JsonData> callback)
             {
                 WWWForm form = new WWWForm();
                 form.AddField("client_id", clientID);
                 form.AddField("client_secret", clientSecret);
                 form.AddField("refresh_token", PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken));
-                form.AddField("grant_type", "authorization_code");
+                form.AddField("grant_type", "refresh_token");
 
                 Debug.Log(PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken));
 
@@ -127,9 +130,14 @@ public class APIManager : MonoBehaviour
                 {
                     Debug.Log(www.downloadHandler.text);
 
-                    JsonData json = JsonMapper.ToJson(www.downloadHandler.text);
+                    JsonData json = JsonMapper.ToObject(www.downloadHandler.text);
 
+                    DateTime d = DateTime.Now.AddSeconds(int.Parse(json["expires_in"].ToString()));
+
+                    //saving new access and refresh token to the users device
                     PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, json["access_token"].ToString());
+                    PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, json["refresh_token"].ToString());
+                    PlayerPrefsX.SetDateTime(PlayerPrefsLocations.User.Account.Credentials.expiresIn, d);
 
                     callback.Invoke(json);
                 }
@@ -157,17 +165,18 @@ public class APIManager : MonoBehaviour
             {
                 //callback.Invoke(www.error);
                 Debug.Log(www.downloadHandler.text);
-
-                //checkIfRefreshNeeded(data, callback);
             }
             else
             {
-                Debug.Log(www.downloadHandler.text);
+                //Debug.Log(www.downloadHandler.text);
                 callback.Invoke(JsonMapper.ToObject(www.downloadHandler.text));
             }
         }
 
-
+        /// <summary>
+        /// this coroutine takes in the requests body as a parameter, as the start and end time of the request can change.
+        /// the request will then get the distance made between the timestamps
+        /// </summary>
         public static IEnumerator GetDistanceBetweenMillis(apiData data, UnityAction<JsonData> callback)
         {
             string body = "{\"aggregateBy\":[{\"dataTypeName\":\"com.google.distance.delta\"}],\"bucketByTime\":{\"durationMillis\":" + data.durationMillis + "},\"startTimeMillis\":" + data.startTimeMillis + ",\"endTimeMillis\":" + data.endTimeMillis + "}";
@@ -184,8 +193,6 @@ public class APIManager : MonoBehaviour
             {
                 //callback.Invoke(www.error);
                 Debug.Log(www.downloadHandler.text);
-
-                //checkIfRefreshNeeded(data, callback);
             }
             else
             {
@@ -193,15 +200,5 @@ public class APIManager : MonoBehaviour
                 callback.Invoke(JsonMapper.ToObject(www.downloadHandler.text));
             }
         }
-
-        /*
-        private static void checkIfRefreshNeeded(apiData d, UnityAction<JsonData> c)
-        {
-            if(PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken) != null)
-            {
-                ProcessDeepLinkMngr.Instance.refreshAccessToken(d, c);
-            }
-        }
-        */
     }
 }

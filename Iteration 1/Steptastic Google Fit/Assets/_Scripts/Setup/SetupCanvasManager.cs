@@ -15,6 +15,9 @@ public class SetupCanvasManager : MonoBehaviour
 
     public TMP_InputField authCode;
     public TMP_InputField accessToken;
+    public TMP_InputField refreshToken;
+
+
     public TMP_Text todaysStepCount;
 
     private void Awake()
@@ -53,6 +56,11 @@ public class SetupCanvasManager : MonoBehaviour
         }
     }
 
+    public void testRefreshToken()
+    {
+        StartCoroutine(APIManager.GoogleFit.Authorization.RefreshAccessToken(refreshCallback));
+    }
+
     private void refreshCallback(JsonData j)
     {
         Debug.Log(j.ToJson());
@@ -71,11 +79,13 @@ public class SetupCanvasManager : MonoBehaviour
 
         authCode.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode);
         accessToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
+        refreshToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken);
 
         getTodaySteps();
     }
 
 #if UNITY_EDITOR
+
     /// <summary>
     /// this method is only for the unity editor, as it i would like it to behave differently to an actual android 
     /// device
@@ -87,6 +97,7 @@ public class SetupCanvasManager : MonoBehaviour
 
         authCode.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode);
         accessToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
+        refreshToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken);
 
         getTodaySteps();
     }

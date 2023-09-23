@@ -13,6 +13,8 @@ public class ProcessDeepLinkMngr : MonoBehaviour
     [Space]
     [TextArea]
     public string editorToken;
+    [TextArea]
+    public string editorRefresh;
 
     private string authURL = "https://accounts.google.com/o/oauth2/v2/auth";
     private string clientID = "452921919955-n5pr35harq133jfkf2kosvq4kbc724ps.apps.googleusercontent.com";
@@ -49,6 +51,7 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 #if UNITY_EDITOR
 
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, editorToken);
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, editorRefresh);
 
         SetupCanvasManager.instance.editorHasCode();
 
