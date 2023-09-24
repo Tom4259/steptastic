@@ -42,6 +42,14 @@ public class ProcessDeepLinkMngr : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        if(PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, "_steptastic_!") != "_steptastic_!")
+        {
+            if (editorToken != PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken))
+            {
+                editorToken = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
+            }
+        }
     }
 
     /// <summary>
@@ -56,7 +64,9 @@ public class ProcessDeepLinkMngr : MonoBehaviour
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, editorToken);
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, editorRefresh);
 
-        saveValuesAndContinue(editorAuth);
+        PlayerPrefsX.Save();
+
+        CanvasManager.instance.authenticateWindow.ExchangedAuthForToken();
 
 #else
         APIManager.GoogleFit.Authorization.GetAuthorizationCode(authURL +
@@ -81,16 +91,12 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 
         //Debug.Log(url);
 
-        #region splitting returned data
-
         string[] returnedUrl = url.Split('&');
         string authCode = returnedUrl[0].Split('=')[1];
 
         //Debug.Log("authCode: " + authCode);
 
         saveValuesAndContinue(authCode);
-
-        #endregion
     }
 
     /// <summary>

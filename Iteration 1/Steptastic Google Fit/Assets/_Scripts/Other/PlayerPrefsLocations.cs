@@ -52,18 +52,25 @@ public class PlayerPrefsLocations : MonoBehaviour
         {
             /// <summary>
             /// Data type: Bool
-            /// Returns true if the user has allowed access to location services
+            /// Returns true if the user has allowed access to testUserGetLocation services
             /// </summary>
             public static string location = "user.permisssions.location";
         }
 
         public class Challenge
         {
-            public static string startLocation = "user.challenge.startlocation";
-
-            public static string endLocation = "user.challenge.endlocation";
-
             public static string startDate = "user.challenge.startdate";
+
+            public static string startLocationName = "user.challenge.startlocationname";
+            public static string startLocationCapital = "user.challenge.startlocationcapital";
+            public static string startLocationLatLong = "user.challenge.startlocationlatlong";//seperated by just a ','
+
+            public static string endLocationName = "user.challenge.endlocationname";
+            public static string endLocationCapital = "user.challenge.endlocationcapital";
+            public static string endLocationLatLong = "user.challenge.endlocationlatlong";//seperated by just a ','
+
+
+
         }
 
         public class CompletedWindows

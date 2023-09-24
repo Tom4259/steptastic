@@ -10,6 +10,13 @@ public class CanvasManager : MonoBehaviour
 {
     public static CanvasManager instance;
 
+#if UNITY_EDITOR
+    public bool testUserAuthenticated = false;
+    public bool testUserGetLocation = false;
+    public bool testUserCreatedChallenge = false;
+#endif
+
+    [Space]
     public RectTransform setupWindows;
 
     [Space]
@@ -18,7 +25,7 @@ public class CanvasManager : MonoBehaviour
     public ChallengeSetupWindow challengeSetupWindow;
 
     [Space]
-    public RectTransform mainScreen;
+    public MainWindow mainScreen;
 
 
     public TMP_Text todaysStepCount;
@@ -33,6 +40,19 @@ public class CanvasManager : MonoBehaviour
         {
             Destroy(this);
         }
+
+#if UNITY_EDITOR
+
+        if (testUserAuthenticated) PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, false);
+        else PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, true);
+
+        if (testUserGetLocation) PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.requestedUserLocation, false);
+        else PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.requestedUserLocation, true);
+
+        if (testUserCreatedChallenge) PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.createdChallenge, false);
+        else PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.createdChallenge, true);
+
+#endif
 
         setupWindows.gameObject.SetActive(true);
         authenticateWindow.gameObject.SetActive(true);
@@ -66,16 +86,16 @@ public class CanvasManager : MonoBehaviour
             }
             else { return; }
 
-            //user has allowed/denied location services //code in later
+            //user has allowed/denied testUserGetLocation services //code in later
             //if(PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.requestedUserLocation, false))
             //{
             //    requestUserLocationWindow.gameObject.SetActive(false);
             //}
             //else { return; }
 
-            //get user location first, so start location can either be 
+            //get user testUserGetLocation first, so start testUserGetLocation can either be 
 
-            //user has created a challenge
+            //user has created a testUserCreatedChallenge
             if (PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.createdChallenge, false))
             {
                 challengeSetupWindow.gameObject.SetActive(false);
@@ -100,6 +120,8 @@ public class CanvasManager : MonoBehaviour
         authenticateWindow.gameObject.SetActive(false);
 
         PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, true);
+
+        checkAllCompleted();
     }
 
     public void UserFinishedLocationrequest()
@@ -107,6 +129,8 @@ public class CanvasManager : MonoBehaviour
         requestUserLocationWindow.gameObject.SetActive(false);
 
         PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.requestedUserLocation, true);
+
+        checkAllCompleted();
     }
 
     public void UserSetUpChallenge()
@@ -114,12 +138,14 @@ public class CanvasManager : MonoBehaviour
         challengeSetupWindow.gameObject.SetActive(false);
 
         PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.createdChallenge, true);
+
+        checkAllCompleted();
     }
 
     private void checkAllCompleted()
     {
         bool authenticated = PlayerPrefsX.GetBool(PlayerPrefsLocations.User.Account.authenticated, false);
-        //bool location = PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.requestedUserLocation, false);
+        //bool testUserGetLocation = PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.requestedUserLocation, false);
         bool location = true;
         bool challenge = PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.createdChallenge, false);
 
@@ -127,7 +153,11 @@ public class CanvasManager : MonoBehaviour
         {
             setupWindows.gameObject.SetActive(false);
             mainScreen.gameObject.SetActive(true);
+
+            mainScreen.StartMainWindow();
         }
+
+        
     }    
 
     /// <summary>

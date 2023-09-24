@@ -27,15 +27,20 @@ public class APIManager : MonoBehaviour
     /// <param name="end">the point in history to stop getting data from</param>
     /// <param name="timeGap">the amount of milliseconds between each data point</param>
     /// <returns></returns>
-    public static apiData GenerateAPIbody(DateTime start, DateTime end, long timeGap = 8600000)
+    public static apiData GenerateAPIbody(DateTime start, DateTime end, long timeGap = 86400000)
     {
-        apiData apiData = new apiData();
-
         long milliseconds = ((DateTimeOffset)end).ToUnixTimeMilliseconds();
 
-        apiData.startTimeMillis = milliseconds - (milliseconds - ((DateTimeOffset)start).ToUnixTimeMilliseconds());
-        apiData.endTimeMillis = milliseconds;
-        apiData.durationMillis = timeGap;
+        apiData apiData = new apiData()
+        {
+            startTimeMillis = milliseconds - (milliseconds - ((DateTimeOffset)start).ToUnixTimeMilliseconds()),
+            endTimeMillis = milliseconds,
+            durationMillis = timeGap
+        };
+
+        //Debug.Log(apiData.startTimeMillis);
+        //Debug.Log(apiData.endTimeMillis);
+        Debug.Log(apiData.durationMillis);
 
         return apiData;
     }

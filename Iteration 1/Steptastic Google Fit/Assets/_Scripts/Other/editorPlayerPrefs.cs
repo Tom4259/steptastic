@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class editorPlayerPrefs : MonoBehaviour
 {
-    public string key;
-    public string value;
-
-    private void Start()
+    private void Awake()
     {
-        PlayerPrefsX.SetString(key, value);
+        //PlayerPrefs.DeleteKey(PlayerPrefsLocations.User.Challenge.startDate);
     }
 }

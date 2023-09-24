@@ -29,6 +29,10 @@ public class AuthenticateWindow : MonoBehaviour
         authCode.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode);
         accessToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
         refreshToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken);
+
+        ProcessDeepLinkMngr.Instance.editorAuth = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode);
+        ProcessDeepLinkMngr.Instance.editorToken = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
+        ProcessDeepLinkMngr.Instance.editorRefresh = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken);
     }
 
     //called when everything about authentication has been completed
