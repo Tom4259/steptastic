@@ -24,17 +24,17 @@ public class MainWindow : MonoBehaviour
 
         double dif = (now - startDate).TotalMinutes;
 
-        Debug.Log("saved date: " + startDate.ToString());
-        Debug.Log("now: " + now.ToString());
-        Debug.Log("dif: " + dif.ToString());
+        //Debug.Log("saved date: " + startDate.ToString());
+        //Debug.Log("now: " + now.ToString());
+        //Debug.Log("dif: " + dif.ToString());
 
         API.apiData data = new API.apiData();
 
         //if less than a minute, get data in 30 minute intervals
-        if (dif < 60) data = API.GenerateAPIbody(startDate, now, 30000);
+        if (dif < 60) data = API.GenerateAPIbody(startDate, now, 1800000);
 
-        //if less than 1 day, get data in minutes
-        else if (dif < 1440) API.GenerateAPIbody(startDate, now, 60000);
+        //if less than 1 day, get data in hours
+        else if (dif < 1440) data = API.GenerateAPIbody(startDate, now, 3600000);
 
         //if greater than 1 day (in minutes) get data with interval of 1 day
         else data = API.GenerateAPIbody(startDate, now);
@@ -45,15 +45,21 @@ public class MainWindow : MonoBehaviour
 
     private void calculateUserProgress(JsonData json)
     {
-        Debug.Log(json.ToJson());
+        //Debug.Log(json.ToJson());
 
         int totalStepCount = 0;
 
         for (int i = 0; i < json["bucket"].Count; i++)
         {
-            totalStepCount += int.Parse(json["bucket"][i]["dataset"][0]["point"][0]["value"][0]["intVal"].ToString());
+            JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
 
-            Debug.Log(totalStepCount + " for index " + i);
+            try
+            {
+                totalStepCount += int.Parse(stepData[0]["value"][0]["intVal"].ToString());
+            }
+            catch(ArgumentOutOfRangeException e) { }
+
+            //Debug.Log(totalStepCount + " for index " + i);
         }
 
         Debug.Log("total: " +  totalStepCount);

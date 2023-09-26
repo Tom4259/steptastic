@@ -40,7 +40,7 @@ public class APIManager : MonoBehaviour
 
         //Debug.Log(apiData.startTimeMillis);
         //Debug.Log(apiData.endTimeMillis);
-        Debug.Log(apiData.durationMillis);
+        //Debug.Log(apiData.durationMillis);
 
         return apiData;
     }

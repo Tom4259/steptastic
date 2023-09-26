@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using LitJson;
 using System;
+using Coordinates = UsefulFunctions.Coordinates;
 
 public class ChallengeSetupWindow : MonoBehaviour
 {
@@ -83,6 +84,24 @@ public class ChallengeSetupWindow : MonoBehaviour
 
         PlayerPrefsX.Save();
 
+        calculateDistanceToTarget();
+    }
+
+
+    private void calculateDistanceToTarget()
+    {
+        //calculates the distance between 2 latitude and longitudes
+
+        Coordinates start = new Coordinates { Lat = 51.815319, Long = -0.355710 };
+        Coordinates end = new Coordinates { Lat = 48.864716, Long = 2.349014 };
+
+        Debug.Log(UsefulFunctions.DistanceTo(start, end));
+
+        closeChallengeSetup();
+    }
+
+    private void closeChallengeSetup() 
+    {
         CanvasManager.instance.UserSetUpChallenge();
     }
 }
