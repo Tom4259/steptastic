@@ -5,21 +5,33 @@ using TMPro;
 using XCharts;
 using System;
 using LitJson;
-using API = APIManager;
+using API = APIManager.GoogleFit;
+using UnityEngine.UI;
+using Unity.Mathematics;
 
 public class MainWindow : MonoBehaviour
 {
+    [Header("Progress bar")]
+    public Image progressBar;
+
+    [Space(20)]
+    [Header("Map visualisation")]
+    public Image mapImage;
+
 
     public void StartMainWindow()
     {
         calculateUserProgress();
+        getMapImage();
     }
 
+
+    #region progress to target
 
     private void calculateUserProgress()
     {
         //if start date is now, then make it beggining of the day
-        DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.startDate, DateTime.Today);
+        DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
         DateTime now = DateTime.Now;
 
         double dif = (now - startDate).TotalMinutes;
@@ -40,14 +52,14 @@ public class MainWindow : MonoBehaviour
         else data = API.GenerateAPIbody(startDate, now);
 
 
-        StartCoroutine(API.GoogleFit.GetStepsBetweenMillis(data, calculateUserProgress));
+        StartCoroutine(API.GetDistanceBetweenMillis(data, calculateUserProgress));
     }
 
     private void calculateUserProgress(JsonData json)
     {
         //Debug.Log(json.ToJson());
 
-        int totalStepCount = 0;
+        float totalMeters = 0;
 
         for (int i = 0; i < json["bucket"].Count; i++)
         {
@@ -55,13 +67,117 @@ public class MainWindow : MonoBehaviour
 
             try
             {
-                totalStepCount += int.Parse(stepData[0]["value"][0]["intVal"].ToString());
+                totalMeters += float.Parse(stepData[0]["value"][0]["fpVal"].ToString());
             }
-            catch(ArgumentOutOfRangeException e) { }
+            catch (ArgumentOutOfRangeException) { }
 
-            //Debug.Log(totalStepCount + " for index " + i);
+            //Debug.Log(totalMeters + " for index " + i);
         }
 
-        Debug.Log("total: " +  totalStepCount);
+        Debug.Log("total: " +  totalMeters);
+
+        float distanceToTarget = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, -1);
+        float userKM = totalMeters / 1000;
+
+        float percentage = (userKM / distanceToTarget) * 100;
+
+        Debug.Log("percent = " + percentage);
+
+        progressBar.fillAmount = percentage / 100;
+
+        PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted, percentage);
     }
+
+    #endregion
+
+    #region map image
+
+    private void getMapImage()
+    {
+        #region variables
+
+        float userLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[0]);
+        float userLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[1]);
+        float targetLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[0]);
+        float targetLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[1]);
+
+        float currentPointLat = latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item1;
+        float currentPointLong = latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
+
+        #endregion
+
+        //can possible optimise more
+        APIManager.MapQuest.MapData mData = new APIManager.MapQuest.MapData
+        {
+            startLocation = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong),
+            endLocation = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong),
+
+            location1 = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong),
+            location2 = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong),
+
+            currentLattitude = currentPointLat,
+            currentLongitude = currentPointLong,
+
+            imageHeight = (int)mapImage.rectTransform.rect.height,
+            imageWidth = (int)Math.Round(mapImage.rectTransform.rect.width),
+
+            zoom = getMapZoomApproximation(),
+
+            imageToSet = mapImage
+        };
+
+
+        StartCoroutine(APIManager.MapQuest.getMapImage(mData));
+    }
+
+    #region helpers
+
+    //may need to update these values. test more
+    private int getMapZoomApproximation()
+    {
+        int dist = (int)PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget);
+
+        Debug.Log("distance: " + dist);
+
+        if (dist <= 50)
+        {
+            return 6;
+        }
+        else if (dist <= 350)
+        {
+            return 5;
+        }
+        if (dist <= 800)
+        {
+            return 4;
+        }
+        else if (dist <= 1200)
+        {
+            return 3;
+        }
+        else if (dist <= 2000)
+        {
+            return 2;
+        }
+        else
+        {
+            return 1;//maybe
+        }
+    }
+
+    public static Tuple<float, float> latLongBetweenTwoLatLongs(float lat1, float long1, float lat2, float long2, float per)
+    {
+        per /= 100;
+
+        float lat = lat1 + (lat2 - lat1) * per;
+        float lng = long1 + (long2 - long1) * per;
+
+        //Debug.Log(lat + "," + lng);
+
+        return Tuple.Create(lat, lng);
+    }
+
+    #endregion
+
+    #endregion
 }

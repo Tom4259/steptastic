@@ -59,18 +59,26 @@ public class PlayerPrefsLocations : MonoBehaviour
 
         public class Challenge
         {
-            public static string startDate = "user.challenge.startdate";
+            public class ChallengeData
+            {
+                public static string startDate = "user.challenge.userdata.startdate";
 
-            public static string startLocationName = "user.challenge.startlocationname";
-            public static string startLocationCapital = "user.challenge.startlocationcapital";
-            public static string startLocationLatLong = "user.challenge.startlocationlatlong";//seperated by just a ','
+                public static string startLocationName = "user.challenge.userdata.startlocationname";
+                public static string startLocationCapital = "user.challenge.userdata.startlocationcapital";
+                public static string startLocationLatLong = "user.challenge.userdata.startlocationlatlong";//seperated by just a ','
 
-            public static string endLocationName = "user.challenge.endlocationname";
-            public static string endLocationCapital = "user.challenge.endlocationcapital";
-            public static string endLocationLatLong = "user.challenge.endlocationlatlong";//seperated by just a ','
+                public static string endLocationName = "user.challenge.userdata.endlocationname";
+                public static string endLocationCapital = "user.challenge.userdata.endlocationcapital";
+                public static string endLocationLatLong = "user.challenge.userdata.endlocationlatlong";//seperated by just a ','
 
+                public static string totalDistanceToTarget = "user.challenge.totaldistancetotarget";// in KM
+            }
 
-
+            public class UserData
+            {
+                public static string currentLatLong = "user.challenge.userdata.currentlatlong";
+                public static string percentCompleted = "user.challenge.userdata.percentcompleted";
+            }
         }
 
         public class CompletedWindows

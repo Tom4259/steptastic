@@ -64,23 +64,23 @@ public class ChallengeSetupWindow : MonoBehaviour
             if (itemData["Countries"][i]["Country"].ToString() == startLocation.captionText.text)
             {
                 //save as start location
-                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.startLocationName, itemData["Countries"][i]["Country"].ToString());
-                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.startLocationCapital, itemData["Countries"][i]["Capital"].ToString());
-                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.startLocationLatLong,
+                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName, itemData["Countries"][i]["Country"].ToString());
+                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital, itemData["Countries"][i]["Capital"].ToString());
+                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong,
                     itemData["Countries"][i]["Latitude"].ToString() + "," + itemData["Countries"][i]["Longitude"].ToString());
             }
 
             if(itemData["Countries"][i]["Country"].ToString() == endLocation.captionText.text)
             {
                 //save as end location
-                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.endLocationName, itemData["Countries"][i]["Country"].ToString());
-                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.endLocationCapital, itemData["Countries"][i]["Capital"].ToString());
-                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.endLocationLatLong,
+                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName, itemData["Countries"][i]["Country"].ToString());
+                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital, itemData["Countries"][i]["Capital"].ToString());
+                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong,
                     itemData["Countries"][i]["Latitude"].ToString() + "," + itemData["Countries"][i]["Longitude"].ToString());
             }
         }
 
-        PlayerPrefsX.SetDateTime(PlayerPrefsLocations.User.Challenge.startDate, DateTime.Today);
+        PlayerPrefsX.SetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
 
         PlayerPrefsX.Save();
 
@@ -95,7 +95,11 @@ public class ChallengeSetupWindow : MonoBehaviour
         Coordinates start = new Coordinates { Lat = 51.815319, Long = -0.355710 };
         Coordinates end = new Coordinates { Lat = 48.864716, Long = 2.349014 };
 
-        Debug.Log(UsefulFunctions.DistanceTo(start, end));
+        double distance = UsefulFunctions.DistanceTo(start, end);
+
+        Debug.Log(distance);
+
+        PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, (float)distance);
 
         closeChallengeSetup();
     }

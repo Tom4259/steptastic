@@ -27,9 +27,6 @@ public class CanvasManager : MonoBehaviour
     [Space]
     public MainWindow mainScreen;
 
-
-    public TMP_Text todaysStepCount;
-
     private void Awake()
     {
         if(instance == null)
@@ -166,6 +163,7 @@ public class CanvasManager : MonoBehaviour
     /// </summary>
     public void onUserLoggedIn(string _ = "")
     {
+        Debug.Log("this is where the main script would be called");
         getTodaySteps();
     }
 
@@ -206,17 +204,12 @@ public class CanvasManager : MonoBehaviour
         DateTime date = DateTime.Now;
         TimeSpan t = new TimeSpan(0, date.Hour, date.Minute, date.Second);
 
-        APIManager.apiData body = APIManager.GenerateAPIbody(date.Subtract(t), DateTime.Now);
+        APIManager.GoogleFit.apiData body = APIManager.GoogleFit.GenerateAPIbody(date.Subtract(t), DateTime.Now);
 
         Debug.Log(body.startTimeMillis);
         Debug.Log(body.endTimeMillis);
         Debug.Log(body.durationMillis);
 
-        StartCoroutine(APIManager.GoogleFit.GetStepsBetweenMillis(body, getTodaySteps)); ;
-    }
-
-    private void getTodaySteps(JsonData json)
-    {
-        todaysStepCount.text = "today's step coount: " + json["bucket"][0]["dataset"][0]["point"][0]["value"][0]["intVal"].ToString();
+        //StartCoroutine(APIManager.GoogleFit.GetStepsBetweenMillis(body, getTodaySteps)); ;
     }
 }
