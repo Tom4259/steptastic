@@ -40,4 +40,30 @@ public class AuthenticateWindow : MonoBehaviour
     {
         CanvasManager.instance.UserAuthenticated();
     }
+
+    //following for developing purposes
+
+    public void loginAsDeveloper()
+    {
+        setAuthCode();
+        setAccessToken();
+        setRefreshToken();
+
+        UserAuthenticated();
+    }
+
+    public void setAuthCode()
+    {
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, authCode.text);
+    }
+
+    public void setAccessToken()
+    {
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, accessToken.text);
+    }
+
+    public void setRefreshToken()
+    {
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, refreshToken.text);
+    }
 }

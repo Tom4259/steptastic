@@ -139,23 +139,23 @@ public class MainWindow : MonoBehaviour
 
         Debug.Log("distance: " + dist);
 
-        if (dist <= 50)
+        if (dist <= 75)
         {
             return 6;
         }
-        else if (dist <= 350)
+        else if (dist <= 800)
         {
             return 5;
         }
-        if (dist <= 800)
+        if (dist <= 2000)
         {
             return 4;
         }
-        else if (dist <= 1200)
+        else if (dist <= 4500)
         {
             return 3;
         }
-        else if (dist <= 2000)
+        else if (dist <= 8000)
         {
             return 2;
         }

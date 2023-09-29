@@ -92,8 +92,11 @@ public class ChallengeSetupWindow : MonoBehaviour
     {
         //calculates the distance between 2 latitude and longitudes
 
-        Coordinates start = new Coordinates { Lat = 51.815319, Long = -0.355710 };
-        Coordinates end = new Coordinates { Lat = 48.864716, Long = 2.349014 };
+        Coordinates start = new Coordinates { Lat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[0]),
+            Long = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[1])};
+
+        Coordinates end = new Coordinates { Lat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[0]),
+            Long = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[1]) };
 
         double distance = UsefulFunctions.DistanceTo(start, end);
 

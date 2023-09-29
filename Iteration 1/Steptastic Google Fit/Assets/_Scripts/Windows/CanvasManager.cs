@@ -74,7 +74,7 @@ public class CanvasManager : MonoBehaviour
                 authenticateWindow.gameObject.SetActive(false);
 
                 //checking if the access token needs refreshing
-                if (DateTime.Compare(PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Account.Credentials.expiresIn, DateTime.Now.AddDays(-1)), DateTime.Now) < 0)
+                if (DateTime.Compare(PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Account.Credentials.expiresIn, DateTime.Now.AddHours(-1)), DateTime.Now) < 0)
                 {
                     Debug.Log("refreshing token");
 
@@ -101,6 +101,7 @@ public class CanvasManager : MonoBehaviour
             
 
             mainScreen.gameObject.SetActive(true);
+            mainScreen.StartMainWindow();
         }
     }
 
