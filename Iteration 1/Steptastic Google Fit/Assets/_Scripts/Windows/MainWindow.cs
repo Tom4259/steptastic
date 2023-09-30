@@ -38,7 +38,7 @@ public class MainWindow : MonoBehaviour
 
         //Debug.Log("saved date: " + startDate.ToString());
         //Debug.Log("now: " + now.ToString());
-        //Debug.Log("dif: " + dif.ToString());
+        //Debug.Log( "dif: " + dif.ToString());
 
         API.apiData data = new API.apiData();
 
@@ -57,7 +57,7 @@ public class MainWindow : MonoBehaviour
 
     private void calculateUserProgress(JsonData json)
     {
-        //Debug.Log(json.ToJson());
+        Debug.Log(json.ToJson());
 
         float totalMeters = 0;
 
@@ -71,17 +71,17 @@ public class MainWindow : MonoBehaviour
             }
             catch (ArgumentOutOfRangeException) { }
 
-            //Debug.Log(totalMeters + " for index " + i);
+            Debug.Log(totalMeters);
         }
 
-        Debug.Log("total: " +  totalMeters);
+        Debug.Log(totalMeters);
 
         float distanceToTarget = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, -1);
         float userKM = totalMeters / 1000;
 
         float percentage = (userKM / distanceToTarget) * 100;
 
-        Debug.Log("percent = " + percentage);
+        Debug.Log(percentage);
 
         progressBar.fillAmount = percentage / 100;
 
@@ -137,7 +137,7 @@ public class MainWindow : MonoBehaviour
     {
         int dist = (int)PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget);
 
-        Debug.Log("distance: " + dist);
+        Debug.Log(dist);
 
         if (dist <= 75)
         {
@@ -165,14 +165,14 @@ public class MainWindow : MonoBehaviour
         }
     }
 
-    public static Tuple<float, float> latLongBetweenTwoLatLongs(float lat1, float long1, float lat2, float long2, float per)
+    private Tuple<float, float> latLongBetweenTwoLatLongs(float lat1, float long1, float lat2, float long2, float per)
     {
         per /= 100;
 
         float lat = lat1 + (lat2 - lat1) * per;
         float lng = long1 + (long2 - long1) * per;
 
-        //Debug.Log(lat + "," + lng);
+        Debug.Log("[" + GetType().Name + "] " + lat + "," + lng);
 
         return Tuple.Create(lat, lng);
     }

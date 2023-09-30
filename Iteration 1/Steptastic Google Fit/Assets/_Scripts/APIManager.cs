@@ -93,7 +93,7 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    //Debug.Log(www.downloadHandler.text);
+                    Debug.Log(www.downloadHandler.text);
 
                     JsonData json = JsonMapper.ToObject(www.downloadHandler.text);
 
@@ -170,7 +170,6 @@ public class APIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(www.error))
             {
-                //callback.Invoke(www.error);
                 Debug.Log(www.downloadHandler.text);
             }
             else
@@ -198,7 +197,6 @@ public class APIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(www.error))
             {
-                //callback.Invoke(www.error);
                 Debug.Log(www.downloadHandler.text);
             }
             else
@@ -239,7 +237,7 @@ public class APIManager : MonoBehaviour
             URL += "&zoom=" + data.zoom;
             URL += "&routeArc=true";
 
-            Debug.Log(URL);
+            //Debug.Log(URL);
 
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(URL);
             yield return www.SendWebRequest();
