@@ -52,8 +52,6 @@ public class APIManager : MonoBehaviour
         }
 
 
-
-
         public class Authorization
         {
             private static readonly string clientID = "452921919955-n5pr35harq133jfkf2kosvq4kbc724ps.apps.googleusercontent.com";
@@ -170,7 +168,7 @@ public class APIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(www.error))
             {
-                Debug.Log(www.downloadHandler.text);
+                Debug.LogError(www.downloadHandler.text);
             }
             else
             {
@@ -197,7 +195,7 @@ public class APIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(www.error))
             {
-                Debug.Log(www.downloadHandler.text);
+                Debug.LogError(www.downloadHandler.text);
             }
             else
             {

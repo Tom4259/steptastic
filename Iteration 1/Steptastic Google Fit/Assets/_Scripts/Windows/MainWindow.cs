@@ -7,12 +7,16 @@ using System;
 using LitJson;
 using API = APIManager.GoogleFit;
 using UnityEngine.UI;
-using Unity.Mathematics;
 
 public class MainWindow : MonoBehaviour
 {
     [Header("Progress bar")]
     public Image progressBar;
+
+    [Space(10)]
+    [TextArea]
+    public string challengeDescriptionText;
+    public TMP_Text challengeDescriptionLabel;
 
     [Space(20)]
     [Header("Map visualisation")]
@@ -21,6 +25,14 @@ public class MainWindow : MonoBehaviour
 
     public void StartMainWindow()
     {
+        //shows the user their start and end location
+        challengeDescriptionLabel.text = challengeDescriptionText.Replace("{{startLocation}}",
+            PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital) +
+            PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName)).Replace("{{endLocation}}",
+            PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital) +
+            PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName));
+
+
         calculateUserProgress();
         getMapImage();
     }
@@ -118,7 +130,7 @@ public class MainWindow : MonoBehaviour
             currentLattitude = currentPointLat,
             currentLongitude = currentPointLong,
 
-            imageHeight = (int)mapImage.rectTransform.rect.height,
+            imageHeight = (int)Math.Round(mapImage.rectTransform.rect.height),
             imageWidth = (int)Math.Round(mapImage.rectTransform.rect.width),
 
             zoom = getMapZoomApproximation(),
@@ -137,7 +149,7 @@ public class MainWindow : MonoBehaviour
     {
         int dist = (int)PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget);
 
-        Debug.Log(dist);
+        //Debug.Log(dist);
 
         if (dist <= 75)
         {
@@ -172,7 +184,7 @@ public class MainWindow : MonoBehaviour
         float lat = lat1 + (lat2 - lat1) * per;
         float lng = long1 + (long2 - long1) * per;
 
-        Debug.Log("[" + GetType().Name + "] " + lat + "," + lng);
+        //Debug.Log("lat long between lat longs: " + lat + "," + lng);
 
         return Tuple.Create(lat, lng);
     }
