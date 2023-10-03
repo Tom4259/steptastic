@@ -90,7 +90,8 @@ public class CanvasManager : MonoBehaviour
             //}
             //else { return; }
 
-            //get user testUserGetLocation first, so start testUserGetLocation can either be 
+            //get user testUserGetLocation first, so start testUserGetLocation can either be
+
 
             //user has created a testUserCreatedChallenge
             if (PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.createdChallenge, false))
@@ -140,6 +141,7 @@ public class CanvasManager : MonoBehaviour
         checkAllCompleted();
     }
 
+    //checks wether all windows have been completed by the user, if they have then the user can continue to the main screen
     private void checkAllCompleted()
     {
         bool authenticated = PlayerPrefsX.GetBool(PlayerPrefsLocations.User.Account.authenticated, false);
@@ -158,6 +160,7 @@ public class CanvasManager : MonoBehaviour
         
     }    
 
+    //this method might not be called, can delete if it isn't
     /// <summary>
     /// this method changes the screens that my application displays, and sets text boxes to important codes used for 
     /// retrieving data
@@ -193,7 +196,7 @@ public class CanvasManager : MonoBehaviour
 
 
 
-    //put the following in the main screen script
+    //put the following in the main screen script, KEEP AS AN EXAMPLE OF THE API CALL
 
 
     /// <summary>

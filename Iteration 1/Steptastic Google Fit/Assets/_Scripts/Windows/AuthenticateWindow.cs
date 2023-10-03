@@ -19,11 +19,13 @@ public class AuthenticateWindow : MonoBehaviour
         UserAuthenticated();
     }
 
+    //only used for development purposes
     public void EDITORrefreshToken()
     {
         StartCoroutine(APIManager.GoogleFit.Authorization.RefreshAccessToken(EDITORrefreshToken));
     }
 
+    //only used for development processs
     public void EDITORrefreshToken(JsonData j)
     {
         authCode.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode);

@@ -20,6 +20,9 @@ public class ChallengeSetupWindow : MonoBehaviour
         populateDropdowns();
     }
 
+    /// <summary>
+    /// Adds all country and capital data to the dropdowns
+    /// </summary>
     public void populateDropdowns()
     {
         countriesList = Resources.Load<TextAsset>(pathToCountriesResource).ToString();
@@ -44,7 +47,9 @@ public class ChallengeSetupWindow : MonoBehaviour
         endLocation.RefreshShownValue();
     }
 
-
+    /// <summary>
+    /// saves the start and end lcoation as with the relevant latitude and longitudes to device
+    /// </summary>
     public void saveChallengeData()
     {
         //code in a better way of showing the user, or add functionality to remove selected item from other dropdown
@@ -100,7 +105,7 @@ public class ChallengeSetupWindow : MonoBehaviour
 
         double distance = UsefulFunctions.DistanceTo(start, end);
 
-        Debug.Log(distance);
+        //Debug.Log(distance);
 
         PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, (float)distance);
 
