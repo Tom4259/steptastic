@@ -44,9 +44,9 @@ public class APIManager : MonoBehaviour
                 durationMillis = timeGap
             };
 
-            //Debug.Log(apiData.startTimeMillis);
-            //Debug.Log(apiData.endTimeMillis);
-            //Debug.Log(apiData.durationMillis);
+            Debug.Log("[APIManager]", () => apiData.startTimeMillis);
+            Debug.Log("[APIManager]", () => apiData.endTimeMillis);
+            Debug.Log("[APIManager]", () => apiData.durationMillis);
 
             return apiData;
         }
@@ -91,7 +91,7 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(www.downloadHandler.text);
+                    Debug.Log("[APIManager]", () => www.downloadHandler.text);
 
                     JsonData json = JsonMapper.ToObject(www.downloadHandler.text);
 
@@ -122,7 +122,7 @@ public class APIManager : MonoBehaviour
                 form.AddField("refresh_token", PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken));
                 form.AddField("grant_type", "refresh_token");
 
-                Debug.Log(PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken));
+                Debug.Log("[APIManager]" + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken));
 
                 UnityWebRequest www = UnityWebRequest.Post("https://oauth2.googleapis.com/token", form);
 
@@ -134,7 +134,7 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(www.downloadHandler.text);
+                    Debug.Log("[APIManager]", () => www.downloadHandler.text);
 
                     JsonData json = JsonMapper.ToObject(www.downloadHandler.text);
 
@@ -172,7 +172,7 @@ public class APIManager : MonoBehaviour
             }
             else
             {
-                //Debug.Log(www.downloadHandler.text);
+                Debug.Log("[APIManager]", () => www.downloadHandler.text);
                 callback.Invoke(JsonMapper.ToObject(www.downloadHandler.text));
             }
         }
@@ -199,7 +199,7 @@ public class APIManager : MonoBehaviour
             }
             else
             {
-                //Debug.Log(www.downloadHandler.text);
+                Debug.Log("[APIManager]", () => www.downloadHandler.text);
                 callback.Invoke(JsonMapper.ToObject(www.downloadHandler.text));
             }
         }
@@ -235,7 +235,7 @@ public class APIManager : MonoBehaviour
             URL += "&zoom=" + data.zoom;
             URL += "&routeArc=true";
 
-            //Debug.Log(URL);
+            Debug.Log("[APIManager]", () => URL);
 
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(URL);
             yield return www.SendWebRequest();

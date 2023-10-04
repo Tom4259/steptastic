@@ -105,7 +105,7 @@ public class ChallengeSetupWindow : MonoBehaviour
 
         double distance = UsefulFunctions.DistanceTo(start, end);
 
-        //Debug.Log(distance);
+        Debug.Log("[" + GetType().Name + "]", () => distance);
 
         PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, (float)distance);
 

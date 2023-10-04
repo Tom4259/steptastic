@@ -76,7 +76,7 @@ public class CanvasManager : MonoBehaviour
                 //checking if the access token needs refreshing
                 if (DateTime.Compare(PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Account.Credentials.expiresIn, DateTime.Now.AddHours(-1)), DateTime.Now) < 0)
                 {
-                    Debug.Log("refreshing token");
+                    Debug.Log("[" + GetType().Name + "]" + "refreshing token");
 
                     StartCoroutine(APIManager.GoogleFit.Authorization.RefreshAccessToken(refreshCallback));
                 }
@@ -108,7 +108,7 @@ public class CanvasManager : MonoBehaviour
 
     public void refreshCallback(JsonData j)
     {
-        Debug.Log(j.ToJson());
+        Debug.Log("[" + GetType().Name + "]" + j.ToJson());
 
         checkAllCompleted();
     }
@@ -167,7 +167,7 @@ public class CanvasManager : MonoBehaviour
     /// </summary>
     public void onUserLoggedIn(string _ = "")
     {
-        Debug.Log("this is where the main script would be called");
+        Debug.Log("[" + GetType().Name + "]" + "this is where the main script would be called");
         getTodaySteps();
     }
 
@@ -210,9 +210,9 @@ public class CanvasManager : MonoBehaviour
 
         APIManager.GoogleFit.apiData body = APIManager.GoogleFit.GenerateAPIbody(date.Subtract(t), DateTime.Now);
 
-        Debug.Log(body.startTimeMillis);
-        Debug.Log(body.endTimeMillis);
-        Debug.Log(body.durationMillis);
+        Debug.Log("[" + GetType().Name + "]", () => body.startTimeMillis);
+        Debug.Log("[" + GetType().Name + "]", () => body.endTimeMillis);
+        Debug.Log("[" + GetType().Name + "]", () => body.durationMillis);
 
         //StartCoroutine(APIManager.GoogleFit.GetStepsBetweenMillis(body, getTodaySteps)); ;
     }

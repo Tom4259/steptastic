@@ -57,9 +57,9 @@ public class MainWindow : MonoBehaviour
 
 		double dif = (now - startDate).TotalMinutes;
 
-		//Debug.Log("saved date: " + startDate.ToString());
-		//Debug.Log("now: " + now.ToString());
-		//Debug.Log( "dif: " + dif.ToString());
+		Debug.Log("[" + GetType().Name + "]", () => startDate);
+		Debug.Log("[" + GetType().Name + "]", () => now);
+		Debug.Log("[" + GetType().Name + "]", () => dif);
 
 		API.apiData data = new API.apiData();
 
@@ -83,7 +83,7 @@ public class MainWindow : MonoBehaviour
 	/// <param name="json"></param>
 	private void calculateUserProgress(JsonData json)
 	{
-		Debug.Log(json.ToJson());
+		Debug.Log("[" + GetType().Name + "]" + json.ToJson());
 
 		float totalMeters = 0;
 
@@ -97,17 +97,17 @@ public class MainWindow : MonoBehaviour
 			}
 			catch (ArgumentOutOfRangeException) { }
 
-			//Debug.Log(totalMeters);
+			Debug.Log("[" + GetType().Name + "]", () => totalMeters);
 		}
 
-		Debug.Log("totalMeters" + totalMeters);
+		Debug.Log("[" + GetType().Name + "]", () => totalMeters);
 
 		float distanceToTarget = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, -1);
 		float userKM = totalMeters / 1000;
 
 		float percentage = (userKM / distanceToTarget) * 100;
 
-		Debug.Log("percentage: " + percentage);
+		Debug.Log("[" + GetType().Name + "]", () => percentage);
 
 		progressBar.fillAmount = percentage / 100;
 
@@ -142,13 +142,13 @@ public class MainWindow : MonoBehaviour
 
 		#endregion
 
-		//Debug.Log("userLat: " + userLat);
-		//Debug.Log("userLong: " + userLong);
-		//Debug.Log("targetLat: " + targetLat);
-		//Debug.Log("targetLong: " + targetLong);
+		Debug.Log("[" + GetType().Name + "]", () => userLat);
+		Debug.Log("[" + GetType().Name + "]", () => userLong);
+		Debug.Log("[" + GetType().Name + "]", () => targetLat);
+		Debug.Log("[" + GetType().Name + "]", () => targetLong);
 
-		//Debug.Log("currentPLate: " + currentPointLat);
-		//Debug.Log("currentPLong: " + currentPointLong);
+		Debug.Log("[" + GetType().Name + "]", () => currentPointLat);
+		Debug.Log("[" + GetType().Name + "]", () => currentPointLong);
 
 		//can possible optimise more
 		APIManager.MapQuest.MapData mData = new APIManager.MapQuest.MapData
@@ -181,7 +181,7 @@ public class MainWindow : MonoBehaviour
 	{
 		int dist = (int)PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget);
 
-		//Debug.Log(dist);
+		Debug.Log("[" + GetType().Name + "]", () => dist);
 
 		if (dist <= 75)
 		{
@@ -216,7 +216,7 @@ public class MainWindow : MonoBehaviour
 		float lat = lat1 + (lat2 - lat1) * per;
 		float lng = long1 + (long2 - long1) * per;
 
-		//Debug.Log("lat long between lat longs: " + lat + "," + lng);
+		Debug.Log("[MainWindow] lat long between lat longs: " + lat + "," + lng);
 
 		return Tuple.Create(lat, lng);
 	}

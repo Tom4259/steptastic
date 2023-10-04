@@ -89,12 +89,12 @@ public class ProcessDeepLinkMngr : MonoBehaviour
         // Update DeepLink Manager global variable, so URL can be accessed from anywhere.
         deeplinkURL = url;
 
-        //Debug.Log(url);
+        Debug.Log("[" + GetType().Name + "]", () => url);
 
         string[] returnedUrl = url.Split('&');
         string authCode = returnedUrl[0].Split('=')[1];
 
-        //Debug.Log("authCode: " + authCode);
+        Debug.Log("[" + GetType().Name + "]", () => authCode);
 
         saveValuesAndContinue(authCode);
     }
