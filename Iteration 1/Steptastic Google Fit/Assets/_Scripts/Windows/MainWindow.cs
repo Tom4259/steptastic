@@ -14,6 +14,7 @@ public class MainWindow : MonoBehaviour
 	public Image progressBar;
 
 	[Space(10)]
+	public TMP_Text userPercentText;
 	[TextArea]
 	public string challengeDescriptionText;
 	public TMP_Text challengeDescriptionLabel;
@@ -105,6 +106,9 @@ public class MainWindow : MonoBehaviour
 		progressBar.fillAmount = percentage / 100;
 
 		PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted, percentage);
+
+
+		userPercentText.text = Math.Round(percentage, 2).ToString() + "%";
 	}
 
 	#endregion
