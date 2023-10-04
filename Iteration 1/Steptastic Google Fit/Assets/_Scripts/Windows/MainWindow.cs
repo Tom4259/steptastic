@@ -106,6 +106,7 @@ public class MainWindow : MonoBehaviour
 		progressBar.fillAmount = percentage / 100;
 
 		PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted, percentage);
+		PlayerPrefs.Save();
 
 
 		userPercentText.text = Math.Round(percentage, 2).ToString() + "%";
@@ -131,6 +132,14 @@ public class MainWindow : MonoBehaviour
 		float currentPointLong = latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
 
 		#endregion
+
+		Debug.Log("userLat: " + userLat);
+		Debug.Log("userLong: " + userLong);
+		Debug.Log("targetLat: " + targetLat);
+		Debug.Log("targetLong: " + targetLong);
+
+		Debug.Log("currentPLate: " + currentPointLat);
+		Debug.Log("currentPLong" + currentPointLong);
 
 		//can possible optimise more
 		APIManager.MapQuest.MapData mData = new APIManager.MapQuest.MapData
