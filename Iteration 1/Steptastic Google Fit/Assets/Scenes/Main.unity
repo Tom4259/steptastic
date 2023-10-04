@@ -2053,9 +2053,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deeplinkURL: unitydl://Steptastic
-  editorAuth: 4/0AfJohXkxDVPnbLm0tMXZ2MDi8drloMJKqyNG9U-4mrTLE1URtf5ErB5MKcKvq41a46XzLw
-  editorToken: ya29.a0AfB_byD5qOs5T5T8rkBPg-AJwyjWhM2DaT-lsOX3pLFinJonaiCIaaHdbhF3ePVahhclJGZM7EFhEPBlBzcarkeUSXQYWefQqzRCHdbcuXo96Hv9aooXRpMkwQKxZ3urzApE8-O-F7DkgS7HRBZPcK0-iEkpq2y4gNRoaCgYKAYMSARISFQGOcNnCYDqCZH8A1_VQY-0CWid2rw0171
-  editorRefresh: 1//03nZE4HWJeVGpCgYIARAAGAMSNwF-L9IrAdq2_BwDlEDLXjz0qQdoUREvidyfuD6jcWahj7W5ujcx-mN5lv7BAn23rzfekcTQnvM
+  editorAuth: 4/0AfJohXmjT0nyZuXxOlCUK-bWWcn8Od9VuNR2Gg6epC_kowLB08PYRLsXTIMIc5KSkVxXKg
+  editorToken: ya29.a0AfB_byCcPcOcibRRPFR47xn0Wl27X6JIxIRM6JAubMPQTySfsT7v-H9XL5NFB6evebjTd0QbpFC6PrKhZ2siBcjK9lZxshsKj_K1Act6oFILbno0ETnphmm7mFVkNkDXQu1-z1wvufUz4GBtG8ax6iOJDbrd98E_VwB4aCgYKAccSARISFQGOcNnC-hKa9aw0crtDqZ3nEBf59w0171
+  editorRefresh: 1//03qHsX9rWa96GCgYIARAAGAMSNwF-L9IrtiNsz7K5C9ProKDf0_6xSTOL1R8DXzqDyMOn7rDEbi8Apff9FwgI--yuuNPrcG4HQto
 --- !u!4 &583102152
 Transform:
   m_ObjectHideFlags: 0
