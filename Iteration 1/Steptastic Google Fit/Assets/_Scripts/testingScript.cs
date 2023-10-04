@@ -16,5 +16,7 @@ public class testingScript : MonoBehaviour
         PlayerPrefsX.SetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, d);
 
         PlayerPrefs.Save();
+
+        CanvasManager.instance.mainScreen.StartMainWindow();
     }
 }

@@ -7,6 +7,7 @@ using System;
 using LitJson;
 using API = APIManager.GoogleFit;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class MainWindow : MonoBehaviour
 {
@@ -35,6 +36,10 @@ public class MainWindow : MonoBehaviour
 
 
 		calculateUserProgress();
+	}
+
+	private void continueMainWindow()
+	{
 		getMapImage();
 	}
 
@@ -71,6 +76,7 @@ public class MainWindow : MonoBehaviour
 		StartCoroutine(API.GetDistanceBetweenMillis(data, calculateUserProgress));
 	}
 
+
 	/// <summary>
 	/// dissects the returned data from Google and calculates the percentage completion
 	/// </summary>
@@ -91,17 +97,17 @@ public class MainWindow : MonoBehaviour
 			}
 			catch (ArgumentOutOfRangeException) { }
 
-			Debug.Log(totalMeters);
+			//Debug.Log(totalMeters);
 		}
 
-		Debug.Log(totalMeters);
+		Debug.Log("totalMeters" + totalMeters);
 
 		float distanceToTarget = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, -1);
 		float userKM = totalMeters / 1000;
 
 		float percentage = (userKM / distanceToTarget) * 100;
 
-		Debug.Log(percentage);
+		Debug.Log("percentage: " + percentage);
 
 		progressBar.fillAmount = percentage / 100;
 
@@ -110,7 +116,10 @@ public class MainWindow : MonoBehaviour
 
 
 		userPercentText.text = Math.Round(percentage, 2).ToString() + "%";
-	}
+
+
+		continueMainWindow();
+    }
 
 	#endregion
 
@@ -133,13 +142,13 @@ public class MainWindow : MonoBehaviour
 
 		#endregion
 
-		Debug.Log("userLat: " + userLat);
-		Debug.Log("userLong: " + userLong);
-		Debug.Log("targetLat: " + targetLat);
-		Debug.Log("targetLong: " + targetLong);
+		//Debug.Log("userLat: " + userLat);
+		//Debug.Log("userLong: " + userLong);
+		//Debug.Log("targetLat: " + targetLat);
+		//Debug.Log("targetLong: " + targetLong);
 
-		Debug.Log("currentPLate: " + currentPointLat);
-		Debug.Log("currentPLong" + currentPointLong);
+		//Debug.Log("currentPLate: " + currentPointLat);
+		//Debug.Log("currentPLong: " + currentPointLong);
 
 		//can possible optimise more
 		APIManager.MapQuest.MapData mData = new APIManager.MapQuest.MapData
