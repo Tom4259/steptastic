@@ -13,7 +13,7 @@ public class DebugCanvas : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(refreshTokens());
+        //StartCoroutine(refreshTokens());
     }
 
 
@@ -25,7 +25,7 @@ public class DebugCanvas : MonoBehaviour
             accessToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, "N/A");
             refreshToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, "N/A");
 
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(2);
         }
     }
 

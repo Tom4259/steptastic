@@ -68,6 +68,8 @@ public class CanvasManager : MonoBehaviour
             {
                 if(DateTime.Compare(PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Account.Credentials.expiresIn, DateTime.Now.AddHours(-1)), DateTime.Now) < 0)
                 {
+                    Debug.Log("[" + GetType().Name + "]" + "refreshing token: expiry date reached");
+
                     //refreshes the access token and debugs it to the console
                     StartCoroutine(APIManager.GoogleFit.Authorization.RefreshAccessToken((JsonData j) =>
                     {
@@ -87,12 +89,14 @@ public class CanvasManager : MonoBehaviour
 
     public void SetupCompleted()
     {
+        Debug.Log("[" + GetType().Name + "]" + "setup completed");
+
         CanvasGroup c = setupWindows.gameObject.GetComponent<CanvasGroup>();
 
-        LeanTween.value(setupWindows.gameObject, (float v) =>
-        {
-            c.alpha = v;
-        }, 1, 0, 3);
+        //LeanTween.value(setupWindows.gameObject, (float v) =>
+        //{
+        //    c.alpha = v;
+        //}, 1, 0, 3);
     }
 
     /*

@@ -17,6 +17,6 @@ public class testingScript : MonoBehaviour
 
         PlayerPrefs.Save();
 
-        CanvasManager.instance.mainScreen.StartMainWindow();
+        //CanvasManager.instance.mainScreen.StartMainWindow();
     }
 }

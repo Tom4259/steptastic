@@ -7,7 +7,6 @@ using System;
 using LitJson;
 using API = APIManager.GoogleFit;
 using UnityEngine.UI;
-using System.Threading.Tasks;
 
 public class MainWindow : MonoBehaviour
 {

@@ -23,20 +23,20 @@ public class PlayerPrefsLocations : MonoBehaviour
                 /// Data type: String
                 /// The auth code to get data from the user
                 /// </summary>
-                public static string authorizationCode = "user.account.authorizationCode";
+                public static string authorizationCode = "user.account.authorizationcode";
 
                 /// <summary>
                 /// Data type: String
                 /// The token to access users data
                 /// </summary>
-                public static string accessToken = "user.account.codes.accessToken";
+                public static string accessToken = "user.account.codes.accesstoken";
 
 
                 /// <summary>
                 /// Data type: String
                 /// A refresh  token for the accessToken
                 /// </summary>
-                public static string refreshToken = "user.account.codes.refreshToken";
+                public static string refreshToken = "user.account.codes.refreshtoken";
 
 
                 /// <summary>

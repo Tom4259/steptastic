@@ -19,6 +19,10 @@ public class ChallengeSetupWindow : MonoBehaviour
     [Space]
     public Sprite dropdownIcon;
 
+    [Space(20)]
+
+    public ButtonManager saveButton;
+
     private void Start()
     {
         populateDropdowns();
@@ -29,10 +33,6 @@ public class ChallengeSetupWindow : MonoBehaviour
     /// </summary>
     public void populateDropdowns()
     {
-        startLocation.items.Clear();
-        endLocation.items.Clear();
-
-
         countriesList = Resources.Load<TextAsset>(pathToCountriesResource).ToString();
         JsonData itemData = JsonMapper.ToObject(countriesList);
 
@@ -58,25 +58,58 @@ public class ChallengeSetupWindow : MonoBehaviour
 
         }
 
-        startLocation.selectedItemIndex = 0;
-        endLocation.selectedItemIndex = 1;
+        startLocation.selectedItemIndex = 1;
+        endLocation.selectedItemIndex = 2;
 
         startLocation.SetupDropdown();
         endLocation.SetupDropdown();
     }
+
+    public void onDropdownChanged()
+    {
+        checkValidDropdownItems();
+    }
+
+    /// <summary>
+    /// checks to see if the user has selected valid options in the dropdowns
+    /// </summary>
+    /// <returns></returns>
+    public bool checkValidDropdownItems()
+    {
+        if (startLocation.selectedItemIndex == endLocation.selectedItemIndex)
+        {
+            Debug.LogError("chosen locations are the same");
+
+            // SHOW A MODAL WINDOW HERE!
+
+            saveButton.Interactable(false);
+
+            return false;
+        }
+        else if ((startLocation.selectedItemIndex == 0) || (endLocation.selectedItemIndex == 0))
+        {
+            Debug.LogError("need to choose a location");
+
+            // SHOW A MODAL WINDOW HERE!
+
+            saveButton.Interactable(false);
+
+            return false;
+        }
+
+        saveButton.Interactable(true);
+
+        return true;
+    }
+
 
     /// <summary>
     /// saves the start and end lcoation as with the relevant latitude and longitudes to device
     /// </summary>
     public void SaveChallengeData()
     {
-        //code in a better way of showing the user, or add functionality to remove selected item from other dropdown
-        if(startLocation.selectedItemIndex == endLocation.selectedItemIndex)
-        {
-            Debug.LogError("chosen locations are the same");
+        if (!checkValidDropdownItems()) return;
 
-            return;
-        }
 
         countriesList = Resources.Load<TextAsset>(pathToCountriesResource).ToString();
         JsonData itemData = JsonMapper.ToObject(countriesList);
