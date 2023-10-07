@@ -1,0 +1,20 @@
+{
+    "name": "DebugLogExtensions.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b4961e33ae1fd044a97be54ecbd6b4f7"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Debug-Log-Extensions.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

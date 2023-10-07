@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: DebugLogExtensionsProjectSettings
+  m_EditorClassIdentifier: DebugLogExtensions.Settings:Sisus.Debugging.Settings:DebugLogExtensionsProjectSettingsAsset
+  useGlobalNamespace: 0
+  stripAllCallsFromBuilds: 0
+  unlistedChannelsEnabledByDefault: 1
+  channels:
+  - id: tomre
+    color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    enabledByDefault: 0
+    colorText: 
+  - id: APIManager
+    color: {r: 0.17568529, g: 0.7924528, b: 0.29903883, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: ProcessDeepLinkMngr
+    color: {r: 0.31132078, g: 0.302256, b: 0.12775901, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: PlayerPrefsX
+    color: {r: 0.7895604, g: 0.505162, b: 0.8301887, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: AuthenticateWindow
+    color: {r: 0.6886792, g: 0.16567281, b: 0.33063483, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: CanvasManager
+    color: {r: 1, g: 1, b: 1, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: ChallengeSetupWindow
+    color: {r: 0.8679245, g: 0.5032566, b: 0.11053756, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: MainWindow
+    color: {r: 0, g: 1, b: 0.8927181, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: RequestUserLocationWindow
+    color: {r: 0.3301887, g: 0.13377318, b: 0.03270737, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  toggleView:
+    key: DebugLogExtensions.ToggleView
+    keyCode: 277
+    control: 0
+    alt: 0
+    shift: 0
+  hideStackTraceRows: []
+  useGlobalNamespaceDetermined: 0
+  ignoreUnlistedChannelPrefixes: 0
+  autoAddDevUniqueChannels: 1
