@@ -61,8 +61,19 @@ public class APIManager : MonoBehaviour
             /// <summary>
             /// redirects the user to the google authorization page
             /// </summary>
-            public static void GetAuthorizationCode(string URL)
+            public static void GetAuthorizationCode()
             {
+                string scope = "https://www.googleapis.com/auth/fitness.activity.read https://www.googleapis.com/auth/fitness.location.read";
+
+                string authURL = "https://accounts.google.com/o/oauth2/v2/auth";
+
+                string URL = authURL +
+                    "?client_id=" + clientID +
+                    "&redirect_uri=https://steptastic-ad9d9.web.app" +
+                    "&scope=" + scope +
+                    "&response_type=code" +
+                    "&access_type=offline";
+
                 Application.OpenURL(URL);
             }
 

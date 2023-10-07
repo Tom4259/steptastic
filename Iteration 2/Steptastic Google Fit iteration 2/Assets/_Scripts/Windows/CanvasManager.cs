@@ -11,9 +11,7 @@ public class CanvasManager : MonoBehaviour
     public static CanvasManager instance;
 
 #if UNITY_EDITOR
-    public bool testUserAuthenticated = false;
-    public bool testUserGetLocation = false;
-    public bool testUserCreatedChallenge = false;
+    public bool testSetupStage = true;
 #endif
 
     [Space]
@@ -40,107 +38,64 @@ public class CanvasManager : MonoBehaviour
 
 #if UNITY_EDITOR
 
-        if (testUserAuthenticated) PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, false);
-        else PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, true);
-
-        if (testUserGetLocation) PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.requestedUserLocation, false);
-        else PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.requestedUserLocation, true);
-
-        if (testUserCreatedChallenge) PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.createdChallenge, false);
-        else PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.createdChallenge, true);
+        if (testSetupStage)
+        {
+            PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, false);
+            PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.setup, false);
+        }
+        else
+        {
+            PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, true);
+            PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.setup, true);
+        }
 
 #endif
 
         setupWindows.gameObject.SetActive(true);
-        authenticateWindow.gameObject.SetActive(true);
-        //requestUserLocationWindow.gameObject.SetActive(true); //code in later
-        challengeSetupWindow.gameObject.SetActive(true);
         mainScreen.gameObject.SetActive(false);
     }
 
     private void Start()
     {
-        //if the user has completed all setup windows
-        if(PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.mainScreen, false))
+        //if the user has completed the setup stage
+        if(PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.setup, false))
         {
             setupWindows.gameObject.SetActive(false);
             mainScreen.gameObject.SetActive(true);
+
+            //if the expiry time of access token has passed and the user is authenticated, refresh the access token
+            if (PlayerPrefsX.GetBool(PlayerPrefsLocations.User.Account.authenticated)) 
+            {
+                if(DateTime.Compare(PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Account.Credentials.expiresIn, DateTime.Now.AddHours(-1)), DateTime.Now) < 0)
+                {
+                    //refreshes the access token and debugs it to the console
+                    StartCoroutine(APIManager.GoogleFit.Authorization.RefreshAccessToken((JsonData j) =>
+                    {
+                        Debug.Log("[" + GetType().Name + "]" + j.ToJson());
+                    }));
+                }
+            }
+
+            mainScreen.StartMainWindow();
         }
         else
         {
-            //user has logged in
-            if (PlayerPrefsX.GetBool(PlayerPrefsLocations.User.Account.authenticated, false))
-            {
-                authenticateWindow.gameObject.SetActive(false);
-
-                //checking if the access token needs refreshing
-                if (DateTime.Compare(PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Account.Credentials.expiresIn, DateTime.Now.AddHours(-1)), DateTime.Now) < 0)
-                {
-                    Debug.Log("[" + GetType().Name + "]" + "refreshing token");
-
-                    StartCoroutine(APIManager.GoogleFit.Authorization.RefreshAccessToken(refreshCallback));
-                }
-            }
-            else { return; }
-
-            //user has allowed/denied testUserGetLocation services //code in later
-            //if(PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.requestedUserLocation, false))
-            //{
-            //    requestUserLocationWindow.gameObject.SetActive(false);
-            //}
-            //else { return; }
-
-            //get user testUserGetLocation first, so start testUserGetLocation can either be
-
-
-            //user has created a testUserCreatedChallenge
-            if (PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.createdChallenge, false))
-            {
-                challengeSetupWindow.gameObject.SetActive(false);
-            }
-            else { return; }
-            
-
-            mainScreen.gameObject.SetActive(true);
-            mainScreen.StartMainWindow();
+            setupWindows.gameObject.SetActive(true);
+            mainScreen.gameObject.SetActive(false);
         }
     }
 
-    public void refreshCallback(JsonData j)
+    public void SetupCompleted()
     {
-        Debug.Log("[" + GetType().Name + "]" + j.ToJson());
+        CanvasGroup c = setupWindows.gameObject.GetComponent<CanvasGroup>();
 
-        checkAllCompleted();
+        LeanTween.value(setupWindows.gameObject, (float v) =>
+        {
+            c.alpha = v;
+        }, 1, 0, 3);
     }
 
-
-    public void UserAuthenticated()
-    {
-        authenticateWindow.gameObject.SetActive(false);
-
-        PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, true);
-
-        checkAllCompleted();
-    }
-
-    public void UserFinishedLocationrequest()
-    {
-        requestUserLocationWindow.gameObject.SetActive(false);
-
-        PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.requestedUserLocation, true);
-
-        checkAllCompleted();
-    }
-
-    public void UserSetUpChallenge()
-    {
-        challengeSetupWindow.gameObject.SetActive(false);
-
-        PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.createdChallenge, true);
-
-        checkAllCompleted();
-    }
-
+    /*
     //checks wether all windows have been completed by the user, if they have then the user can continue to the main screen
     private void checkAllCompleted()
     {
@@ -155,46 +110,9 @@ public class CanvasManager : MonoBehaviour
             mainScreen.gameObject.SetActive(true);
 
             mainScreen.StartMainWindow();
-        }
-
-        
-    }    
-
-    //this method might not be called, can delete if it isn't
-    /// <summary>
-    /// this method changes the screens that my application displays, and sets text boxes to important codes used for 
-    /// retrieving data
-    /// </summary>
-    public void onUserLoggedIn(string _ = "")
-    {
-        Debug.Log("[" + GetType().Name + "]" + "this is where the main script would be called");
-        getTodaySteps();
+        }        
     }
-
-/*
-#if UNITY_EDITOR
-
-    /// <summary>
-    /// this method is only for the unity editor, as it i would like it to behave differently to an actual android 
-    /// device
-    /// </summary>
-    public void editorHasCode()
-    {
-        authenticateWindow.gameObject.SetActive(false);
-        mainScreen.gameObject.SetActive(true);
-
-        authCode.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode);
-        accessToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
-        refreshToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken);
-
-        getTodaySteps();
-    }
-
-#endif
     */
-
-
-
 
     //put the following in the main screen script, KEEP AS AN EXAMPLE OF THE API CALL
 

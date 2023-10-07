@@ -6,66 +6,38 @@ using LitJson;
 
 public class AuthenticateWindow : MonoBehaviour
 {
-    public TMP_InputField authCode;
-    public TMP_InputField accessToken;
-    public TMP_InputField refreshToken;
+
+    /// <summary>
+    /// opens the oauth2 screen for the user to login to their google account and authorize my app to access their data
+    /// </summary>
+    public void LoginToGoogleFit()
+    {
+        //add an editor token, so don't need to keep logging in to google account on emulator
+#if UNITY_EDITOR
+
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, ProcessDeepLinkMngr.Instance.editorAuth);
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, ProcessDeepLinkMngr.Instance.editorToken);
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, ProcessDeepLinkMngr.Instance.editorRefresh);
+
+        PlayerPrefsX.Save();
+
+        CanvasManager.instance.authenticateWindow.ExchangedAuthForToken();
+
+#else
+        APIManager.GoogleFit.Authorization.GetAuthorizationCode();
+#endif
+    }
+
+
 
     public void ExchangedAuthForToken(string _ = "")
     {
-        authCode.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode);
-        accessToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
-        refreshToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken);
-
         UserAuthenticated();
-    }
-
-    //only used for development purposes
-    public void EDITORrefreshToken()
-    {
-        StartCoroutine(APIManager.GoogleFit.Authorization.RefreshAccessToken(EDITORrefreshToken));
-    }
-
-    //only used for development processs
-    public void EDITORrefreshToken(JsonData j)
-    {
-        authCode.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode);
-        accessToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
-        refreshToken.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken);
-
-        ProcessDeepLinkMngr.Instance.editorAuth = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode);
-        ProcessDeepLinkMngr.Instance.editorToken = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
-        ProcessDeepLinkMngr.Instance.editorRefresh = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken);
     }
 
     //called when everything about authentication has been completed
     public void UserAuthenticated()
     {
-        CanvasManager.instance.UserAuthenticated();
-    }
-
-    //following for developing purposes
-
-    public void loginAsDeveloper()
-    {
-        setAuthCode();
-        setAccessToken();
-        setRefreshToken();
-
-        UserAuthenticated();
-    }
-
-    public void setAuthCode()
-    {
-        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, authCode.text);
-    }
-
-    public void setAccessToken()
-    {
-        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, accessToken.text);
-    }
-
-    public void setRefreshToken()
-    {
-        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, refreshToken.text);
+        PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, true);
     }
 }

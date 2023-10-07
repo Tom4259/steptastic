@@ -52,6 +52,10 @@ MonoBehaviour:
     color: {r: 0.24516429, g: 0.24733844, b: 0.19697247, a: 1}
     enabledByDefault: 1
     colorText: 
+  - id: DebugCanvas
+    color: {r: 0.7735849, g: 0.13501246, b: 0.16194718, a: 1}
+    enabledByDefault: 1
+    colorText: 
   toggleView:
     key: DebugLogExtensions.ToggleView
     keyCode: 277

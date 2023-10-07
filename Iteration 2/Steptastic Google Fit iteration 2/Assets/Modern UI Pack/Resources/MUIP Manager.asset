@@ -23,16 +23,16 @@ MonoBehaviour:
   buttonDisabledAlpha: 0.4
   dropdownFont: {fileID: 11400000, guid: 52e44e217c5d78c4787bfa0d6a98ba86, type: 2}
   dropdownItemFont: {fileID: 11400000, guid: 52e44e217c5d78c4787bfa0d6a98ba86, type: 2}
-  dropdownBackgroundColor: {r: 0.21568628, g: 0.29411766, b: 0.37254903, a: 255}
-  dropdownContentBackgroundColor: {r: 0.1764706, g: 0.25490198, b: 0.33333334, a: 255}
+  dropdownBackgroundColor: {r: 0.21568629, g: 0.7686275, b: 0.90196085, a: 1}
+  dropdownContentBackgroundColor: {r: 0.24056602, g: 0.6426193, b: 1, a: 1}
   dropdownPrimaryColor: {r: 1, g: 1, b: 1, a: 255}
-  dropdownItemBackgroundColor: {r: 0.13725491, g: 0.21568628, b: 0.29411766, a: 255}
+  dropdownItemBackgroundColor: {r: 0, g: 0.5294118, b: 1, a: 1}
   dropdownItemPrimaryColor: {r: 1, g: 1, b: 1, a: 255}
   selectorFont: {fileID: 11400000, guid: 52e44e217c5d78c4787bfa0d6a98ba86, type: 2}
   selectorColor: {r: 1, g: 1, b: 1, a: 1}
   selectorHighlightedColor: {r: 0.1764706, g: 0.25490198, b: 0.33333334, a: 1}
   inputFieldFont: {fileID: 11400000, guid: 52e44e217c5d78c4787bfa0d6a98ba86, type: 2}
-  inputFieldColor: {r: 1, g: 1, b: 1, a: 1}
+  inputFieldColor: {r: 0, g: 0.5294118, b: 1, a: 1}
   modalWindowTitleFont: {fileID: 11400000, guid: 8eacf26e43444834f994ea6c9bd6b1cd, type: 2}
   modalWindowContentFont: {fileID: 11400000, guid: 52e44e217c5d78c4787bfa0d6a98ba86, type: 2}
   modalWindowTitleColor: {r: 1, g: 1, b: 1, a: 1}

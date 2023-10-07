@@ -88,13 +88,7 @@ public class PlayerPrefsLocations : MonoBehaviour
             /// <summary>
             /// takes the user straight to the main screen if it returns true
             /// </summary>
-            public static string mainScreen = "user.completedwindows.all";
-
-            public static string loggedIn = "user.completedwindows.loggedin";
-
-            public static string createdChallenge = "user.completedwindows.createdchallenge";
-
-            public static string requestedUserLocation = "user.completedwindows.requesteduserlocation";
+            public static string setup = "user.completedwindows.setup";
         }
     }
 

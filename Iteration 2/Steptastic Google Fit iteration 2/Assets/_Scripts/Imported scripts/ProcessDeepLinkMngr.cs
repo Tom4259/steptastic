@@ -18,10 +18,6 @@ public class ProcessDeepLinkMngr : MonoBehaviour
     [TextArea]
     public string editorRefresh;
 
-    private string authURL = "https://accounts.google.com/o/oauth2/v2/auth";
-    private string clientID = "452921919955-n5pr35harq133jfkf2kosvq4kbc724ps.apps.googleusercontent.com";
-    private string scope = "https://www.googleapis.com/auth/fitness.activity.read https://www.googleapis.com/auth/fitness.location.read";
-
     private void Awake()
     {
         if (Instance == null)
@@ -52,31 +48,6 @@ public class ProcessDeepLinkMngr : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// opens the oauth2 screen for the user to login to their google account and authorize my app to access their data
-    /// </summary>
-    public void startLoginToGoogleFit()
-    {
-        //add an editor token, so don't need to keep logging in to google account on emulator
-#if UNITY_EDITOR
-
-        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, editorAuth);
-        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, editorToken);
-        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, editorRefresh);
-
-        PlayerPrefsX.Save();
-
-        CanvasManager.instance.authenticateWindow.ExchangedAuthForToken();
-
-#else
-        APIManager.GoogleFit.Authorization.GetAuthorizationCode(authURL +
-                "?client_id=" + clientID +
-                "&redirect_uri=https://steptastic-ad9d9.web.app" +
-                "&scope=" + scope +
-                "&response_type=code" +
-                "&access_type=offline");
-#endif
-    }
 
     /// <summary>
     /// when the user finishes authorizing my app, they will be directed to another site (which i have hosted) which 

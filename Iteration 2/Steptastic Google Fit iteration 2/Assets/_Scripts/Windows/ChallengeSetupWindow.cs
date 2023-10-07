@@ -5,6 +5,7 @@ using TMPro;
 using LitJson;
 using System;
 using Coordinates = UsefulFunctions.Coordinates;
+using Michsky.MUIP;
 
 public class ChallengeSetupWindow : MonoBehaviour
 {
@@ -12,8 +13,11 @@ public class ChallengeSetupWindow : MonoBehaviour
     private string countriesList;
 
     [Space]
-    public TMP_Dropdown startLocation;
-    public TMP_Dropdown endLocation;
+    public CustomDropdown startLocation;
+    public CustomDropdown endLocation;
+
+    [Space]
+    public Sprite dropdownIcon;
 
     private void Start()
     {
@@ -25,8 +29,11 @@ public class ChallengeSetupWindow : MonoBehaviour
     /// </summary>
     public void populateDropdowns()
     {
-        countriesList = Resources.Load<TextAsset>(pathToCountriesResource).ToString();
+        startLocation.items.Clear();
+        endLocation.items.Clear();
 
+
+        countriesList = Resources.Load<TextAsset>(pathToCountriesResource).ToString();
         JsonData itemData = JsonMapper.ToObject(countriesList);
 
         //creates a dropdown object and adds it to the dropdown list
@@ -34,26 +41,37 @@ public class ChallengeSetupWindow : MonoBehaviour
         {
             string country = itemData["Countries"][i]["Country"].ToString();
 
-            TMP_Dropdown.OptionData option = new TMP_Dropdown.OptionData();
-            option.text = country;
-            startLocation.options.Add(option);
-            endLocation.options.Add(option);
+            CustomDropdown.Item option = new CustomDropdown.Item();
+            option.itemName = country;
+            option.itemIcon = dropdownIcon;
+
+            startLocation.items.Add(option);
+            endLocation.items.Add(option);
+
+            startLocation.SetupDropdown();
+            endLocation.SetupDropdown();
         }
 
-        startLocation.value = 0;
-        endLocation.value = 1;
+        //this is where to set the closest locaion to he user if they have accpted location services
+        if(PlayerPrefsX.GetBool(PlayerPrefsLocations.User.Permissions.location, false))
+        {
 
-        startLocation.RefreshShownValue();
-        endLocation.RefreshShownValue();
+        }
+
+        startLocation.selectedItemIndex = 0;
+        endLocation.selectedItemIndex = 1;
+
+        startLocation.SetupDropdown();
+        endLocation.SetupDropdown();
     }
 
     /// <summary>
     /// saves the start and end lcoation as with the relevant latitude and longitudes to device
     /// </summary>
-    public void saveChallengeData()
+    public void SaveChallengeData()
     {
         //code in a better way of showing the user, or add functionality to remove selected item from other dropdown
-        if(startLocation.captionText.text == endLocation.captionText.text)
+        if(startLocation.selectedItemIndex == endLocation.selectedItemIndex)
         {
             Debug.LogError("chosen locations are the same");
 
@@ -66,7 +84,7 @@ public class ChallengeSetupWindow : MonoBehaviour
         //goes through all of the countries list and finds the start and end location, saves the latitude and longitude to the device
         for (int i = 0; i < itemData["Countries"].Count; i++)
         {
-            if (itemData["Countries"][i]["Country"].ToString() == startLocation.captionText.text)
+            if (itemData["Countries"][i]["Country"].ToString() == startLocation.items[startLocation.selectedItemIndex].itemName)
             {
                 //save as start location
                 PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName, itemData["Countries"][i]["Country"].ToString());
@@ -75,7 +93,7 @@ public class ChallengeSetupWindow : MonoBehaviour
                     itemData["Countries"][i]["Latitude"].ToString() + "," + itemData["Countries"][i]["Longitude"].ToString());
             }
 
-            if(itemData["Countries"][i]["Country"].ToString() == endLocation.captionText.text)
+            if(itemData["Countries"][i]["Country"].ToString() == endLocation.items[endLocation.selectedItemIndex].itemName)
             {
                 //save as end location
                 PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName, itemData["Countries"][i]["Country"].ToString());
@@ -114,6 +132,6 @@ public class ChallengeSetupWindow : MonoBehaviour
 
     private void closeChallengeSetup() 
     {
-        CanvasManager.instance.UserSetUpChallenge();
+        CanvasManager.instance.SetupCompleted();
     }
 }

@@ -22,6 +22,7 @@ namespace Sisus.Debugging
 		public static readonly int ChallengeSetupWindow = 7;
 		public static readonly int MainWindow = 8;
 		public static readonly int RequestUserLocation = 9;
+		public static readonly int DebugCanvas = 10;
 	}
 }
 #endregion
