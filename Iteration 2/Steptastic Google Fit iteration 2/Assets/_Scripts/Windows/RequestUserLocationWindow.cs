@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AndroidRuntimePermissionsNamespace;
 using Michsky.MUIP;
 using UnityEngine.UI;
-using Sisus.Debugging.Console;
 #if !UNITY_EDITOR
 //using Debug = Sisus.Debugging.Debug;
 #endif
