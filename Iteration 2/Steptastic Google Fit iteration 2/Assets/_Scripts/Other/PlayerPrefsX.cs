@@ -4,7 +4,9 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+#if !UNITY_EDITOR
 //using Debug = Sisus.Debugging.Debug;
+#endif
 
 public class PlayerPrefsX
 {
@@ -22,7 +24,7 @@ public class PlayerPrefsX
     #region string
     public static bool SetString(String name, string value)
     {
-        //Debug.Log(PlayerPrefsKeyStorage.debugChannels.playerPrefs + " Setting " + name + " to " + value + " in " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+        Debug.Log("[PlayerPrefsX]" + " Setting " + name + " to " + value + " in " + System.Reflection.MethodBase.GetCurrentMethod().Name);
 
         try
         {
@@ -51,7 +53,7 @@ public class PlayerPrefsX
 
     public static bool SetInt(String name, int value)
     {
-        //Debug.Log(PlayerPrefsKeyStorage.debugChannels.playerPrefs + " Setting " + name + " to " + value + " in " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+        Debug.Log("[PlayerPrefsX]" + " Setting " + name + " to " + value + " in " + System.Reflection.MethodBase.GetCurrentMethod().Name);
 
         try
         {
@@ -80,7 +82,7 @@ public class PlayerPrefsX
 
     public static bool SetFloat(String name, float value)
     {
-        //Debug.Log(PlayerPrefsKeyStorage.debugChannels.playerPrefs + " Setting " + name + " to " + value + " in " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+        Debug.Log("[PlayerPrefsX]" + " Setting " + name + " to " + value + " in " + System.Reflection.MethodBase.GetCurrentMethod().Name);
 
         try
         {
@@ -109,6 +111,8 @@ public class PlayerPrefsX
 
     public static void SetDateTime(String name, DateTime value)
     {
+        Debug.Log("[PlayerPrefsX]" + " Setting " + name + " to " + value + " in " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+
         SetLong(name + ".datetime", value.ToBinary());
     }
 
@@ -135,7 +139,7 @@ public class PlayerPrefsX
 
     public static bool SetBool(String name, bool value)
     {
-        //Debug.Log(PlayerPrefsKeyStorage.debugChannels.playerPrefs + " Setting " + name + " to " + value + " in " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+        Debug.Log("[PlayerPrefsX]" + " Setting " + name + " to " + value + " in " + System.Reflection.MethodBase.GetCurrentMethod().Name);
 
         try
         {

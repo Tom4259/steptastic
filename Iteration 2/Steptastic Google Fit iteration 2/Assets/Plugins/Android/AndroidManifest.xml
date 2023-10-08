@@ -15,24 +15,26 @@
           <intent-filter android:autoVerify="true">
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-            
+            <category android:name="android.intent.category.BROWSABLE" />            
             <data android:scheme="unitydl" />
-            <!-- Include one or more domains that should be verified. -->
-            <data android:host="steptastic" />
-            
+            <data android:host="steptastic" />            
           </intent-filter>
 
-
+          <!-- used for opening the app from website-->
           <intent-filter android:autoVerify="true">
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https"
                   android:host="steptastic-ad9d9.web.app" />
-          </intent-filter>
-         
+          </intent-filter>         
           
         </activity>
+      
+      <meta-data android:name="unityplayer.SkipPermissionsDialog" android:value="true" />
     </application>
+
+  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION " />
+
 </manifest>

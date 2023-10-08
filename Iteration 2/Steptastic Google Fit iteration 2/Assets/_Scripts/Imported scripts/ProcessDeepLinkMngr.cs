@@ -4,6 +4,9 @@ using UnityEngine;
 using System;
 using LitJson;
 using UnityEngine.Events;
+#if !UNITY_EDITOR
+//using Debug = Sisus.Debugging.Debug;
+#endif
 
 public class ProcessDeepLinkMngr : MonoBehaviour
 {

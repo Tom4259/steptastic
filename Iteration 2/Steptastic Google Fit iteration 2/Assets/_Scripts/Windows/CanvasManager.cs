@@ -5,6 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using LitJson;
 using System;
+using Michsky.MUIP;
+#if !UNITY_EDITOR
+//using Debug = Sisus.Debugging.Debug;
+#endif
 
 public class CanvasManager : MonoBehaviour
 {
@@ -16,6 +20,7 @@ public class CanvasManager : MonoBehaviour
 
     [Space]
     public RectTransform setupWindows;
+    public WindowManager setupWindowmanager;
 
     [Space]
     public AuthenticateWindow authenticateWindow;
@@ -90,6 +95,8 @@ public class CanvasManager : MonoBehaviour
     {
         setupWindows.gameObject.SetActive(true);
         mainScreen.gameObject.SetActive(false);
+
+        setupWindowmanager.OpenWindowByIndex(0);
 
         challengeSetupWindow.PopulateDropdowns();
     }

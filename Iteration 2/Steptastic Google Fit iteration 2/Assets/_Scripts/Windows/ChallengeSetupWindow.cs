@@ -6,6 +6,9 @@ using LitJson;
 using System;
 using Coordinates = UsefulFunctions.Coordinates;
 using Michsky.MUIP;
+#if !UNITY_EDITOR
+//using Debug = Sisus.Debugging.Debug;
+#endif
 
 public class ChallengeSetupWindow : MonoBehaviour
 {
@@ -30,8 +33,6 @@ public class ChallengeSetupWindow : MonoBehaviour
     /// </summary>
     public void PopulateDropdowns()
     {
-        Debug.Log("populating");
-
         countriesList = Resources.Load<TextAsset>(pathToCountriesResource).ToString();
         JsonData itemData = JsonMapper.ToObject(countriesList);
 
@@ -115,15 +116,18 @@ public class ChallengeSetupWindow : MonoBehaviour
 
     private bool dropdownsTheSame()
     {
-        Debug.Log(() => startLocation.items[startLocation.selectedItemIndex].itemName);
-        Debug.Log(() => endLocation.items[endLocation.selectedItemIndex].itemName);
+        string startName = startLocation.items[startLocation.selectedItemIndex].itemName;
+        string endName = endLocation.items[endLocation.selectedItemIndex].itemName;
+
+        Debug.Log("[" + GetType().Name + "]", () => startName);
+        Debug.Log("[" + GetType().Name + "]", () => endName);
 
         return (startLocation.items[startLocation.selectedItemIndex].itemName == endLocation.items[endLocation.selectedItemIndex].itemName);
     }
 
 
     /// <summary>
-    /// saves the start and end lcoation as with the relevant latitude and longitudes to device
+    /// saves the start and end lation as with the relevant latitude and longitudes to device
     /// </summary>
     public void SaveChallengeData()
     {

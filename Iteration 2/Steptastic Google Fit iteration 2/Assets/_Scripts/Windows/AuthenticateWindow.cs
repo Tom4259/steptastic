@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using LitJson;
+#if !UNITY_EDITOR
+//using Debug = Sisus.Debugging.Debug;
+#endif
 
 public class AuthenticateWindow : MonoBehaviour
 {
