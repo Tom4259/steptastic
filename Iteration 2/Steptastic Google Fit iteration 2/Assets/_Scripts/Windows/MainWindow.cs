@@ -7,9 +7,6 @@ using System;
 using LitJson;
 using API = APIManager.GoogleFit;
 using UnityEngine.UI;
-#if !UNITY_EDITOR
-//using Debug = Sisus.Debugging.Debug;
-#endif
 
 public class MainWindow : MonoBehaviour
 {

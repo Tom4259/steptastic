@@ -13,20 +13,15 @@ public class DebugCanvas : MonoBehaviour
 
     private void Start()
     {
-        //StartCoroutine(refreshTokens());
+        refreshTokens();
     }
 
 
-    private IEnumerator refreshTokens()
+    public void refreshTokens()
     {
-        while (true)
-        {
-            authToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, "N/A");
-            accessToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, "N/A");
-            refreshToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, "N/A");
-
-            yield return new WaitForSeconds(2);
-        }
+        authToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, "N/A");
+        accessToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, "N/A");
+        refreshToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, "N/A");
     }
 
 

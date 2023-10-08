@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9445f2911562c624e85b35f7929244a7, type: 3}
   m_Name: DebugLogExtensionsProjectSettings
   m_EditorClassIdentifier: 
-  useGlobalNamespace: 0
+  useGlobalNamespace: 1
   stripAllCallsFromBuilds: 0
   unlistedChannelsEnabledByDefault: 1
   channels:

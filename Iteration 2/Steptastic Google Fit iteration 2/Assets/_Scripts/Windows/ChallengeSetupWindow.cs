@@ -6,9 +6,6 @@ using LitJson;
 using System;
 using Coordinates = UsefulFunctions.Coordinates;
 using Michsky.MUIP;
-#if !UNITY_EDITOR
-//using Debug = Sisus.Debugging.Debug;
-#endif
 
 public class ChallengeSetupWindow : MonoBehaviour
 {

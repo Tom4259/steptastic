@@ -6,9 +6,6 @@ using TMPro;
 using LitJson;
 using System;
 using Michsky.MUIP;
-#if !UNITY_EDITOR
-//using Debug = Sisus.Debugging.Debug;
-#endif
 
 public class CanvasManager : MonoBehaviour
 {

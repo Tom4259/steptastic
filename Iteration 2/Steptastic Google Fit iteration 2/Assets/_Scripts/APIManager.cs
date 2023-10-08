@@ -7,9 +7,6 @@ using UnityEngine.Networking;
 using LitJson;
 using System.Text;
 using UnityEngine.UI;
-#if !UNITY_EDITOR
-//using Debug = Sisus.Debugging.Debug;
-#endif
 
 public class APIManager : MonoBehaviour
 {

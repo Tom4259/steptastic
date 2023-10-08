@@ -4,9 +4,6 @@ using UnityEngine;
 using TMPro;
 using LitJson;
 using Michsky.MUIP;
-#if !UNITY_EDITOR
-//using Debug = Sisus.Debugging.Debug;
-#endif
 
 public class AuthenticateWindow : MonoBehaviour
 {

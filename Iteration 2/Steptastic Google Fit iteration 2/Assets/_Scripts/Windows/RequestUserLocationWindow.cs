@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Michsky.MUIP;
 using UnityEngine.UI;
-#if !UNITY_EDITOR
-//using Debug = Sisus.Debugging.Debug;
-#endif
 
 public class RequestUserLocationWindow : MonoBehaviour
 {
