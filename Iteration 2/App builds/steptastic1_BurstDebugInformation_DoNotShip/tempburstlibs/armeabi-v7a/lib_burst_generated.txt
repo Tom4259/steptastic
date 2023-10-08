@@ -7,6 +7,7 @@ Library: D:\Unity\Projects\Computing NEA\steptastic\Iteration 2\Steptastic Googl
 --dump=Function
 --float-precision=Standard
 --target-framework=NetFramework
+--assembly-defines=AndroidRuntimePermissions.Runtime;
 --assembly-defines=Assembly-CSharp;
 --assembly-defines=Debug-Log-Extensions;
 --assembly-defines=DebugLogExtensions.Demo;

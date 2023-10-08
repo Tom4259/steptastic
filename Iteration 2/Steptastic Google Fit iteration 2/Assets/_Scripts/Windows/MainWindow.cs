@@ -26,7 +26,7 @@ public class MainWindow : MonoBehaviour
 
 	public void StartMainWindow()
 	{
-		//shows the user their start and end location
+		//shows the user their start and end Location
 		challengeDescriptionLabel.text = challengeDescriptionText.Replace("{{startLocation}}",
 			PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital) + ", " +
 			PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName)).Replace("{{endLocation}}",

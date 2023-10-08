@@ -464,7 +464,7 @@ public class LeanTween : MonoBehaviour {
 
 
 
-    public static void removeTween( int i, int uniqueId){ // Only removes the tween if the unique id matches <summary>Move a GameObject to a certain location</summary>
+    public static void removeTween( int i, int uniqueId){ // Only removes the tween if the unique id matches <summary>Move a GameObject to a certain Location</summary>
         if(tweens[i].uniqueId==uniqueId){
             removeTween( i );
         }
@@ -1277,7 +1277,7 @@ public class LeanTween : MonoBehaviour {
 
 
     /**
-    * <summary>Move a GameObject to a certain location</summary>
+    * <summary>Move a GameObject to a certain Location</summary>
     * 
     * @method LeanTween.move
     * @param {GameObject} gameObject:GameObject Gameobject that you wish to move
@@ -1397,7 +1397,7 @@ public class LeanTween : MonoBehaviour {
     }
 
     /**
-    * <summary>Move a GUI Element to a certain location</summary>
+    * <summary>Move a GUI Element to a certain Location</summary>
     * 
     * @method LeanTween.move (GUI)
     * @param {LTRect} ltRect:LTRect ltRect LTRect object that you wish to move
@@ -1453,7 +1453,7 @@ public class LeanTween : MonoBehaviour {
     }
 
     /**
-    * <summary>Move a GameObject to a certain location relative to the parent transform.</summary>
+    * <summary>Move a GameObject to a certain Location relative to the parent transform.</summary>
     * 
     * @method LeanTween.moveLocal
     * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
@@ -1998,7 +1998,7 @@ public class LeanTween : MonoBehaviour {
     * 
     * @method LeanTween.moveX (RectTransform)
     * @param {RectTransform} rectTrans:RectTransform RectTransform that you wish to attach the tween to
-    * @param {float} to:float The final x location with which to tween to
+    * @param {float} to:float The final x Location with which to tween to
     * @param {float} time:float The time to complete the tween in
     * @return {LTDescr} LTDescr an object that distinguishes the tween
     * @example LeanTween.moveX(gameObject.GetComponent&lt;RectTransform&gt;(), 200f, 1f).setDelay(1f);
@@ -2012,7 +2012,7 @@ public class LeanTween : MonoBehaviour {
     * 
     * @method LeanTween.moveY (RectTransform)
     * @param {RectTransform} rectTrans:RectTransform RectTransform that you wish to attach the tween to
-    * @param {float} to:float The final y location with which to tween to
+    * @param {float} to:float The final y Location with which to tween to
     * @param {float} time:float The time to complete the tween in
     * @return {LTDescr} LTDescr an object that distinguishes the tween
     * @example LeanTween.moveY(gameObject.GetComponent&lt;RectTransform&gt;(), 200f, 1f).setDelay(1f);
@@ -2026,7 +2026,7 @@ public class LeanTween : MonoBehaviour {
     * 
     * @method LeanTween.moveZ (RectTransform)
     * @param {RectTransform} rectTrans:RectTransform RectTransform that you wish to attach the tween to
-    * @param {float} to:float The final x location with which to tween to
+    * @param {float} to:float The final x Location with which to tween to
     * @param {float} time:float The time to complete the tween in
     * @return {LTDescr} LTDescr an object that distinguishes the tween
     * @example LeanTween.moveZ(gameObject.GetComponent&lt;RectTransform&gt;(), 200f, 1f).setDelay(1f);
@@ -3151,7 +3151,7 @@ public class LTBezierPath {
     * <summary>Retrieve the closest ratio near the point</summary>
     * 
     * @method ratioAtPoint
-    * @param {Vector3} point:Vector3 given a current location it makes the best approximiation of where it is along the path ratio-wise (0-1)
+    * @param {Vector3} point:Vector3 given a current Location it makes the best approximiation of where it is along the path ratio-wise (0-1)
     * @return {float} float of ratio along the path
     * @example
     * ratioIter = ltBezier.ratioAtPoint( transform.position );
@@ -3178,7 +3178,7 @@ public class LTBezierPath {
 }
 
 /**
-* Animate along a set of points that need to be in the format: controlPoint, point1, point2.... pointLast, endControlPoint <summary>Move a GameObject to a certain location</summary>
+* Animate along a set of points that need to be in the format: controlPoint, point1, point2.... pointLast, endControlPoint <summary>Move a GameObject to a certain Location</summary>
 * @class LTSpline
 * @constructor
 * @param {Vector3 Array} pts A set of points that define the points the path will pass through (starting with starting control point, and ending with a control point)<br />
@@ -3331,10 +3331,10 @@ public class LTSpline {
     }
 
     /**
-    * Retrieve a point along a path <summary>Move a GameObject to a certain location</summary>
+    * Retrieve a point along a path <summary>Move a GameObject to a certain Location</summary>
     * 
     * @method ratioAtPoint
-    * @param {Vector3} point:Vector3 given a current location it makes the best approximiation of where it is along the path ratio-wise (0-1)
+    * @param {Vector3} point:Vector3 given a current Location it makes the best approximiation of where it is along the path ratio-wise (0-1)
     * @return {float} float of ratio along the path
     * @example
     * ratioIter = ltSpline.ratioAtPoint( transform.position );
@@ -3355,7 +3355,7 @@ public class LTSpline {
     }
 
     /**
-    * Retrieve a point along a path <summary>Move a GameObject to a certain location</summary>
+    * Retrieve a point along a path <summary>Move a GameObject to a certain Location</summary>
     * 
     * @method point
     * @param {float} ratio:float ratio of the point along the path you wish to receive (0-1)
@@ -3396,7 +3396,7 @@ public class LTSpline {
 
 
     /**
-    * Place an object along a certain point on the path (facing the direction perpendicular to the path) <summary>Move a GameObject to a certain location</summary>
+    * Place an object along a certain point on the path (facing the direction perpendicular to the path) <summary>Move a GameObject to a certain Location</summary>
     * 
     * @method place
     * @param {Transform} transform:Transform the transform of the object you wish to place along the path
@@ -3409,7 +3409,7 @@ public class LTSpline {
     }
 
     /**
-    * Place an object along a certain point on the path, with it facing a certain direction perpendicular to the path <summary>Move a GameObject to a certain location</summary>
+    * Place an object along a certain point on the path, with it facing a certain direction perpendicular to the path <summary>Move a GameObject to a certain Location</summary>
     * 
     * @method place
     * @param {Transform} transform:Transform the transform of the object you wish to place along the path
@@ -3428,7 +3428,7 @@ public class LTSpline {
     }
 
     /**
-    * Place an object along a certain point on the path (facing the direction perpendicular to the path) - Local Space, not world-space <summary>Move a GameObject to a certain location</summary>
+    * Place an object along a certain point on the path (facing the direction perpendicular to the path) - Local Space, not world-space <summary>Move a GameObject to a certain Location</summary>
     * 
     * @method placeLocal
     * @param {Transform} transform:Transform the transform of the object you wish to place along the path
@@ -3441,7 +3441,7 @@ public class LTSpline {
     }
 
     /**
-    * Place an object along a certain point on the path, with it facing a certain direction perpendicular to the path - Local Space, not world-space <summary>Move a GameObject to a certain location</summary>
+    * Place an object along a certain point on the path, with it facing a certain direction perpendicular to the path - Local Space, not world-space <summary>Move a GameObject to a certain Location</summary>
     * 
     * @method placeLocal
     * @param {Transform} transform:Transform the transform of the object you wish to place along the path
@@ -3632,8 +3632,8 @@ public class LTSpline {
 *
 * @class LTRect
 * @constructor
-* @param {float} x:float X location
-* @param {float} y:float Y location
+* @param {float} x:float X Location
+* @param {float} y:float Y Location
 * @param {float} width:float Width
 * @param {float} height:float Height
 * @param {float} alpha:float (Optional) initial alpha amount (0-1)

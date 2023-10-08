@@ -41,8 +41,8 @@ public class ChallengeSetupWindow : MonoBehaviour
             endLocation.CreateNewItem(country, dropdownIcon);
         }
 
-        //this is where to set the closest locaion to he user if they have accpted location services
-        if(PlayerPrefsX.GetBool(PlayerPrefsLocations.User.Permissions.location, false))
+        //this is where to set the closest locaion to he user if they have accpted Location services
+        if(PlayerPrefsX.GetBool(PlayerPrefsLocations.User.Permissions.Location, false))
         {
 
         }
@@ -53,8 +53,8 @@ public class ChallengeSetupWindow : MonoBehaviour
 
 
     /// <summary>
-    /// Gets the users location and compares with the whole of the couuntries list to see which is the closest place.
-    /// the closest point gets set as the start location, for ease of access for the user
+    /// Gets the users Location and compares with the whole of the couuntries list to see which is the closest place.
+    /// the closest point gets set as the start Location, for ease of access for the user
     /// </summary>
     public void SetStartLocationUsingGPS()
     {
@@ -90,11 +90,13 @@ public class ChallengeSetupWindow : MonoBehaviour
                 closestIndex = i;
                 closestDistance = itemDistance;
 
-                Debug.Log("[" + GetType().Name + "] ", "Closest city: " + countriesList["Countries"][i]["Country"].ToString());
+                //Debug.Log("[" + GetType().Name + "] ", "Closest city: " + countriesList["Countries"][i]["Country"].ToString());
             }
         }
 
-        if(closestIndex >= 0)
+        Debug.Log("[" + GetType().Name + "] " + "Closest city to the user is " + countriesList["Countries"][closestIndex]["Country"].ToString() + ", " + countriesList["Countries"][closestIndex]["Capital"].ToString());
+
+        if (closestIndex >= 0)
         {
             startLocation.SetDropdownIndex(closestIndex);
         }
@@ -195,12 +197,12 @@ public class ChallengeSetupWindow : MonoBehaviour
         if (!checkValidDropdownItems()) return;
 
 
-        //goes through all of the countries list and finds the start and end location, saves the latitude and longitude to the device
+        //goes through all of the countries list and finds the start and end Location, saves the latitude and longitude to the device
         for (int i = 0; i < countriesList["Countries"].Count; i++)
         {
             if (countriesList["Countries"][i]["Country"].ToString() == startLocation.items[startLocation.selectedItemIndex].itemName)
             {
-                //save as start location
+                //save as start Location
                 PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName, countriesList["Countries"][i]["Country"].ToString());
                 PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital, countriesList["Countries"][i]["Capital"].ToString());
                 PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong,
@@ -209,7 +211,7 @@ public class ChallengeSetupWindow : MonoBehaviour
 
             if(countriesList["Countries"][i]["Country"].ToString() == endLocation.items[endLocation.selectedItemIndex].itemName)
             {
-                //save as end location
+                //save as end Location
                 PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName, countriesList["Countries"][i]["Country"].ToString());
                 PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital, countriesList["Countries"][i]["Capital"].ToString());
                 PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong,

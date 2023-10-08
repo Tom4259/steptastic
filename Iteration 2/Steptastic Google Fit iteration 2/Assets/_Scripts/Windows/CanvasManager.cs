@@ -116,10 +116,10 @@ public class CanvasManager : MonoBehaviour
     {
         bool authenticated = PlayerPrefsX.GetBool(PlayerPrefsLocations.User.Account.authenticated, false);
         //bool testUserGetLocation = PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.requestedUserLocation, false);
-        bool location = true;
+        bool Location = true;
         bool challenge = PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.createdChallenge, false);
 
-        if(authenticated && challenge && location)
+        if(authenticated && challenge && Location)
         {
             setupWindows.gameObject.SetActive(false);
             mainScreen.gameObject.SetActive(true);

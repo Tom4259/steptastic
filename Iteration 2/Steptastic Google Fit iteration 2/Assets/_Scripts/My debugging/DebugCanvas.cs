@@ -25,12 +25,11 @@ public class DebugCanvas : MonoBehaviour
     }
 
 
-    public void loginAsDeveloper()
+    public void devLogin()
     {
-        setAuthCode();
-        setAccessToken();
-        setRefreshToken();
+        CanvasManager.instance.authenticateWindow.UserAuthenticated();
     }
+
 
     public void setAuthCode()
     {

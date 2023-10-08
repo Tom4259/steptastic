@@ -54,7 +54,7 @@ public class PlayerPrefsLocations : MonoBehaviour
             /// Data type: Bool
             /// Returns true if the user has allowed access to testUserGetLocation services
             /// </summary>
-            public static string location = "user.permisssions.location";
+            public static string Location = "user.permisssions.location";
         }
 
         public class Challenge
