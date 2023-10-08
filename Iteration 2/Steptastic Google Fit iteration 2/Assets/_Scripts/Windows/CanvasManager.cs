@@ -82,9 +82,16 @@ public class CanvasManager : MonoBehaviour
         }
         else
         {
-            setupWindows.gameObject.SetActive(true);
-            mainScreen.gameObject.SetActive(false);
+            LoadSetup();
         }
+    }
+
+    private void LoadSetup()
+    {
+        setupWindows.gameObject.SetActive(true);
+        mainScreen.gameObject.SetActive(false);
+
+        challengeSetupWindow.PopulateDropdowns();
     }
 
     public void SetupCompleted()

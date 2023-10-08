@@ -1,4 +1,4 @@
-Modern UI Pack - v5.5.16
+Modern UI Pack - v5.5.17
 
 Make sure to update TextMesh Pro to the latest version and import its essentials.
 

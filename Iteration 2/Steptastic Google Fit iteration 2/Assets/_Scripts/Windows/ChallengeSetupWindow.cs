@@ -19,20 +19,19 @@ public class ChallengeSetupWindow : MonoBehaviour
     [Space]
     public Sprite dropdownIcon;
 
+    [Space]
+    public NotificationManager sameLocationMessage;
+
     [Space(20)]
-
     public ButtonManager saveButton;
-
-    private void Start()
-    {
-        populateDropdowns();
-    }
 
     /// <summary>
     /// Adds all country and capital data to the dropdowns
     /// </summary>
-    public void populateDropdowns()
+    public void PopulateDropdowns()
     {
+        Debug.Log("populating");
+
         countriesList = Resources.Load<TextAsset>(pathToCountriesResource).ToString();
         JsonData itemData = JsonMapper.ToObject(countriesList);
 
@@ -41,15 +40,8 @@ public class ChallengeSetupWindow : MonoBehaviour
         {
             string country = itemData["Countries"][i]["Country"].ToString();
 
-            CustomDropdown.Item option = new CustomDropdown.Item();
-            option.itemName = country;
-            option.itemIcon = dropdownIcon;
-
-            startLocation.items.Add(option);
-            endLocation.items.Add(option);
-
-            startLocation.SetupDropdown();
-            endLocation.SetupDropdown();
+            startLocation.CreateNewItem(country, dropdownIcon);
+            endLocation.CreateNewItem(country, dropdownIcon);
         }
 
         //this is where to set the closest locaion to he user if they have accpted location services
@@ -58,15 +50,34 @@ public class ChallengeSetupWindow : MonoBehaviour
 
         }
 
-        startLocation.selectedItemIndex = 1;
-        endLocation.selectedItemIndex = 2;
-
         startLocation.SetupDropdown();
         endLocation.SetupDropdown();
     }
 
     public void onDropdownChanged()
     {
+        if(startLocation.selectedItemIndex != 0)
+        {
+            StartCoroutine(updateDropdown(startLocation));
+        }
+
+        if(endLocation.selectedItemIndex != 0)
+        {
+            StartCoroutine(updateDropdown(endLocation));
+        }        
+    }
+
+    private IEnumerator updateDropdown(CustomDropdown d)
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        if (d.items[0].itemName == "SELECT")
+        {
+            d.SetDropdownIndex(d.selectedItemIndex - 1);
+        } 
+        
+        d.RemoveItem("SELECT", true);
+
         checkValidDropdownItems();
     }
 
@@ -76,21 +87,19 @@ public class ChallengeSetupWindow : MonoBehaviour
     /// <returns></returns>
     public bool checkValidDropdownItems()
     {
-        if (startLocation.selectedItemIndex == endLocation.selectedItemIndex)
+        if (dropdownsTheSame())
         {
-            Debug.LogError("chosen locations are the same");
+            Debug.LogError("[" + GetType().Name + "]", "chosen locations are the same");
 
-            // SHOW A MODAL WINDOW HERE!
+            sameLocationMessage.Open();
 
             saveButton.Interactable(false);
 
             return false;
         }
-        else if ((startLocation.selectedItemIndex == 0) || (endLocation.selectedItemIndex == 0))
+        else if ((startLocation.items[startLocation.selectedItemIndex].itemName == "SELECT") || (endLocation.items[endLocation.selectedItemIndex].itemName == "SELECT"))
         {
-            Debug.LogError("need to choose a location");
-
-            // SHOW A MODAL WINDOW HERE!
+            Debug.LogWarning("[" + GetType().Name + "]", "need to choose a location");
 
             saveButton.Interactable(false);
 
@@ -100,6 +109,16 @@ public class ChallengeSetupWindow : MonoBehaviour
         saveButton.Interactable(true);
 
         return true;
+    }
+
+
+
+    private bool dropdownsTheSame()
+    {
+        Debug.Log(() => startLocation.items[startLocation.selectedItemIndex].itemName);
+        Debug.Log(() => endLocation.items[endLocation.selectedItemIndex].itemName);
+
+        return (startLocation.items[startLocation.selectedItemIndex].itemName == endLocation.items[endLocation.selectedItemIndex].itemName);
     }
 
 
@@ -138,8 +157,6 @@ public class ChallengeSetupWindow : MonoBehaviour
 
         PlayerPrefsX.SetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
 
-        PlayerPrefsX.Save();
-
         calculateDistanceToTarget();
     }
 
@@ -165,6 +182,8 @@ public class ChallengeSetupWindow : MonoBehaviour
 
     private void closeChallengeSetup() 
     {
+        PlayerPrefsX.Save();
+
         CanvasManager.instance.SetupCompleted();
     }
 }

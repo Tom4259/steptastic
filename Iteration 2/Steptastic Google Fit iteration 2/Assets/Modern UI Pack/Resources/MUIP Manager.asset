@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableDynamicUpdate: 1
   enableExtendedColorPicker: 0
-  editorHints: 0
+  editorHints: 1
   animatedIconColor: {r: 1, g: 1, b: 1, a: 1}
-  contextBackgroundColor: {r: 0.21568628, g: 0.29411766, b: 0.37254903, a: 1}
+  contextBackgroundColor: {r: 0.21568629, g: 0.7686275, b: 0.90196085, a: 1}
   buttonFont: {fileID: 11400000, guid: 4b2e491a3e451b146b7c2d575d053046, type: 2}
-  buttonNormalColor: {r: 0.21568628, g: 0.29411766, b: 0.37254903, a: 255}
+  buttonNormalColor: {r: 0, g: 0.5294118, b: 1, a: 1}
   buttonAccentColor: {r: 1, g: 1, b: 1, a: 255}
   buttonDisabledAlpha: 0.4
   dropdownFont: {fileID: 11400000, guid: 52e44e217c5d78c4787bfa0d6a98ba86, type: 2}
@@ -30,7 +30,7 @@ MonoBehaviour:
   dropdownItemPrimaryColor: {r: 1, g: 1, b: 1, a: 255}
   selectorFont: {fileID: 11400000, guid: 52e44e217c5d78c4787bfa0d6a98ba86, type: 2}
   selectorColor: {r: 1, g: 1, b: 1, a: 1}
-  selectorHighlightedColor: {r: 0.1764706, g: 0.25490198, b: 0.33333334, a: 1}
+  selectorHighlightedColor: {r: 0, g: 0.5294118, b: 1, a: 1}
   inputFieldFont: {fileID: 11400000, guid: 52e44e217c5d78c4787bfa0d6a98ba86, type: 2}
   inputFieldColor: {r: 0, g: 0.5294118, b: 1, a: 1}
   modalWindowTitleFont: {fileID: 11400000, guid: 8eacf26e43444834f994ea6c9bd6b1cd, type: 2}
@@ -38,14 +38,14 @@ MonoBehaviour:
   modalWindowTitleColor: {r: 1, g: 1, b: 1, a: 1}
   modalWindowDescriptionColor: {r: 1, g: 1, b: 1, a: 1}
   modalWindowIconColor: {r: 1, g: 1, b: 1, a: 1}
-  modalWindowBackgroundColor: {r: 0.1764706, g: 0.25490198, b: 0.33333334, a: 1}
+  modalWindowBackgroundColor: {r: 0, g: 0.5294118, b: 1, a: 1}
   modalWindowContentPanelColor: {r: 1, g: 1, b: 1, a: 0.039215688}
   notificationTitleFont: {fileID: 11400000, guid: 8eacf26e43444834f994ea6c9bd6b1cd, type: 2}
   notificationTitleFontSize: 22.5
   notificationDescriptionFont: {fileID: 11400000, guid: 4f723c72f0e9e3d428a4de43cb607a81, type: 2}
   notificationDescriptionFontSize: 18
   notificationThemeType: 0
-  notificationBackgroundColor: {r: 0.1764706, g: 0.25490198, b: 0.33333334, a: 1}
+  notificationBackgroundColor: {r: 0, g: 0.5294118, b: 1, a: 1}
   notificationTitleColor: {r: 1, g: 1, b: 1, a: 1}
   notificationDescriptionColor: {r: 1, g: 1, b: 1, a: 1}
   notificationIconColor: {r: 1, g: 1, b: 1, a: 1}
@@ -64,8 +64,8 @@ MonoBehaviour:
   sliderLabelColor: {r: 1, g: 1, b: 1, a: 1}
   sliderPopupLabelColor: {r: 0.37254903, g: 0.40784314, b: 0.4509804, a: 1}
   sliderHandleColor: {r: 1, g: 1, b: 1, a: 1}
-  switchBorderColor: {r: 0.1764706, g: 0.25490198, b: 0.33333334, a: 1}
-  switchBackgroundColor: {r: 0.05882353, g: 0.5882353, b: 0.99215686, a: 1}
+  switchBorderColor: {r: 0, g: 0.5294118, b: 1, a: 1}
+  switchBackgroundColor: {r: 0.21568629, g: 0.7686275, b: 0.90196085, a: 1}
   switchHandleOnColor: {r: 1, g: 1, b: 1, a: 1}
   switchHandleOffColor: {r: 1, g: 1, b: 1, a: 1}
   toggleFont: {fileID: 11400000, guid: 52e44e217c5d78c4787bfa0d6a98ba86, type: 2}
@@ -77,4 +77,4 @@ MonoBehaviour:
   tooltipFont: {fileID: 11400000, guid: 52e44e217c5d78c4787bfa0d6a98ba86, type: 2}
   tooltipFontSize: 22
   tooltipTextColor: {r: 1, g: 1, b: 1, a: 1}
-  tooltipBackgroundColor: {r: 0.1764706, g: 0.25490198, b: 0.33333334, a: 1}
+  tooltipBackgroundColor: {r: 0, g: 0.5294118, b: 1, a: 1}
