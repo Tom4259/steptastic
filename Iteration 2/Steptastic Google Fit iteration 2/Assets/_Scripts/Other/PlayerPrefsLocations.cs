@@ -78,6 +78,17 @@ public class PlayerPrefsLocations : MonoBehaviour
             {
                 public static string currentLatLong = "user.challenge.userdata.currentlatlong";
                 public static string percentCompleted = "user.challenge.userdata.percentcompleted";
+
+                /// <summary>
+                /// Data type: float
+                /// </summary>
+                public static string setupLatitude = "user.challenge.userdata.setuplatitude";
+
+
+                /// <summary>
+                /// Data type: float
+                /// </summary>
+                public static string setupLongitude = "user.challenge.userdata.setuplongitude";
             }
         }
 

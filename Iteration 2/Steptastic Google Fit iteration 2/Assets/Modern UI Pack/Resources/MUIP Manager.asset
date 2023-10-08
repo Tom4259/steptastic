@@ -70,10 +70,10 @@ MonoBehaviour:
   switchHandleOffColor: {r: 1, g: 1, b: 1, a: 1}
   toggleFont: {fileID: 11400000, guid: 52e44e217c5d78c4787bfa0d6a98ba86, type: 2}
   toggleThemeType: 0
-  toggleTextColor: {r: 1, g: 1, b: 1, a: 1}
-  toggleBorderColor: {r: 1, g: 1, b: 1, a: 1}
+  toggleTextColor: {r: 0, g: 0.5294118, b: 1, a: 1}
+  toggleBorderColor: {r: 0, g: 0.5294118, b: 1, a: 1}
   toggleBackgroundColor: {r: 1, g: 1, b: 1, a: 0.29411766}
-  toggleCheckColor: {r: 1, g: 1, b: 1, a: 1}
+  toggleCheckColor: {r: 0, g: 0.5294118, b: 1, a: 1}
   tooltipFont: {fileID: 11400000, guid: 52e44e217c5d78c4787bfa0d6a98ba86, type: 2}
   tooltipFontSize: 22
   tooltipTextColor: {r: 1, g: 1, b: 1, a: 1}

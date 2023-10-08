@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using LitJson;
+using Michsky.MUIP;
 #if !UNITY_EDITOR
 //using Debug = Sisus.Debugging.Debug;
 #endif
 
 public class AuthenticateWindow : MonoBehaviour
 {
+
+    public ButtonManager continueButton;
 
     /// <summary>
     /// opens the oauth2 screen for the user to login to their google account and authorize my app to access their data
@@ -42,5 +45,7 @@ public class AuthenticateWindow : MonoBehaviour
     public void UserAuthenticated()
     {
         PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, true);
+
+        continueButton.onClick.Invoke();
     }
 }

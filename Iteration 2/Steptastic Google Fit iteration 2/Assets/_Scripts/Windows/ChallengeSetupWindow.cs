@@ -13,7 +13,7 @@ using Michsky.MUIP;
 public class ChallengeSetupWindow : MonoBehaviour
 {
     public string pathToCountriesResource = "Text/countryCapitalList";
-    private string countriesList;
+    private JsonData countriesList;
 
     [Space]
     public CustomDropdown startLocation;
@@ -33,13 +33,12 @@ public class ChallengeSetupWindow : MonoBehaviour
     /// </summary>
     public void PopulateDropdowns()
     {
-        countriesList = Resources.Load<TextAsset>(pathToCountriesResource).ToString();
-        JsonData itemData = JsonMapper.ToObject(countriesList);
+        countriesList = JsonMapper.ToObject(Resources.Load<TextAsset>(pathToCountriesResource).ToString());
 
-        //creates a dropdown object and adds it to the dropdown list
-        for (int i = 0; i < itemData["Countries"].Count; i++)
+        //loops through the countries list and adds each country as a selectable item
+        for (int i = 0; i < countriesList["Countries"].Count; i++)
         {
-            string country = itemData["Countries"][i]["Country"].ToString();
+            string country = countriesList["Countries"][i]["Country"].ToString();
 
             startLocation.CreateNewItem(country, dropdownIcon);
             endLocation.CreateNewItem(country, dropdownIcon);
@@ -55,6 +54,65 @@ public class ChallengeSetupWindow : MonoBehaviour
         endLocation.SetupDropdown();
     }
 
+
+    /// <summary>
+    /// Gets the users location and compares with the whole of the couuntries list to see which is the closest place.
+    /// the closest point gets set as the start location, for ease of access for the user
+    /// </summary>
+    public void SetStartLocationUsingGPS()
+    {
+        float lat = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.setupLatitude);
+        float lon = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.setupLongitude);
+
+        Coordinates userCoords = new Coordinates
+        {
+            Lat = lat,
+            Long = lon
+        };
+
+
+        double closestDistance = double.MaxValue;
+        int closestIndex = -1;
+
+        //loops through the whole of the countries file and finds the closest country to the user
+        for (int i = 0; i < countriesList["Countries"].Count; i++)
+        {
+            float itemLat = float.Parse(countriesList["Countries"][i]["Latitude"].ToString());
+            float itemLong = float.Parse(countriesList["Countries"][i]["Longitude"].ToString());
+
+            Coordinates itemCoords = new Coordinates
+            {
+                Lat = itemLat,
+                Long = itemLong
+            };
+
+            double itemDistance = UsefulFunctions.DistanceTo(userCoords, itemCoords);
+
+            if (itemDistance < closestDistance)
+            {
+                closestIndex = i;
+                closestDistance = itemDistance;
+
+                Debug.Log("[" + GetType().Name + "] ", "Closest city: " + countriesList["Countries"][i]["Country"].ToString());
+            }
+        }
+
+        if(closestIndex >= 0)
+        {
+            startLocation.SetDropdownIndex(closestIndex);
+        }
+        else
+        {
+            Debug.LogError("[" + GetType().Name + "]", "closestIndex: " + closestIndex + ", closestDistance: " + closestDistance);
+        }
+
+        //remove the SELECT option from the dropdown items
+        startLocation.RemoveItem("SELECT", true);
+    }
+
+    /// <summary>
+    /// called when the selected dropdown item has been changed
+    /// </summary>
     public void onDropdownChanged()
     {
         if(startLocation.selectedItemIndex != 0)
@@ -68,6 +126,9 @@ public class ChallengeSetupWindow : MonoBehaviour
         }        
     }
 
+    /// <summary>
+    /// waits a certain amount of time before updating the dropdown list to prevent a UI lag
+    /// </summary>
     private IEnumerator updateDropdown(CustomDropdown d)
     {
         yield return new WaitForSeconds(0.2f);
@@ -81,6 +142,7 @@ public class ChallengeSetupWindow : MonoBehaviour
 
         checkValidDropdownItems();
     }
+
 
     /// <summary>
     /// checks to see if the user has selected valid options in the dropdowns
@@ -112,8 +174,10 @@ public class ChallengeSetupWindow : MonoBehaviour
         return true;
     }
 
-
-
+    /// <summary>
+    /// returns a bool depending on if the same item is selected in both dropdowns
+    /// </summary>
+    /// <returns></returns>
     private bool dropdownsTheSame()
     {
         string startName = startLocation.items[startLocation.selectedItemIndex].itemName;
@@ -134,28 +198,25 @@ public class ChallengeSetupWindow : MonoBehaviour
         if (!checkValidDropdownItems()) return;
 
 
-        countriesList = Resources.Load<TextAsset>(pathToCountriesResource).ToString();
-        JsonData itemData = JsonMapper.ToObject(countriesList);
-
         //goes through all of the countries list and finds the start and end location, saves the latitude and longitude to the device
-        for (int i = 0; i < itemData["Countries"].Count; i++)
+        for (int i = 0; i < countriesList["Countries"].Count; i++)
         {
-            if (itemData["Countries"][i]["Country"].ToString() == startLocation.items[startLocation.selectedItemIndex].itemName)
+            if (countriesList["Countries"][i]["Country"].ToString() == startLocation.items[startLocation.selectedItemIndex].itemName)
             {
                 //save as start location
-                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName, itemData["Countries"][i]["Country"].ToString());
-                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital, itemData["Countries"][i]["Capital"].ToString());
+                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName, countriesList["Countries"][i]["Country"].ToString());
+                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital, countriesList["Countries"][i]["Capital"].ToString());
                 PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong,
-                    itemData["Countries"][i]["Latitude"].ToString() + "," + itemData["Countries"][i]["Longitude"].ToString());
+                    countriesList["Countries"][i]["Latitude"].ToString() + "," + countriesList["Countries"][i]["Longitude"].ToString());
             }
 
-            if(itemData["Countries"][i]["Country"].ToString() == endLocation.items[endLocation.selectedItemIndex].itemName)
+            if(countriesList["Countries"][i]["Country"].ToString() == endLocation.items[endLocation.selectedItemIndex].itemName)
             {
                 //save as end location
-                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName, itemData["Countries"][i]["Country"].ToString());
-                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital, itemData["Countries"][i]["Capital"].ToString());
+                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName, countriesList["Countries"][i]["Country"].ToString());
+                PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital, countriesList["Countries"][i]["Capital"].ToString());
                 PlayerPrefsX.SetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong,
-                    itemData["Countries"][i]["Latitude"].ToString() + "," + itemData["Countries"][i]["Longitude"].ToString());
+                    countriesList["Countries"][i]["Latitude"].ToString() + "," + countriesList["Countries"][i]["Longitude"].ToString());
             }
         }
 
