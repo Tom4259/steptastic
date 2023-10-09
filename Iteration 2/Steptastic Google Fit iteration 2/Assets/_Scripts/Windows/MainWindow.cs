@@ -15,7 +15,8 @@ public class MainWindow : MonoBehaviour
 
 	[Space(20)]
 	[Header("Progress bar")]
-	public Image progressBar;
+	public ProgressBar progressBar;
+	public float animationTime = 1;
 
 	[Space(10)]
 	public TMP_Text userPercentText;
@@ -85,7 +86,6 @@ public class MainWindow : MonoBehaviour
 	/// <summary>
 	/// dissects the returned data from Google and calculates the percentage completion
 	/// </summary>
-	/// <param name="json"></param>
 	private void calculateUserProgress(JsonData json)
 	{
 		Debug.Log("[" + GetType().Name + "]" + json.ToJson());
@@ -114,11 +114,17 @@ public class MainWindow : MonoBehaviour
 
 		Debug.Log("[" + GetType().Name + "]", () => percentage);
 
-		progressBar.fillAmount = percentage / 100;
+
+
+		LeanTween.value(gameObject, (float f) =>
+		{
+            progressBar.currentPercent = f;
+        }, 0, percentage, animationTime);
+
+
 
 		PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted, percentage);
 		PlayerPrefs.Save();
-
 
 		userPercentText.text = Math.Round(percentage, 2).ToString() + "%";
 
@@ -145,9 +151,11 @@ public class MainWindow : MonoBehaviour
 		float currentPointLat = latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item1;
 		float currentPointLong = latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
 
-		#endregion
+        #endregion
 
-		Debug.Log("[" + GetType().Name + "]", () => userLat);
+        #region debugging variables
+
+        Debug.Log("[" + GetType().Name + "]", () => userLat);
 		Debug.Log("[" + GetType().Name + "]", () => userLong);
 		Debug.Log("[" + GetType().Name + "]", () => targetLat);
 		Debug.Log("[" + GetType().Name + "]", () => targetLong);
@@ -155,8 +163,10 @@ public class MainWindow : MonoBehaviour
 		Debug.Log("[" + GetType().Name + "]", () => currentPointLat);
 		Debug.Log("[" + GetType().Name + "]", () => currentPointLong);
 
-		//can possible optimise more
-		APIManager.MapQuest.MapData mData = new APIManager.MapQuest.MapData
+        #endregion
+
+        //can possible optimise more
+        APIManager.MapQuest.MapData mData = new APIManager.MapQuest.MapData
 		{
 			startLocation = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong),
 			endLocation = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong),
