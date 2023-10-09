@@ -1,5 +1,6 @@
 using Michsky.MUIP;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,13 +25,19 @@ public class RequestUserLocationWindow : MonoBehaviour
         }
     }
 
+
+#if !UNITY_EDITOR
+
     private async void GetLocation()
     {
         continueButton.Interactable(false);
 
-#if !UNITY_EDITOR
+        toggle.isOn = true;
+        toggle.GetComponent<CustomToggle>().UpdateState();
 
         AndroidRuntimePermissions.Permission[] result = await AndroidRuntimePermissions.RequestPermissionsAsync("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION");
+
+        Debug.Log(result[0].ToString());
 
         //fine Location
         if (result[0] == AndroidRuntimePermissions.Permission.Granted)
@@ -57,6 +64,8 @@ public class RequestUserLocationWindow : MonoBehaviour
                 await Task.Delay(1000);
 
                 //Debug.Log("[" + GetType().Name + "] " + "Location services are initializing: maxWait " + maxWait);
+
+                toggle.GetComponent<CustomToggle>().UpdateState();
 
                 maxWait--;
             }
@@ -92,6 +101,8 @@ public class RequestUserLocationWindow : MonoBehaviour
             }
             else
             {
+                toggle.GetComponent<CustomToggle>().UpdateState();
+
                 float lat = Input.location.lastData.latitude;
                 float lon = Input.location.lastData.longitude;
 
@@ -118,19 +129,16 @@ public class RequestUserLocationWindow : MonoBehaviour
         {
             PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
         }
+    }
 
-        //coarse Location, treat as not allowed Location
-        if (result[1] == AndroidRuntimePermissions.Permission.Granted)
-        {
-
-        }
-        else
-        {
-
-        }
-
-        
 #else
+
+    private void GetLocation()
+    {
+        continueButton.Interactable(false);
+
+        toggle.isOn = true;
+        toggle.GetComponent<CustomToggle>().UpdateState();
 
         Debug.Log("[" + GetType().Name + "]", () => testWithLocation);
 
@@ -157,9 +165,9 @@ public class RequestUserLocationWindow : MonoBehaviour
         CanvasManager.instance.challengeSetupWindow.SetStartLocationUsingGPS();
 
         PlayerPrefs.Save();
+    }
 
 #endif
-    }
 
     public void completedLocation()
     {
