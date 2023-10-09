@@ -7,9 +7,13 @@ using System;
 using LitJson;
 using API = APIManager.GoogleFit;
 using UnityEngine.UI;
+using Michsky.MUIP;
 
 public class MainWindow : MonoBehaviour
 {
+	public GameObject loadingScreen;
+
+	[Space(20)]
 	[Header("Progress bar")]
 	public Image progressBar;
 
@@ -26,6 +30,8 @@ public class MainWindow : MonoBehaviour
 
 	public void StartMainWindow()
 	{
+		loadingScreen.SetActive(true);
+
 		//shows the user their start and end Location
 		challengeDescriptionLabel.text = challengeDescriptionText.Replace("{{startLocation}}",
 			PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital) + ", " +
@@ -166,7 +172,13 @@ public class MainWindow : MonoBehaviour
 
 			zoom = getMapZoomApproximation(),
 
-			imageToSet = mapImage
+			imageToSet = mapImage,
+
+			// runs this section of code when the map image has been loaded
+			callback = () =>
+			{
+                loadingScreen.SetActive(false);
+            }
 		};
 
 

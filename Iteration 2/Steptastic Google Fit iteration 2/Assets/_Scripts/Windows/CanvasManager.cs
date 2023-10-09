@@ -26,6 +26,8 @@ public class CanvasManager : MonoBehaviour
 
     [Space]
     public MainWindow mainScreen;
+    private Vector2 mainScreenStartLocation;
+    public float animationTime = 1.2f;
 
     private void Awake()
     {
@@ -52,6 +54,9 @@ public class CanvasManager : MonoBehaviour
         }
 
 #endif
+        mainScreenStartLocation = new Vector2(GetComponent<CanvasScaler>().referenceResolution.x, 0);
+
+        mainScreen.GetComponent<RectTransform>().anchoredPosition = mainScreenStartLocation;
 
         setupWindows.gameObject.SetActive(true);
         mainScreen.gameObject.SetActive(false);
@@ -104,10 +109,13 @@ public class CanvasManager : MonoBehaviour
 
         CanvasGroup c = setupWindows.gameObject.GetComponent<CanvasGroup>();
 
-        //LeanTween.value(setupWindows.gameObject, (float v) =>
-        //{
-        //    c.alpha = v;
-        //}, 1, 0, 3);
+        LeanTween.move(setupWindows, -mainScreenStartLocation, animationTime).setEaseInOutCubic();
+
+        mainScreen.gameObject.SetActive(true);
+
+        LeanTween.move(mainScreen.GetComponent<RectTransform>(), Vector2.zero, animationTime).setEaseInOutCubic();
+
+        mainScreen.StartMainWindow();
     }
 
     /*

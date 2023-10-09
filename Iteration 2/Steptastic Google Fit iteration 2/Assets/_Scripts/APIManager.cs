@@ -235,6 +235,8 @@ public class APIManager : MonoBehaviour
             public int zoom;
 
             public Image imageToSet;
+
+            public UnityAction callback = null;
         }
 
         public static IEnumerator getMapImage(MapData data)
@@ -261,6 +263,11 @@ public class APIManager : MonoBehaviour
 
                 data.imageToSet.sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), Vector2.zero);
                 data.imageToSet.color = Color.white;
+
+                if(data.callback != null)
+                {
+                    data.callback.Invoke();
+                }
             }
         }
     }
