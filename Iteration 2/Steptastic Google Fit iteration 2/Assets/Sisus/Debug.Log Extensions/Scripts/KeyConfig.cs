@@ -243,11 +243,5 @@ namespace Sisus.Debugging.Settings
 			PlayerPrefs.SetInt(key, (int)keyCodeOverride);
 			PlayerPrefs.SetInt(key + "_modifiers", (int)modifiers);
 		}
-
-		public Debugging.KeyConfig ToDllVariant()
-		{
-			Load();
-			return new Debugging.KeyConfig(KeyCode, Control, Alt, Shift);
-		}
 	}
 }

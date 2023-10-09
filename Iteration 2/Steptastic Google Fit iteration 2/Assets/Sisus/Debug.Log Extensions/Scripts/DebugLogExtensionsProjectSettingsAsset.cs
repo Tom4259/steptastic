@@ -73,18 +73,21 @@ namespace Sisus.Debugging.Settings
 			settings.channels = new Debugging.DebugChannelInfo[count];
 			for(int i = 0; i < count; i++)
 			{
-				settings.channels[i] = channels[i].ToDllVariant();
+				var channel = channels[i];
+				settings.channels[i] = new Debugging.DebugChannelInfo(channel.id, channel.color, channel.enabledByDefault, channel.colorText);
 			}
 
 			count = hideStackTraceRows.Length;
 			settings.hideStackTraceRows = new Debugging.IgnoredStackTraceInfo[count];
 			for(int i = 0; i < count; i++)
 			{
-				settings.hideStackTraceRows[i] = hideStackTraceRows[i].ToDllVariant();
+				var hideStackTraceRow = hideStackTraceRows[i];
+				settings.hideStackTraceRows[i] = new Debugging.IgnoredStackTraceInfo(hideStackTraceRow.namespaceName, hideStackTraceRow.className, hideStackTraceRow.methodName);
 			}
 
 			toggleView.Load();
-			settings.toggleView = toggleView.ToDllVariant();
+			toggleView.Load();
+			settings.toggleView = new Debugging.KeyConfig(toggleView.KeyCode, toggleView.Control, toggleView.Alt, toggleView.Shift);
 			settings.useGlobalNamespaceDetermined = useGlobalNamespaceDetermined;
 			settings.ignoreUnlistedChannelPrefixes = ignoreUnlistedChannelPrefixes;
 			settings.autoAddDevUniqueChannels = autoAddDevUniqueChannels;			

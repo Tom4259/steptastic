@@ -8,10 +8,5 @@ namespace Sisus.Debugging.Settings
 		public string namespaceName = "";
 		public string className = "";
 		public string methodName = "";
-
-		public Debugging.IgnoredStackTraceInfo ToDllVariant()
-		{
-			return new Debugging.IgnoredStackTraceInfo(namespaceName, className, methodName);
-		}
 	}
 }

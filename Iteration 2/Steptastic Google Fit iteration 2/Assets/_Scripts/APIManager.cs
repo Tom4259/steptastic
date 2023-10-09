@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using LitJson;
 using System.Text;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class APIManager : MonoBehaviour
 {
@@ -82,7 +83,7 @@ public class APIManager : MonoBehaviour
             /// when the user has pressed authorize, my application will be supplied with a authorization token. i then
             /// need to exchange this for an access token and refresh token so i can request the users data
             /// </summary>
-            public static IEnumerator ExchangeAuthCodeForToken(UnityAction<string> callback)
+            public static async Task<string> ExchangeAuthCodeForToken()
             {
                 // adds fields to the request
                 WWWForm form = new WWWForm();
@@ -94,11 +95,17 @@ public class APIManager : MonoBehaviour
 
                 UnityWebRequest www = UnityWebRequest.Post("https://oauth2.googleapis.com/token", form);
 
-                yield return www.SendWebRequest();
+                var operation = www.SendWebRequest();
+
+                while(!operation.isDone)
+                {
+                    await Task.Yield();
+                }
 
                 if (!string.IsNullOrEmpty(www.error))
                 {
                     Debug.LogError(www.downloadHandler.text);
+                    return www.downloadHandler.text;
                 }
                 else
                 {
@@ -117,7 +124,9 @@ public class APIManager : MonoBehaviour
 
                     PlayerPrefsX.Save();
 
-                    callback.Invoke(json["access_token"].ToString());
+                    return json["access_token"].ToString();
+
+                    //callback.Invoke(json["access_token"].ToString());
                 }
             }
 
@@ -125,7 +134,7 @@ public class APIManager : MonoBehaviour
             /// when the access token expires, this methods is called. google then supplies my application with a new access token
             /// to access the user's data with
             /// </summary>
-            public static IEnumerator RefreshAccessToken(UnityAction<JsonData> callback)
+            public static async Task<JsonData> RefreshAccessToken()
             {
                 WWWForm form = new WWWForm();
                 form.AddField("client_id", clientID);
@@ -137,11 +146,17 @@ public class APIManager : MonoBehaviour
 
                 UnityWebRequest www = UnityWebRequest.Post("https://oauth2.googleapis.com/token", form);
 
-                yield return www.SendWebRequest();
+                var operation = www.SendWebRequest();
+
+                while (!operation.isDone)
+                {
+                    await Task.Yield();
+                }
 
                 if (!string.IsNullOrEmpty(www.error))
                 {
                     Debug.LogError(www.downloadHandler.text);
+                    return (JsonMapper.ToObject(www.downloadHandler.text));
                 }
                 else
                 {
@@ -155,7 +170,9 @@ public class APIManager : MonoBehaviour
                     PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, json["access_token"].ToString());
                     PlayerPrefsX.SetDateTime(PlayerPrefsLocations.User.Account.Credentials.expiresIn, d);
 
-                    callback.Invoke(json);
+                    return json;
+
+                    //callback.Invoke(json);
                 }
             }
         }
@@ -165,7 +182,7 @@ public class APIManager : MonoBehaviour
         /// this coroutine takes in the requests body as a parameter, as the start and end time of the request can change.
         /// the request will then get the step count between the timestamps
         /// </summary>
-        public static IEnumerator GetStepsBetweenMillis(apiData data, UnityAction<JsonData> callback)
+        public static async Task<JsonData> GetStepsBetweenMillis(apiData data)
         {
             string body = "{\"aggregateBy\":[{\"dataTypeName\":\"com.google.step_count.delta\",\"dataSourceId\":\"derived:com.google.step_count.delta:com.google.android.gms:estimated_steps\"}],\"bucketByTime\":{\"durationMillis\":" + data.durationMillis + "},\"startTimeMillis\":" + data.startTimeMillis + ",\"endTimeMillis\":" + data.endTimeMillis + "}";
 
@@ -175,16 +192,25 @@ public class APIManager : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
             www.uploadHandler.contentType = "application/json";
 
-            yield return www.SendWebRequest();
+            var operation = www.SendWebRequest();
+
+            while (!operation.isDone)
+            {
+                await Task.Yield();
+            }
 
             if (!string.IsNullOrEmpty(www.error))
             {
                 Debug.LogError(www.downloadHandler.text);
+                return JsonMapper.ToObject(www.downloadHandler.text);
             }
             else
             {
                 Debug.Log("[APIManager]", () => www.downloadHandler.text);
-                callback.Invoke(JsonMapper.ToObject(www.downloadHandler.text));
+
+                return JsonMapper.ToObject(www.downloadHandler.text);
+
+                //callback.Invoke(JsonMapper.ToObject(www.downloadHandler.text));
             }
         }
 
@@ -192,7 +218,7 @@ public class APIManager : MonoBehaviour
         /// this coroutine takes in the requests body as a parameter, as the start and end time of the request can change.
         /// the request will then get the distance made between the timestamps
         /// </summary>
-        public static IEnumerator GetDistanceBetweenMillis(apiData data, UnityAction<JsonData> callback)
+        public static async Task<JsonData> GetDistanceBetweenMillis(apiData data)
         {
             string body = "{\"aggregateBy\":[{\"dataTypeName\":\"com.google.distance.delta\"}],\"bucketByTime\":{\"durationMillis\":" + data.durationMillis + "},\"startTimeMillis\":" + data.startTimeMillis + ",\"endTimeMillis\":" + data.endTimeMillis + "}";
 
@@ -202,16 +228,26 @@ public class APIManager : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
             www.uploadHandler.contentType = "application/json";
 
-            yield return www.SendWebRequest();
+            var operation = www.SendWebRequest();
+
+            while (!operation.isDone)
+            {
+                await Task.Yield();
+            }
 
             if (!string.IsNullOrEmpty(www.error))
             {
                 Debug.LogError(www.downloadHandler.text);
+
+                return JsonMapper.ToObject(www.downloadHandler.text);
             }
             else
             {
                 Debug.Log("[APIManager]", () => www.downloadHandler.text);
-                callback.Invoke(JsonMapper.ToObject(www.downloadHandler.text));
+
+                return JsonMapper.ToObject(www.downloadHandler.text);
+
+                //callback.Invoke(JsonMapper.ToObject(www.downloadHandler.text));
             }
         }
     }
@@ -239,7 +275,7 @@ public class APIManager : MonoBehaviour
             public UnityAction callback = null;
         }
 
-        public static IEnumerator getMapImage(MapData data)
+        public static async void getMapImage(MapData data)
         {
             string URL = "https://www.mapquestapi.com/staticmap/v5/map?key=frXZBd4uCdYXhcwhVMPsug3yjf6oXQ5b";
             URL += "&shape=" + data.startLocation + "|" + data.endLocation;
@@ -251,7 +287,13 @@ public class APIManager : MonoBehaviour
             Debug.Log("[APIManager]", () => URL);
 
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(URL);
-            yield return www.SendWebRequest();
+
+            var operation = www.SendWebRequest();
+
+            while (!operation.isDone)
+            {
+                await Task.Yield();
+            }
 
             if (!string.IsNullOrEmpty(www.error))
             {

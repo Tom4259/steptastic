@@ -51,11 +51,6 @@ namespace Sisus.Debugging.Settings
 			}
 		}
 
-		public Debugging.DebugChannelInfo ToDllVariant()
-		{
-			return new Debugging.DebugChannelInfo(id, color, enabledByDefault, colorText);
-		}
-
 		/// <summary>
 		/// This should be called during the OnValidate event for all <see cref="DebugChannelInfo"/> fields on a <see cref="UnityEngine.Object"/>.
 		/// </summary>

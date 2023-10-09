@@ -73,12 +73,14 @@ public class ProcessDeepLinkMngr : MonoBehaviour
     /// <summary>
     /// after splitting the values, the important ones are saved
     /// </summary>
-    private void saveValuesAndContinue(string authCode)
+    private async void saveValuesAndContinue(string authCode)
     {
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, authCode);
 
         PlayerPrefsX.Save();
 
-        StartCoroutine(APIManager.GoogleFit.Authorization.ExchangeAuthCodeForToken(CanvasManager.instance.authenticateWindow.ExchangedAuthForToken));
+        await APIManager.GoogleFit.Authorization.ExchangeAuthCodeForToken();
+
+        CanvasManager.instance.authenticateWindow.ExchangedAuthForToken();
     }
 }

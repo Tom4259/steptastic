@@ -18,15 +18,20 @@ public class MainWindow : MonoBehaviour
 	public ProgressBar progressBar;
 	public float animationTime = 1;
 
-	[Space(10)]
-	public TMP_Text userPercentText;
-	[TextArea]
-	public string challengeDescriptionText;
-	public TMP_Text challengeDescriptionLabel;
+	//[Space(10)]
+	//[TextArea]
+	//public string challengeDescriptionText;
+	//public TMP_Text challengeDescriptionLabel;
 
 	[Space(20)]
 	[Header("Map visualisation")]
 	public Image mapImage;
+
+
+	[Space(20)]
+	[Header("Smaller UI blocks")]
+	public RectTransform stepsBlock;
+	public RectTransform distanceBlock;
 
 
 	public void StartMainWindow()
@@ -34,11 +39,11 @@ public class MainWindow : MonoBehaviour
 		loadingScreen.SetActive(true);
 
 		//shows the user their start and end Location
-		challengeDescriptionLabel.text = challengeDescriptionText.Replace("{{startLocation}}",
-			PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital) + ", " +
-			PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName)).Replace("{{endLocation}}",
-			PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital) + ", " +
-			PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName));
+		//challengeDescriptionLabel.text = challengeDescriptionText.Replace("{{startLocation}}",
+		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital) + ", " +
+		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName)).Replace("{{endLocation}}",
+		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital) + ", " +
+		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName));
 
 
 		calculateUserProgress();
@@ -47,6 +52,7 @@ public class MainWindow : MonoBehaviour
 	private void continueMainWindow()
 	{
 		getMapImage();
+		loadUIBlocks();
 	}
 
 
@@ -55,7 +61,7 @@ public class MainWindow : MonoBehaviour
 	/// <summary>
 	/// calculates the user progress based on the amount of distance the user has covered since the start date
 	/// </summary>
-	private void calculateUserProgress()
+	private async void calculateUserProgress()
 	{
 		//if start date is now, then make it beggining of the day
 		DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
@@ -77,59 +83,52 @@ public class MainWindow : MonoBehaviour
 
 		//if greater than 1 day (in minutes) get data with interval of 1 day
 		else data = API.GenerateAPIbody(startDate, now);
-		
-
-		StartCoroutine(API.GetDistanceBetweenMillis(data, calculateUserProgress));
-	}
-
-
-	/// <summary>
-	/// dissects the returned data from Google and calculates the percentage completion
-	/// </summary>
-	private void calculateUserProgress(JsonData json)
-	{
-		Debug.Log("[" + GetType().Name + "]" + json.ToJson());
-
-		float totalMeters = 0;
-
-		for (int i = 0; i < json["bucket"].Count; i++)
-		{
-			JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
-
-			try
-			{
-				totalMeters += float.Parse(stepData[0]["value"][0]["fpVal"].ToString());
-			}
-			catch (ArgumentOutOfRangeException) { }
-
-			Debug.Log("[" + GetType().Name + "]", () => totalMeters);
-		}
-
-		Debug.Log("[" + GetType().Name + "]", () => totalMeters);
-
-		float distanceToTarget = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, -1);
-		float userKM = totalMeters / 1000;
-
-		float percentage = (userKM / distanceToTarget) * 100;
-
-		Debug.Log("[" + GetType().Name + "]", () => percentage);
 
 
 
-		LeanTween.value(gameObject, (float f) =>
-		{
+
+		JsonData json = await API.GetDistanceBetweenMillis(data);
+        Debug.Log("[" + GetType().Name + "]" + json.ToJson());
+
+
+
+        float totalMeters = 0;
+
+        for (int i = 0; i < json["bucket"].Count; i++)
+        {
+            JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
+
+            try
+            {
+                totalMeters += float.Parse(stepData[0]["value"][0]["fpVal"].ToString());
+            }
+            catch (ArgumentOutOfRangeException) { }
+
+            Debug.Log("[" + GetType().Name + "]", () => totalMeters);
+        }
+
+        Debug.Log("[" + GetType().Name + "]", () => totalMeters);
+
+        float distanceToTarget = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, -1);
+        float userKM = totalMeters / 1000;
+
+        float percentage = (userKM / distanceToTarget) * 100;
+
+        Debug.Log("[" + GetType().Name + "]", () => percentage);
+
+
+
+        LeanTween.value(gameObject, (float f) =>
+        {
             progressBar.currentPercent = f;
         }, 0, percentage, animationTime);
 
 
 
-		PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted, percentage);
-		PlayerPrefs.Save();
+        PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted, percentage);
+        PlayerPrefs.Save();
 
-		userPercentText.text = Math.Round(percentage, 2).ToString() + "%";
-
-
-		continueMainWindow();
+        continueMainWindow();
     }
 
 	#endregion
@@ -191,8 +190,7 @@ public class MainWindow : MonoBehaviour
             }
 		};
 
-
-		StartCoroutine(APIManager.MapQuest.getMapImage(mData));
+		APIManager.MapQuest.getMapImage(mData);
 	}
 
 	#region helpers
@@ -242,7 +240,31 @@ public class MainWindow : MonoBehaviour
 		return Tuple.Create(lat, lng);
 	}
 
-	#endregion
+    #endregion
 
-	#endregion
+    #endregion
+
+    #region UI blocks
+
+	private async void loadUIBlocks()
+	{
+        #region steps today
+
+        DateTime date = DateTime.Now;
+        TimeSpan t = new TimeSpan(0, date.Hour, date.Minute, date.Second);
+
+        API.apiData body = API.GenerateAPIbody(date.Subtract(t), DateTime.Now);
+
+        Debug.Log("[" + GetType().Name + "]", () => body.startTimeMillis);
+        Debug.Log("[" + GetType().Name + "]", () => body.endTimeMillis);
+        Debug.Log("[" + GetType().Name + "]", () => body.durationMillis);
+
+        #endregion
+
+
+
+        JsonData j = await API.GetStepsBetweenMillis(body);
+    }
+
+    #endregion
 }

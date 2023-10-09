@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using Michsky.MUIP;
 using UnityEngine.UIElements;
+using LitJson;
 
 public class DebugCanvas : MonoBehaviour
 {
@@ -13,15 +14,22 @@ public class DebugCanvas : MonoBehaviour
 
     private void Start()
     {
-        refreshTokens();
+        reloadTokens();
     }
 
 
-    public void refreshTokens()
+    public void reloadTokens()
     {
         authToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, "N/A");
         accessToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, "N/A");
         refreshToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, "N/A");
+    }
+
+    public async void refreshTokens()
+    {
+        JsonData j = await APIManager.GoogleFit.Authorization.RefreshAccessToken();
+
+        Debug.Log(j.ToJson());
     }
 
 

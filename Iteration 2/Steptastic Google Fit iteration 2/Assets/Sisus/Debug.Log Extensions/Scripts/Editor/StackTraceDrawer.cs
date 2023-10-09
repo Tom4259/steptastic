@@ -112,6 +112,7 @@ namespace Sisus.Debugging.Console
 				columnDrawer.AddColumn((int)Column.PathShort, "Path", "", 0.2f, false, EditorPrefs.GetBool(Key.ShowPathShort, false), "Truncated Path");
 				columnDrawer.AddColumn((int)Column.LineNumber, "Line", "", 0.2f, false, EditorPrefs.GetBool(Key.ShowLineNumber, true), "Line");
 			}
+
 			columnDrawer.OnEnable(textAreaStyle, lineColor, OnItemClicked);
 			columnDrawer.OnFinishedBuildingColumns();
 

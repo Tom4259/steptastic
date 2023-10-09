@@ -101,6 +101,8 @@ namespace Sisus.Debugging.Console
 		private static GUIStyle infoStyle;
 		private static GUIStyle infoStyleNormal;
 		private static GUIStyle infoStyleCompact;
+		
+		private static bool staticSetupDone;
 
 		[SerializeField]
 		private GUIContent infoLabel = new GUIContent("0");
@@ -247,6 +249,9 @@ namespace Sisus.Debugging.Console
 		private bool firstMessageReceived = false;
 		[NonSerialized]
 		private int focusFilterField = 3;
+
+		[NonSerialized]
+		private bool instanceSetupDone;
 
 		protected override bool WasCompilingLastFrame => wasCompilingLastFrame;
 		protected override bool InitialMessagesFetched => initialMessagesFetched;
@@ -631,6 +636,8 @@ namespace Sisus.Debugging.Console
 
 			useMonospaceFont = DebugLogExtensionsPreferences.UseMonospaceFont;
 			ApplyFontSettings();
+			instanceSetupDone = true;
+			staticSetupDone = true;
 		}
 
 		private void OnApplicationStart()
@@ -837,7 +844,7 @@ namespace Sisus.Debugging.Console
 		[UsedImplicitly]
 		protected override void OnGUI()
 		{
-			if(infoStyleNormal is null)
+			if(!instanceSetupDone || !staticSetupDone)
 			{
 				Setup();
 			}

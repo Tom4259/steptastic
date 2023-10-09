@@ -62,7 +62,7 @@ public class CanvasManager : MonoBehaviour
         mainScreen.gameObject.SetActive(false);
     }
 
-    private void Start()
+    private async void Start()
     {
         //if the user has completed the setup stage
         if(PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.setup, false))
@@ -78,10 +78,8 @@ public class CanvasManager : MonoBehaviour
                     Debug.Log("[" + GetType().Name + "]" + "refreshing token: expiry date reached");
 
                     //refreshes the access token and debugs it to the console
-                    StartCoroutine(APIManager.GoogleFit.Authorization.RefreshAccessToken((JsonData j) =>
-                    {
-                        Debug.Log("[" + GetType().Name + "]" + j.ToJson());
-                    }));
+                    JsonData j = await APIManager.GoogleFit.Authorization.RefreshAccessToken();
+                    Debug.Log("[" + GetType().Name + "]" + j.ToJson());
                 }
             }
 
@@ -136,25 +134,4 @@ public class CanvasManager : MonoBehaviour
         }        
     }
     */
-
-    //put the following in the main screen script, KEEP AS AN EXAMPLE OF THE API CALL
-
-
-    /// <summary>
-    /// this method genereates the api body, and sends a web request to google, fetching the number of steps the user has done so far today.
-    /// this is then displayed on the screen
-    /// </summary>
-    private void getTodaySteps()
-    {
-        DateTime date = DateTime.Now;
-        TimeSpan t = new TimeSpan(0, date.Hour, date.Minute, date.Second);
-
-        APIManager.GoogleFit.apiData body = APIManager.GoogleFit.GenerateAPIbody(date.Subtract(t), DateTime.Now);
-
-        Debug.Log("[" + GetType().Name + "]", () => body.startTimeMillis);
-        Debug.Log("[" + GetType().Name + "]", () => body.endTimeMillis);
-        Debug.Log("[" + GetType().Name + "]", () => body.durationMillis);
-
-        //StartCoroutine(APIManager.GoogleFit.GetStepsBetweenMillis(body, getTodaySteps)); ;
-    }
 }
