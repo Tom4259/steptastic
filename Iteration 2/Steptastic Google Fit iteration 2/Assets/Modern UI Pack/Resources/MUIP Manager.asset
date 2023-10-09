@@ -51,10 +51,10 @@ MonoBehaviour:
   notificationIconColor: {r: 1, g: 1, b: 1, a: 1}
   progressBarLabelFont: {fileID: 11400000, guid: 4b2e491a3e451b146b7c2d575d053046, type: 2}
   progressBarLabelFontSize: 25
-  progressBarColor: {r: 1, g: 1, b: 1, a: 1}
-  progressBarBackgroundColor: {r: 1, g: 1, b: 1, a: 0.05882353}
-  progressBarLoopBackgroundColor: {r: 1, g: 1, b: 1, a: 1}
-  progressBarLabelColor: {r: 1, g: 1, b: 1, a: 1}
+  progressBarColor: {r: 0.9960785, g: 0.64705884, b: 0.2901961, a: 1}
+  progressBarBackgroundColor: {r: 0.9960785, g: 0.64705884, b: 0.2901961, a: 0.2}
+  progressBarLoopBackgroundColor: {r: 0.9960785, g: 0.64705884, b: 0.2901961, a: 1}
+  progressBarLabelColor: {r: 0.9960785, g: 0.64705884, b: 0.2901961, a: 1}
   scrollbarColor: {r: 1, g: 1, b: 1, a: 1}
   scrollbarBackgroundColor: {r: 1, g: 1, b: 1, a: 0.09803922}
   sliderLabelFont: {fileID: 11400000, guid: 4b2e491a3e451b146b7c2d575d053046, type: 2}
