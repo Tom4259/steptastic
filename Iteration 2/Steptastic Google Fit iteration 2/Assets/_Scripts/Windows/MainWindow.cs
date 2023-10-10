@@ -8,6 +8,9 @@ using LitJson;
 using API = APIManager.GoogleFit;
 using UnityEngine.UI;
 using Michsky.MUIP;
+using XCharts.Runtime;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class MainWindow : MonoBehaviour
 {
@@ -33,36 +36,42 @@ public class MainWindow : MonoBehaviour
 	public TMP_Text stepsBlockValue;
 	public TMP_Text distanceBlockValue;
 
+	[Space]
+	[Header("Graphs")]
+	public EasyChartSettings dayStepsChart;
 
-	public void StartMainWindow()
+
+	public async void StartMainWindow()
 	{
 		loadingScreen.SetActive(true);
 
-		//shows the user their start and end Location
-		//challengeDescriptionLabel.text = challengeDescriptionText.Replace("{{startLocation}}",
-		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital) + ", " +
-		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName)).Replace("{{endLocation}}",
-		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital) + ", " +
-		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName));
+        //shows the user their start and end Location
+        //challengeDescriptionLabel.text = challengeDescriptionText.Replace("{{startLocation}}",
+        //	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital) + ", " +
+        //	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName)).Replace("{{endLocation}}",
+        //	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital) + ", " +
+        //	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName));
 
 
-		calculateUserProgress();
-	}
+        await calculateUserProgress();
+        await getMapImage();
+        await loadUIBlocks();
 
-	private void continueMainWindow()
-	{
-		getMapImage();
-		loadUIBlocks();
-		loadGraphs();
-	}
 
+        float percentage = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted);
+
+        LeanTween.value(gameObject, (float f) =>
+        {
+            progressBar.currentPercent = f;
+        }, 0, percentage, animationTime);
+    }
 
 	#region progress to target
 
 	/// <summary>
 	/// calculates the user progress based on the amount of distance the user has covered since the start date
 	/// </summary>
-	private async void calculateUserProgress()
+	private async Task calculateUserProgress()
 	{
 		//if start date is now, then make it beggining of the day
 		DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
@@ -88,7 +97,7 @@ public class MainWindow : MonoBehaviour
 
 
 		JsonData json = await API.GetDistanceBetweenMillis(data);
-        Debug.Log("[" + GetType().Name + "]" + json.ToJson());
+        //Debug.Log("[" + GetType().Name + "]" + json.ToJson());
 
 
 
@@ -103,6 +112,7 @@ public class MainWindow : MonoBehaviour
                 totalMeters += float.Parse(stepData[0]["value"][0]["fpVal"].ToString());
             }
             catch (ArgumentOutOfRangeException) { }
+			catch (KeyNotFoundException) { }
 
             //Debug.Log("[" + GetType().Name + "]", () => totalMeters);
         }
@@ -117,18 +127,8 @@ public class MainWindow : MonoBehaviour
         Debug.Log("[" + GetType().Name + "]", () => percentage);
 
 
-
-        LeanTween.value(gameObject, (float f) =>
-        {
-            progressBar.currentPercent = f;
-        }, 0, percentage, animationTime);
-
-
-
         PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted, percentage);
         PlayerPrefs.Save();
-
-        continueMainWindow();
     }
 
 	#endregion
@@ -138,11 +138,11 @@ public class MainWindow : MonoBehaviour
 	/// <summary>
 	/// requests an image from MapQuest displaying the user's challenge data
 	/// </summary>
-	private void getMapImage()
-	{
-		#region variables
+	private Task getMapImage()
+    {
+        #region variables
 
-		float userLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[0]);
+        float userLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[0]);
 		float userLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[1]);
 		float targetLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[0]);
 		float targetLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[1]);
@@ -191,12 +191,13 @@ public class MainWindow : MonoBehaviour
 		};
 
 		APIManager.MapQuest.getMapImage(mData);
-	}
+        return Task.CompletedTask;
+    }
 
-	#region helpers
+    #region helpers
 
-	//may need to update these values. test more
-	private int getMapZoomApproximation()
+    //may need to update these values. test more
+    private int getMapZoomApproximation()
 	{
 		int dist = (int)PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget);
 
@@ -246,7 +247,7 @@ public class MainWindow : MonoBehaviour
 
     #region UI blocks
 
-	private async void loadUIBlocks()
+	private async Task loadUIBlocks()
 	{
         #region request data
 
@@ -262,13 +263,15 @@ public class MainWindow : MonoBehaviour
         #endregion
 
 
-
         JsonData stepsJson = await API.GetStepsBetweenMillis(body);
         JsonData distanceJson = await API.GetDistanceBetweenMillis(body);
 
 
-		//Debug.Log("[" + GetType().Name + "] " + stepsJson.ToJson());
-		//Debug.Log("[" + GetType().Name + "] " + distanceJson.ToJson());
+        //Debug.Log("[" + GetType().Name + "] " + stepsJson.ToJson());
+        //Debug.Log("[" + GetType().Name + "] " + distanceJson.ToJson());
+
+        //creating the graph with the steps
+        loadGraphs(stepsJson);
 
 
         #region counting up
@@ -317,9 +320,34 @@ public class MainWindow : MonoBehaviour
 
     #region graphs
 
-	private async void loadGraphs()
+	private void loadGraphs(JsonData json)
 	{
+		List<double> steps = new List<double>();
 
+		for (int i = 0; i < json["bucket"].Count; i++)
+		{
+            JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
+
+			double item = 0;
+
+			try
+			{
+				item = double.Parse(stepData[0]["value"][0]["intVal"].ToString());
+			}
+			catch (ArgumentOutOfRangeException) { }
+			catch (KeyNotFoundException) { }
+
+            steps.Add(item);
+        }
+
+		int remainder = 24 - steps.Count;
+
+        for (int i = 0; i < remainder; i++)
+		{
+			steps.Add(0);
+		}
+
+		dayStepsChart.setSerieData(steps);
 	}
 
     #endregion

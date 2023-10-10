@@ -11,8 +11,6 @@ public class EasyChartSettings : MonoBehaviour
     void Start()
     {
         chart = GetComponent<BaseChart>();
-
-        addSerieData(122, "testing!");
     }
 
 
@@ -24,6 +22,14 @@ public class EasyChartSettings : MonoBehaviour
     public void setSerieData(SerieData data)
     {
         chart.series[0].AddSerieData(data);
+    }
+
+    public void setSerieData(List<double> data)
+    {
+        for (int i = 0; i < data.Count; i++)
+        {
+            chart.series[0].UpdateData(i, 1, data[i]);
+        }
     }
 
     public void addSerieData(double value)

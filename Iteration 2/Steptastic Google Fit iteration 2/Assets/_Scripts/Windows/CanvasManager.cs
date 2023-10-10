@@ -101,8 +101,9 @@ public class CanvasManager : MonoBehaviour
     {
         Debug.Log("[" + GetType().Name + "]" + "setup completed");
 
-        closeSetupWindow();
+        PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.setup, true);
 
+        closeSetupWindow();
         openMainWindow(true);
     }
 
