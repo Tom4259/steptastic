@@ -11,5 +11,15 @@ using UnityEngine;
 public static class Channel
 {
 	public const int None = 0;
+	public static readonly int tomre = 1;
+	public static readonly int APIManager = 2;
+	public static readonly int ProcessDeepLinkMngr = 3;
+	public static readonly int PlayerPrefsX = 4;
+	public static readonly int AuthenticateWindow = 5;
+	public static readonly int CanvasManager = 6;
+	public static readonly int ChallengeSetupWindow = 7;
+	public static readonly int MainWindow = 8;
+	public static readonly int RequestUserLocation = 9;
+	public static readonly int DebugCanvas = 10;
 }
 #endregion

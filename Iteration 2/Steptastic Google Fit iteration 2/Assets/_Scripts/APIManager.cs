@@ -45,9 +45,9 @@ public class APIManager : MonoBehaviour
                 durationMillis = timeGap
             };
 
-            Debug.Log("[APIManager]", () => apiData.startTimeMillis);
-            Debug.Log("[APIManager]", () => apiData.endTimeMillis);
-            Debug.Log("[APIManager]", () => apiData.durationMillis);
+            //Debug.Log("[APIManager]", () => apiData.startTimeMillis);
+            //Debug.Log("[APIManager]", () => apiData.endTimeMillis);
+            //Debug.Log("[APIManager]", () => apiData.durationMillis);
 
             return apiData;
         }
@@ -201,16 +201,31 @@ public class APIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(www.error))
             {
-                Debug.LogError(www.downloadHandler.text);
-                return JsonMapper.ToObject(www.downloadHandler.text);
+                Debug.LogWarning("[APIManager] Attempting to refresh the access token");
+
+                //tries to refresh the token if the request has failed
+                JsonData errorRefresh = await Authorization.RefreshAccessToken();
+
+                try
+                {
+                    string _ = errorRefresh["access_token"].ToString();
+
+                    JsonData json = await GetStepsBetweenMillis(data);
+
+                    return json;
+                }
+                catch (KeyNotFoundException)
+                {
+                    Debug.LogError("[APIManager] failed to send request and refresh attempt: \n" + www.downloadHandler.text + "\n" + errorRefresh.ToJson());
+
+                    return JsonMapper.ToObject(www.downloadHandler.text);
+                }
             }
             else
             {
                 Debug.Log("[APIManager]", () => www.downloadHandler.text);
 
                 return JsonMapper.ToObject(www.downloadHandler.text);
-
-                //callback.Invoke(JsonMapper.ToObject(www.downloadHandler.text));
             }
         }
 
@@ -237,17 +252,31 @@ public class APIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(www.error))
             {
-                Debug.LogError(www.downloadHandler.text);
+                Debug.LogWarning("[APIManager] Attempting to refresh the access token");
 
-                return JsonMapper.ToObject(www.downloadHandler.text);
+                //tries to refresh the token if the request has failed
+                JsonData errorRefresh = await Authorization.RefreshAccessToken();
+
+                try
+                {
+                    string _ = errorRefresh["access_token"].ToString();
+
+                    JsonData json = await GetStepsBetweenMillis(data);
+
+                    return json;
+                }
+                catch (KeyNotFoundException)
+                {
+                    Debug.LogError("[APIManager] failed to send request and refresh attempt: \n" + www.downloadHandler.text + "\n" + errorRefresh.ToJson());
+
+                    return JsonMapper.ToObject(www.downloadHandler.text);
+                }
             }
             else
             {
                 Debug.Log("[APIManager]", () => www.downloadHandler.text);
 
                 return JsonMapper.ToObject(www.downloadHandler.text);
-
-                //callback.Invoke(JsonMapper.ToObject(www.downloadHandler.text));
             }
         }
     }

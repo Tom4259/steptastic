@@ -30,8 +30,8 @@ public class MainWindow : MonoBehaviour
 
 	[Space(20)]
 	[Header("Smaller UI blocks")]
-	public RectTransform stepsBlock;
-	public RectTransform distanceBlock;
+	public TMP_Text stepsBlockValue;
+	public TMP_Text distanceBlockValue;
 
 
 	public void StartMainWindow()
@@ -86,7 +86,6 @@ public class MainWindow : MonoBehaviour
 
 
 
-
 		JsonData json = await API.GetDistanceBetweenMillis(data);
         Debug.Log("[" + GetType().Name + "]" + json.ToJson());
 
@@ -104,7 +103,7 @@ public class MainWindow : MonoBehaviour
             }
             catch (ArgumentOutOfRangeException) { }
 
-            Debug.Log("[" + GetType().Name + "]", () => totalMeters);
+            //Debug.Log("[" + GetType().Name + "]", () => totalMeters);
         }
 
         Debug.Log("[" + GetType().Name + "]", () => totalMeters);
@@ -200,7 +199,7 @@ public class MainWindow : MonoBehaviour
 	{
 		int dist = (int)PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget);
 
-		Debug.Log("[" + GetType().Name + "]", () => dist);
+		//Debug.Log("[" + GetType().Name + "]", () => dist);
 
 		if (dist <= 75)
 		{
@@ -248,22 +247,69 @@ public class MainWindow : MonoBehaviour
 
 	private async void loadUIBlocks()
 	{
-        #region steps today
+        #region request data
 
         DateTime date = DateTime.Now;
         TimeSpan t = new TimeSpan(0, date.Hour, date.Minute, date.Second);
 
-        API.apiData body = API.GenerateAPIbody(date.Subtract(t), DateTime.Now);
+        API.apiData body = API.GenerateAPIbody(date.Subtract(t), DateTime.Now, 3600000);
 
-        Debug.Log("[" + GetType().Name + "]", () => body.startTimeMillis);
-        Debug.Log("[" + GetType().Name + "]", () => body.endTimeMillis);
-        Debug.Log("[" + GetType().Name + "]", () => body.durationMillis);
+        //Debug.Log("[" + GetType().Name + "]", () => body.startTimeMillis);
+        //Debug.Log("[" + GetType().Name + "]", () => body.endTimeMillis);
+        //Debug.Log("[" + GetType().Name + "]", () => body.durationMillis);
 
         #endregion
 
 
 
-        JsonData j = await API.GetStepsBetweenMillis(body);
+        JsonData stepsJson = await API.GetStepsBetweenMillis(body);
+        JsonData distanceJson = await API.GetDistanceBetweenMillis(body);
+
+
+		//Debug.Log("[" + GetType().Name + "] " + stepsJson.ToJson());
+		//Debug.Log("[" + GetType().Name + "] " + distanceJson.ToJson());
+
+
+        #region counting up
+
+        int totalSteps = 0;
+		float totalMeters = 0;
+
+		for (int i = 0; i < stepsJson["bucket"].Count; i++)
+		{
+			try
+			{
+                int item = int.Parse(stepsJson["bucket"][i]["dataset"][0]["point"][0]["value"][0]["intVal"].ToString());
+
+				totalSteps += item;
+            }
+			catch (KeyNotFoundException) { }
+			catch (ArgumentOutOfRangeException) { }
+		}
+
+		Debug.Log("[" + GetType().Name + "]", () => totalSteps);
+
+
+        for (int i = 0; i < distanceJson["bucket"].Count; i++)
+        {
+            try
+            {
+                float item = float.Parse(distanceJson["bucket"][i]["dataset"][0]["point"][0]["value"][0]["fpVal"].ToString());
+
+                totalMeters += item;
+            }
+            catch (KeyNotFoundException) { }
+            catch (ArgumentOutOfRangeException) { }
+        }
+
+        Debug.Log("[" + GetType().Name + "]", () => totalMeters);
+
+		#endregion
+
+		double distanceKM = Math.Round((totalMeters / 1000), 2);
+
+		stepsBlockValue.text = totalSteps.ToString();
+		distanceBlockValue.text = distanceKM + " km";
     }
 
     #endregion
