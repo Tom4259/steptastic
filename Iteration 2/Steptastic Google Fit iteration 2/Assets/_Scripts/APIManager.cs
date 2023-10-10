@@ -313,7 +313,7 @@ public class APIManager : MonoBehaviour
             URL += "&zoom=" + data.zoom;
             URL += "&routeArc=true";
 
-            Debug.Log("[APIManager]", () => URL);
+            //Debug.Log("[APIManager]", () => URL);
 
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(URL);
 

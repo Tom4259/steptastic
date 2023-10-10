@@ -53,6 +53,7 @@ public class MainWindow : MonoBehaviour
 	{
 		getMapImage();
 		loadUIBlocks();
+		loadGraphs();
 	}
 
 
@@ -311,6 +312,15 @@ public class MainWindow : MonoBehaviour
 		stepsBlockValue.text = totalSteps.ToString("#,##0");
 		distanceBlockValue.text = distanceKM + " km";
     }
+
+    #endregion
+
+    #region graphs
+
+	private async void loadGraphs()
+	{
+
+	}
 
     #endregion
 }

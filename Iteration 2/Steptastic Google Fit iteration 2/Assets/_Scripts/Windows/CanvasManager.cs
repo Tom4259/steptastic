@@ -6,6 +6,7 @@ using TMPro;
 using LitJson;
 using System;
 using Michsky.MUIP;
+using System.Threading.Tasks;
 
 public class CanvasManager : MonoBehaviour
 {
@@ -47,15 +48,11 @@ public class CanvasManager : MonoBehaviour
             PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, false);
             PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.setup, false);
         }
-        else
-        {
-            PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, true);
-            PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.setup, true);
-        }
 
 #endif
         mainScreenStartLocation = new Vector2(GetComponent<CanvasScaler>().referenceResolution.x, 0);
 
+        setupWindows.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         mainScreen.GetComponent<RectTransform>().anchoredPosition = mainScreenStartLocation;
 
         setupWindows.gameObject.SetActive(true);
@@ -67,9 +64,6 @@ public class CanvasManager : MonoBehaviour
         //if the user has completed the setup stage
         if(PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.setup, false))
         {
-            setupWindows.gameObject.SetActive(false);
-            mainScreen.gameObject.SetActive(true);
-
             //if the expiry time of access token has passed and the user is authenticated, refresh the access token
             if (PlayerPrefsX.GetBool(PlayerPrefsLocations.User.Account.authenticated)) 
             {
@@ -83,7 +77,9 @@ public class CanvasManager : MonoBehaviour
                 }
             }
 
-            mainScreen.StartMainWindow();
+            closeSetupWindow();
+
+            openMainWindow(false);
         }
         else
         {
@@ -105,33 +101,33 @@ public class CanvasManager : MonoBehaviour
     {
         Debug.Log("[" + GetType().Name + "]" + "setup completed");
 
-        CanvasGroup c = setupWindows.gameObject.GetComponent<CanvasGroup>();
+        closeSetupWindow();
 
+        openMainWindow(true);
+    }
+
+    private async void closeSetupWindow()
+    {
         LeanTween.move(setupWindows, -mainScreenStartLocation, animationTime).setEaseInOutCubic();
 
+        await Task.Delay((int)(animationTime * 1000) + 2000);
+
+        setupWindows.gameObject.SetActive(false);
+    }
+
+    private void openMainWindow(bool animation)
+    {
         mainScreen.gameObject.SetActive(true);
 
-        LeanTween.move(mainScreen.GetComponent<RectTransform>(), Vector2.zero, animationTime).setEaseInOutCubic();
+        if (animation)
+        {
+            LeanTween.move(mainScreen.GetComponent<RectTransform>(), Vector2.zero, animationTime).setEaseInOutCubic();
+        }
+        else
+        {
+            mainScreen.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        }
 
         mainScreen.StartMainWindow();
     }
-
-    /*
-    //checks wether all windows have been completed by the user, if they have then the user can continue to the main screen
-    private void checkAllCompleted()
-    {
-        bool authenticated = PlayerPrefsX.GetBool(PlayerPrefsLocations.User.Account.authenticated, false);
-        //bool testUserGetLocation = PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.requestedUserLocation, false);
-        bool Location = true;
-        bool challenge = PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.createdChallenge, false);
-
-        if(authenticated && challenge && Location)
-        {
-            setupWindows.gameObject.SetActive(false);
-            mainScreen.gameObject.SetActive(true);
-
-            mainScreen.StartMainWindow();
-        }        
-    }
-    */
 }
