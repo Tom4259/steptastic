@@ -308,7 +308,7 @@ public class MainWindow : MonoBehaviour
 
 		double distanceKM = Math.Round((totalMeters / 1000), 2);
 
-		stepsBlockValue.text = totalSteps.ToString();
+		stepsBlockValue.text = totalSteps.ToString("#,##0");
 		distanceBlockValue.text = distanceKM + " km";
     }
 
