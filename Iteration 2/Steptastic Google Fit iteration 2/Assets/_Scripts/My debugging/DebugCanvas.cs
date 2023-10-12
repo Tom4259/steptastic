@@ -34,6 +34,8 @@ public class DebugCanvas : MonoBehaviour
         JsonData j = await APIManager.GoogleFit.Authorization.RefreshAccessToken();
 
         Debug.Log(j.ToJson());
+
+        ReloadTokens();
     }
 
 
@@ -45,21 +47,21 @@ public class DebugCanvas : MonoBehaviour
 
     public void SetAuthCode()
     {
-        Debug.Log("[" + GetType().Name + "]" + "setting auth code to: " + authToken.inputText.text);
+        Debug.Log("[" + GetType().Name + "] " + "Setting auth code to: " + authToken.inputText.text);
 
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, authToken.inputText.text);
     }
 
     public void SetAccessToken()
     {
-        Debug.Log("[" + GetType().Name + "]" + "setting access token to: " + accessToken.inputText.text);
+        Debug.Log("[" + GetType().Name + "] " + "Setting access token to: " + accessToken.inputText.text);
 
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, accessToken.inputText.text);
     }
 
     public void SetRefreshToken()
     {
-        Debug.Log("[" + GetType().Name + "]" + "setting refresh token to: " + refreshToken.inputText.text);
+        Debug.Log("[" + GetType().Name + "] " + "Setting refresh token to: " + refreshToken.inputText.text);
 
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, refreshToken.inputText.text);
     }

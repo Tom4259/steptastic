@@ -32,8 +32,8 @@ public class RequestUserLocationWindow : MonoBehaviour
     {
         continueButton.Interactable(false);
 
-        toggle.isOn = true;
-        toggle.GetComponent<CustomToggle>().UpdateState();
+        useLocationToggle.isOn = true;
+        useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
         AndroidRuntimePermissions.Permission[] result = await AndroidRuntimePermissions.RequestPermissionsAsync("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION");
 
@@ -48,8 +48,8 @@ public class RequestUserLocationWindow : MonoBehaviour
                 Debug.Log("[" + GetType().Name + "] " + "Location not enabled on device or app does not have permission to access location");
                 PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
 
-                toggle.isOn = false;
-                toggle.GetComponent<CustomToggle>().UpdateState();
+                useLocationToggle.isOn = false;
+                useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
                 continueButton.Interactable(true);
             }
@@ -65,7 +65,7 @@ public class RequestUserLocationWindow : MonoBehaviour
 
                 //Debug.Log("[" + GetType().Name + "] " + "Location services are initializing: maxWait " + maxWait);
 
-                toggle.GetComponent<CustomToggle>().UpdateState();
+                useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
                 maxWait--;
             }
@@ -77,8 +77,8 @@ public class RequestUserLocationWindow : MonoBehaviour
 
                 PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
 
-                toggle.isOn = false;
-                toggle.GetComponent<CustomToggle>().UpdateState();
+                useLocationToggle.isOn = false;
+                useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
                 continueButton.Interactable(true);
 
@@ -92,8 +92,8 @@ public class RequestUserLocationWindow : MonoBehaviour
 
                 PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
 
-                toggle.isOn = false;
-                toggle.GetComponent<CustomToggle>().UpdateState();
+                useLocationToggle.isOn = false;
+                useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
                 continueButton.Interactable(true);
 
@@ -101,7 +101,7 @@ public class RequestUserLocationWindow : MonoBehaviour
             }
             else
             {
-                toggle.GetComponent<CustomToggle>().UpdateState();
+                useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
                 float lat = Input.location.lastData.latitude;
                 float lon = Input.location.lastData.longitude;

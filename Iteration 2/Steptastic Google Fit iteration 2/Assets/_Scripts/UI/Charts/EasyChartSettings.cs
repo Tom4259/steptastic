@@ -71,7 +71,7 @@ public class EasyChartSettings : MonoBehaviour
 
     public void AnimateGraph()
     {
-        Debug.Log("[" + GetType().Name + "] Playing chart animation");
+        //Debug.Log("[" + GetType().Name + "] Playing chart animation");
 
         chart.AnimationReset();
         chart.AnimationResume();

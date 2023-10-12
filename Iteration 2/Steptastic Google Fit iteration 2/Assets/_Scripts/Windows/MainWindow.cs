@@ -57,7 +57,9 @@ public class MainWindow : MonoBehaviour
         await GetMapImage();
         await LoadUIBlocks();
 
-		animateScreen();
+        loadingScreen.SetActive(false);
+
+        animateScreen();
     }
 
 	private void animateScreen()
@@ -85,7 +87,7 @@ public class MainWindow : MonoBehaviour
 		//animating the distance UI block
 		LeanTween.value(gameObject, (float f) =>
 		{
-			distanceBlockValue.text = f + " km";
+			distanceBlockValue.text = Math.Round(f, 2) + " km";
 		}, 0, animationDistance, animationTime);
     }
 
@@ -209,7 +211,7 @@ public class MainWindow : MonoBehaviour
 			// runs this section of code when the map image has been loaded
 			callback = () =>
 			{
-                loadingScreen.SetActive(false);
+                //loadingScreen.SetActive(false);
             }
 		};
 
@@ -342,9 +344,7 @@ public class MainWindow : MonoBehaviour
 		double distanceKM = Math.Round((totalMeters / 1000), 2);
 
 		distanceBlockValue.text = distanceKM.ToString();
-
-        //stepsBlockValue.text = totalSteps.ToString("#,##0");
-        //distanceBlockValue.text = distanceKM + " km";
+		stepsBlockValue.text = totalSteps.ToString();
     }
 
     #endregion
