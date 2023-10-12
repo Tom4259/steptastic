@@ -45,14 +45,14 @@ public class MainWindow : MonoBehaviour
 	{
 		loadingScreen.SetActive(true);
 
-        //shows the user their start and end Location
-        //challengeDescriptionLabel.text = challengeDescriptionText.Replace("{{startLocation}}",
-        //	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital) + ", " +
-        //	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName)).Replace("{{endLocation}}",
-        //	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital) + ", " +
-        //	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName));
+		//shows the user their start and end Location
+		//challengeDescriptionLabel.text = challengeDescriptionText.Replace("{{startLocation}}",
+		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital) + ", " +
+		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName)).Replace("{{endLocation}}",
+		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital) + ", " +
+		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName));
 
-
+		resetUIBlockText();
         await calculateUserProgress();
         await getMapImage();
         await loadUIBlocks();
@@ -246,6 +246,12 @@ public class MainWindow : MonoBehaviour
     #endregion
 
     #region UI blocks
+
+	private void resetUIBlockText()
+	{
+		stepsBlockValue.text = "------";
+		distanceBlockValue.text = "--- km";
+	}
 
 	private async Task loadUIBlocks()
 	{

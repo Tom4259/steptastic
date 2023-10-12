@@ -12,9 +12,13 @@ public class DebugCanvas : MonoBehaviour
     public CustomInputField accessToken;
     public CustomInputField refreshToken;
 
+    [Space]
+    public TMP_Text versionText;
+
     private void Start()
     {
         reloadTokens();
+        versionText.text = "V " + Application.version;
     }
 
 
