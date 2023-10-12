@@ -10,14 +10,14 @@ public class RequestUserLocationWindow : MonoBehaviour
     public bool testWithLocation;
 
     [Space]
-    public Toggle toggle;
+    public Toggle useLocationToggle;
 
     [Space(10)]
     public ButtonManager continueButton;
 
-    public void requestLocation()
+    public void RequestLocation()
     {
-        if (toggle.isOn)
+        if (useLocationToggle.isOn)
         {
             Debug.Log("[" + GetType().Name + "] " + "Getting location");
 
@@ -137,8 +137,8 @@ public class RequestUserLocationWindow : MonoBehaviour
     {
         continueButton.Interactable(false);
 
-        toggle.isOn = true;
-        toggle.GetComponent<CustomToggle>().UpdateState();
+        useLocationToggle.isOn = true;
+        useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
         Debug.Log("[" + GetType().Name + "]", () => testWithLocation);
 
@@ -156,8 +156,8 @@ public class RequestUserLocationWindow : MonoBehaviour
         {
             PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
 
-            toggle.isOn = false;
-            toggle.GetComponent<CustomToggle>().UpdateState();
+            useLocationToggle.isOn = false;
+            useLocationToggle.GetComponent<CustomToggle>().UpdateState();
         }
 
         continueButton.Interactable(true);
@@ -169,9 +169,9 @@ public class RequestUserLocationWindow : MonoBehaviour
 
 #endif
 
-    public void completedLocation()
+    public void CompletedLocation()
     {
-        if (toggle.isOn)
+        if (useLocationToggle.isOn)
         {
             PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, true);
         }

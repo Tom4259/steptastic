@@ -24,11 +24,11 @@ public class ProcessDeepLinkMngr : MonoBehaviour
         {
             Instance = this;
 
-            Application.deepLinkActivated += onDeepLinkActivated;
+            Application.deepLinkActivated += OnDeepLinkActivated;
             if (!String.IsNullOrEmpty(Application.absoluteURL))
             {
                 // Cold start and Application.absoluteURL not null so process Deep Link.
-                onDeepLinkActivated(Application.absoluteURL);
+                OnDeepLinkActivated(Application.absoluteURL);
             }
             // Initialize DeepLink Manager global variable.
             else deeplinkURL = "[none]";
@@ -55,7 +55,7 @@ public class ProcessDeepLinkMngr : MonoBehaviour
     /// </summary>
     //demo return link
     //https://steptastic-ad9d9.web.app/?code=4%2F0AfJohXlF9uJL5yPoEbD7LOZUhwzT5pIVfjN86bjd1kEWownIpAdUAcxrftkAo9Ky4op9Xg&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffitness.activity.read
-    public void onDeepLinkActivated(string url)
+    public void OnDeepLinkActivated(string url)
     {
         // Update DeepLink Manager global variable, so URL can be accessed from anywhere.
         deeplinkURL = url;
@@ -67,13 +67,13 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 
         Debug.Log("[" + GetType().Name + "]", () => authCode);
 
-        saveValuesAndContinue(authCode);
+        SaveValuesAndContinue(authCode);
     }
 
     /// <summary>
     /// after splitting the values, the important ones are saved
     /// </summary>
-    private async void saveValuesAndContinue(string authCode)
+    private async void SaveValuesAndContinue(string authCode)
     {
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, authCode);
 

@@ -17,19 +17,19 @@ public class DebugCanvas : MonoBehaviour
 
     private void Start()
     {
-        reloadTokens();
+        ReloadTokens();
         versionText.text = "V " + Application.version;
     }
 
 
-    public void reloadTokens()
+    public void ReloadTokens()
     {
         authToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, "N/A");
         accessToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, "N/A");
         refreshToken.inputText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, "N/A");
     }
 
-    public async void refreshTokens()
+    public async void RefreshTokens()
     {
         JsonData j = await APIManager.GoogleFit.Authorization.RefreshAccessToken();
 
@@ -37,27 +37,27 @@ public class DebugCanvas : MonoBehaviour
     }
 
 
-    public void devLogin()
+    public void DevLogin()
     {
         CanvasManager.instance.authenticateWindow.UserAuthenticated();
     }
 
 
-    public void setAuthCode()
+    public void SetAuthCode()
     {
         Debug.Log("[" + GetType().Name + "]" + "setting auth code to: " + authToken.inputText.text);
 
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, authToken.inputText.text);
     }
 
-    public void setAccessToken()
+    public void SetAccessToken()
     {
         Debug.Log("[" + GetType().Name + "]" + "setting access token to: " + accessToken.inputText.text);
 
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, accessToken.inputText.text);
     }
 
-    public void setRefreshToken()
+    public void SetRefreshToken()
     {
         Debug.Log("[" + GetType().Name + "]" + "setting refresh token to: " + refreshToken.inputText.text);
 

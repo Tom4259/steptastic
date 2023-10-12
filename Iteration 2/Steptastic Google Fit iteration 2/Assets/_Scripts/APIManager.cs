@@ -19,7 +19,7 @@ public class APIManager : MonoBehaviour
         /// <summary>
         /// a simple class so it is easier to customise each api request
         /// </summary>
-        public struct apiData
+        public struct ApiData
         {
             public long startTimeMillis;
             public long endTimeMillis;
@@ -34,11 +34,11 @@ public class APIManager : MonoBehaviour
         /// <param name="end">the point in history to stop getting data from</param>
         /// <param name="timeGap">the amount of milliseconds between each data point</param>
         /// <returns></returns>
-        public static apiData GenerateAPIbody(DateTime start, DateTime end, long timeGap = 86400000)
+        public static ApiData GenerateAPIbody(DateTime start, DateTime end, long timeGap = 86400000)
         {
             long milliseconds = ((DateTimeOffset)end).ToUnixTimeMilliseconds();
 
-            apiData apiData = new apiData()
+            ApiData apiData = new ApiData()
             {
                 startTimeMillis = milliseconds - (milliseconds - ((DateTimeOffset)start).ToUnixTimeMilliseconds()),
                 endTimeMillis = milliseconds,
@@ -182,7 +182,7 @@ public class APIManager : MonoBehaviour
         /// this coroutine takes in the requests body as a parameter, as the start and end time of the request can change.
         /// the request will then get the step count between the timestamps
         /// </summary>
-        public static async Task<JsonData> GetStepsBetweenMillis(apiData data)
+        public static async Task<JsonData> GetStepsBetweenMillis(ApiData data)
         {
             string body = "{\"aggregateBy\":[{\"dataTypeName\":\"com.google.step_count.delta\",\"dataSourceId\":\"derived:com.google.step_count.delta:com.google.android.gms:estimated_steps\"}],\"bucketByTime\":{\"durationMillis\":" + data.durationMillis + "},\"startTimeMillis\":" + data.startTimeMillis + ",\"endTimeMillis\":" + data.endTimeMillis + "}";
 
@@ -233,7 +233,7 @@ public class APIManager : MonoBehaviour
         /// this coroutine takes in the requests body as a parameter, as the start and end time of the request can change.
         /// the request will then get the distance made between the timestamps
         /// </summary>
-        public static async Task<JsonData> GetDistanceBetweenMillis(apiData data)
+        public static async Task<JsonData> GetDistanceBetweenMillis(ApiData data)
         {
             string body = "{\"aggregateBy\":[{\"dataTypeName\":\"com.google.distance.delta\"}],\"bucketByTime\":{\"durationMillis\":" + data.durationMillis + "},\"startTimeMillis\":" + data.startTimeMillis + ",\"endTimeMillis\":" + data.endTimeMillis + "}";
 
@@ -304,7 +304,7 @@ public class APIManager : MonoBehaviour
             public UnityAction callback = null;
         }
 
-        public static async void getMapImage(MapData data)
+        public static async void GetMapImage(MapData data)
         {
             string URL = "https://www.mapquestapi.com/staticmap/v5/map?key=frXZBd4uCdYXhcwhVMPsug3yjf6oXQ5b";
             URL += "&shape=" + data.startLocation + "|" + data.endLocation;

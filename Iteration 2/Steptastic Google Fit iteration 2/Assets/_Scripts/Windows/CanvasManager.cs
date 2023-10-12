@@ -77,9 +77,9 @@ public class CanvasManager : MonoBehaviour
                 }
             }
 
-            closeSetupWindow();
+            CloseSetupWindow();
 
-            openMainWindow(false);
+            OpenMainWindow(false);
         }
         else
         {
@@ -103,11 +103,11 @@ public class CanvasManager : MonoBehaviour
 
         PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.setup, true);
 
-        closeSetupWindow();
-        openMainWindow(true);
+        CloseSetupWindow();
+        OpenMainWindow(true);
     }
 
-    private async void closeSetupWindow()
+    private async void CloseSetupWindow()
     {
         LeanTween.move(setupWindows, -mainScreenStartLocation, animationTime).setEaseInOutCubic();
 
@@ -116,7 +116,7 @@ public class CanvasManager : MonoBehaviour
         setupWindows.gameObject.SetActive(false);
     }
 
-    private void openMainWindow(bool animation)
+    private void OpenMainWindow(bool animation)
     {
         mainScreen.gameObject.SetActive(true);
 

@@ -52,18 +52,41 @@ public class MainWindow : MonoBehaviour
 		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital) + ", " +
 		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName));
 
-		resetUIBlockText();
-        await calculateUserProgress();
-        await getMapImage();
-        await loadUIBlocks();
+		ResetUIBlockText();
+        await CalculateUserProgress();
+        await GetMapImage();
+        await LoadUIBlocks();
 
+		animateScreen();
+    }
 
+	private void animateScreen()
+	{
         float percentage = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted);
 
         LeanTween.value(gameObject, (float f) =>
         {
             progressBar.currentPercent = f;
         }, 0, percentage, animationTime);
+
+		dayStepsChart.AnimateGraph();
+
+
+		int animationSteps = int.Parse(stepsBlockValue.text);
+		float animationDistance = float.Parse(distanceBlockValue.text);
+
+		//animating the steps UI block
+		LeanTween.value(gameObject, (float f) =>
+		{
+			stepsBlockValue.text = f.ToString("#,##0");
+		}, 0, animationSteps, animationTime);
+
+
+		//animating the distance UI block
+		LeanTween.value(gameObject, (float f) =>
+		{
+			distanceBlockValue.text = f + " km";
+		}, 0, animationDistance, animationTime);
     }
 
 	#region progress to target
@@ -71,7 +94,7 @@ public class MainWindow : MonoBehaviour
 	/// <summary>
 	/// calculates the user progress based on the amount of distance the user has covered since the start date
 	/// </summary>
-	private async Task calculateUserProgress()
+	private async Task CalculateUserProgress()
 	{
 		//if start date is now, then make it beggining of the day
 		DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
@@ -83,7 +106,7 @@ public class MainWindow : MonoBehaviour
 		Debug.Log("[" + GetType().Name + "]", () => now);
 		Debug.Log("[" + GetType().Name + "]", () => dif);
 
-		API.apiData data = new API.apiData();
+		API.ApiData data = new API.ApiData();
 
 		//if less than a minute, get data in 30 minute intervals
 		if (dif < 60) data = API.GenerateAPIbody(startDate, now, 1800000);
@@ -138,7 +161,7 @@ public class MainWindow : MonoBehaviour
 	/// <summary>
 	/// requests an image from MapQuest displaying the user's challenge data
 	/// </summary>
-	private Task getMapImage()
+	private Task GetMapImage()
     {
         #region variables
 
@@ -190,7 +213,7 @@ public class MainWindow : MonoBehaviour
             }
 		};
 
-		APIManager.MapQuest.getMapImage(mData);
+		APIManager.MapQuest.GetMapImage(mData);
         return Task.CompletedTask;
     }
 
@@ -247,20 +270,20 @@ public class MainWindow : MonoBehaviour
 
     #region UI blocks
 
-	private void resetUIBlockText()
+	private void ResetUIBlockText()
 	{
 		stepsBlockValue.text = "------";
 		distanceBlockValue.text = "--- km";
 	}
 
-	private async Task loadUIBlocks()
+	private async Task LoadUIBlocks()
 	{
         #region request data
 
         DateTime date = DateTime.Now;
         TimeSpan t = new TimeSpan(0, date.Hour, date.Minute, date.Second);
 
-        API.apiData body = API.GenerateAPIbody(date.Subtract(t), DateTime.Now, 3600000);
+        API.ApiData body = API.GenerateAPIbody(date.Subtract(t), DateTime.Now, 3600000);
 
         //Debug.Log("[" + GetType().Name + "]", () => body.startTimeMillis);
         //Debug.Log("[" + GetType().Name + "]", () => body.endTimeMillis);
@@ -277,7 +300,7 @@ public class MainWindow : MonoBehaviour
         //Debug.Log("[" + GetType().Name + "] " + distanceJson.ToJson());
 
         //creating the graph with the steps
-        loadGraphs(stepsJson);
+        LoadGraphs(stepsJson);
 
 
         #region counting up
@@ -318,15 +341,17 @@ public class MainWindow : MonoBehaviour
 
 		double distanceKM = Math.Round((totalMeters / 1000), 2);
 
-		stepsBlockValue.text = totalSteps.ToString("#,##0");
-		distanceBlockValue.text = distanceKM + " km";
+		distanceBlockValue.text = distanceKM.ToString();
+
+        //stepsBlockValue.text = totalSteps.ToString("#,##0");
+        //distanceBlockValue.text = distanceKM + " km";
     }
 
     #endregion
 
     #region graphs
 
-	private void loadGraphs(JsonData json)
+	private void LoadGraphs(JsonData json)
 	{
 		List<double> steps = new List<double>();
 
@@ -353,7 +378,7 @@ public class MainWindow : MonoBehaviour
 			steps.Add(0);
 		}
 
-		dayStepsChart.setSerieData(steps);
+		dayStepsChart.SetSerieData(steps);
 	}
 
     #endregion

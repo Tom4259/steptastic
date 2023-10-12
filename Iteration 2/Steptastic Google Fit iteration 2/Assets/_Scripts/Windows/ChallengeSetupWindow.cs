@@ -15,15 +15,23 @@ public class ChallengeSetupWindow : MonoBehaviour
     [Space]
     public CustomDropdown startLocation;
     public CustomDropdown endLocation;
-
-    [Space]
     public Sprite dropdownIcon;
 
     [Space]
     public NotificationManager sameLocationMessage;
 
+    [Space]
+    public TMP_Text challengeDescriptionText;
+    [TextArea]
+    public string descriptionText = "You will be virtually walking {{distance}} which will take you approximatly {{days}} days.";
+
     [Space(20)]
     public ButtonManager saveButton;
+
+    private void Start()
+    {
+        challengeDescriptionText.text = "";
+    }
 
     /// <summary>
     /// Adds all country and capital data to the dropdowns
@@ -112,23 +120,23 @@ public class ChallengeSetupWindow : MonoBehaviour
     /// <summary>
     /// called when the selected dropdown item has been changed
     /// </summary>
-    public void onDropdownChanged()
+    public void OnDropdownChanged()
     {
         if(startLocation.selectedItemIndex != 0)
         {
-            StartCoroutine(updateDropdown(startLocation));
+            StartCoroutine(UpdateDropdown(startLocation));
         }
 
         if(endLocation.selectedItemIndex != 0)
         {
-            StartCoroutine(updateDropdown(endLocation));
+            StartCoroutine(UpdateDropdown(endLocation));
         }        
     }
 
     /// <summary>
     /// waits a certain amount of time before updating the dropdown list to prevent a UI lag
     /// </summary>
-    private IEnumerator updateDropdown(CustomDropdown d)
+    private IEnumerator UpdateDropdown(CustomDropdown d)
     {
         yield return new WaitForSeconds(0.2f);
 
@@ -139,7 +147,7 @@ public class ChallengeSetupWindow : MonoBehaviour
         
         d.RemoveItem("SELECT", true);
 
-        checkValidDropdownItems();
+        CheckValidDropdownItems();
     }
 
 
@@ -147,9 +155,9 @@ public class ChallengeSetupWindow : MonoBehaviour
     /// checks to see if the user has selected valid options in the dropdowns
     /// </summary>
     /// <returns></returns>
-    public bool checkValidDropdownItems()
+    public bool CheckValidDropdownItems()
     {
-        if (dropdownsTheSame())
+        if (DropdownsTheSame())
         {
             Debug.LogError("[" + GetType().Name + "]", "chosen locations are the same");
 
@@ -177,7 +185,7 @@ public class ChallengeSetupWindow : MonoBehaviour
     /// returns a bool depending on if the same item is selected in both dropdowns
     /// </summary>
     /// <returns></returns>
-    private bool dropdownsTheSame()
+    private bool DropdownsTheSame()
     {
         string startName = startLocation.items[startLocation.selectedItemIndex].itemName;
         string endName = endLocation.items[endLocation.selectedItemIndex].itemName;
@@ -189,12 +197,20 @@ public class ChallengeSetupWindow : MonoBehaviour
     }
 
 
+    private void updateDescriptionText()
+    {
+        float distance = (float)CalculateDistanceToTarget();
+
+        challengeDescriptionText.text = descriptionText.Replace("{{distance}}", distance + " km");
+    }
+
+
     /// <summary>
     /// saves the start and end lation as with the relevant latitude and longitudes to device
     /// </summary>
     public void SaveChallengeData()
     {
-        if (!checkValidDropdownItems()) return;
+        if (!CheckValidDropdownItems()) return;
 
 
         //goes through all of the countries list and finds the start and end Location, saves the latitude and longitude to the device
@@ -221,30 +237,48 @@ public class ChallengeSetupWindow : MonoBehaviour
 
         PlayerPrefsX.SetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
 
-        calculateDistanceToTarget();
+        PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, (float)CalculateDistanceToTarget());
     }
 
 
-    private void calculateDistanceToTarget()
+    private double CalculateDistanceToTarget()
     {
         //calculates the distance between 2 latitude and longitudes
+        float startLat = -1;
+        float startLong = -1;
 
-        Coordinates start = new Coordinates { Lat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[0]),
-            Long = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[1])};
+        float endLat = -1;
+        float endLong = -1;
 
-        Coordinates end = new Coordinates { Lat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[0]),
-            Long = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[1]) };
+
+        for (int i = 0; i < countriesList["Countries"].Count; i++)
+        {
+            if (countriesList["Countries"][i]["Country"].ToString() == startLocation.items[startLocation.selectedItemIndex].itemName)
+            {
+                startLat = float.Parse(countriesList["Countries"][i]["Latitude"].ToString());
+                startLong = float.Parse(countriesList["Countries"][i]["Longitude"].ToString());
+            }
+
+            if (countriesList["Countries"][i]["Country"].ToString() == endLocation.items[endLocation.selectedItemIndex].itemName)
+            {
+                endLat = float.Parse(countriesList["Countries"][i]["Latitude"].ToString());
+                endLong = float.Parse(countriesList["Countries"][i]["Longitude"].ToString());
+            }
+        }
+
+
+        Coordinates start = new Coordinates { Lat = startLat, Long = startLong };
+
+        Coordinates end = new Coordinates { Lat = endLat, Long = endLong };
 
         double distance = UsefulFunctions.DistanceTo(start, end);
 
         Debug.Log("[" + GetType().Name + "]", () => distance);
 
-        PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, (float)distance);
-
-        closeChallengeSetup();
+        return distance;
     }
 
-    private void closeChallengeSetup() 
+    private void CloseChallengeSetup() 
     {
         PlayerPrefsX.Save();
 
