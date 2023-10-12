@@ -175,13 +175,18 @@ namespace Sisus.Debugging.Console
 			if(length > 0)
 			{
 				int from = text.IndexOf('<');
-				if(from != -1)
+				if(from != -1 && from + 1 < text.Length)
 				{
 					for(int to = textUnformatted.IndexOf('>', from + 1); to != -1; to = textUnformatted.IndexOf('>', from + 1))
 					{
 						textUnformatted = textUnformatted.Substring(0, from) + textUnformatted.Substring(to + 1);
+						if(text.Length <= 1)
+						{
+							break;
+						}
+
 						from = textUnformatted.IndexOf('<');
-						if(from == -1)
+						if(from == -1 || from + 1 >= text.Length)
 						{
 							break;
 						}

@@ -285,7 +285,7 @@ public class MainWindow : MonoBehaviour
         DateTime date = DateTime.Now;
         TimeSpan t = new TimeSpan(0, date.Hour, date.Minute, date.Second);
 
-        API.ApiData body = API.GenerateAPIbody(date.Subtract(t), DateTime.Now, 3600000);
+        API.ApiData body = API.GenerateAPIbody(date.Subtract(t), DateTime.Now, (3600000 / 2)); //30 minute time gap
 
         //Debug.Log("[" + GetType().Name + "]", () => body.startTimeMillis);
         //Debug.Log("[" + GetType().Name + "]", () => body.endTimeMillis);
@@ -377,6 +377,8 @@ public class MainWindow : MonoBehaviour
 		{
 			steps.Add(0);
 		}
+
+		Debug.Log(() => steps.Count);
 
 		dayStepsChart.SetSerieData(steps);
 	}
