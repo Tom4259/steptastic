@@ -862,7 +862,7 @@ namespace Sisus.Debugging
 		/// Each format item inside the string is replaced by the value of the argument at the same index.
 		/// </para>
 		/// <para>
-		/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that Location.
+		/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that location.
 		/// </para>
 		/// </param>
 		/// <param name="args">

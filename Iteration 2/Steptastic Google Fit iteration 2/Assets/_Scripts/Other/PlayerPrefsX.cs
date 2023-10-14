@@ -108,7 +108,7 @@ public class PlayerPrefsX
 
     public static void SetDateTime(String name, DateTime value)
     {
-        Debug.Log("[PlayerPrefsX]" + " Setting " + name + " to " + value + " in " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+        Debug.Log("[PlayerPrefsX]" + " Setting " + name + " to " + value.ToString("d") + " in " + System.Reflection.MethodBase.GetCurrentMethod().Name);
 
         SetLong(name + ".datetime", value.ToBinary());
     }

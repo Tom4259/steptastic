@@ -63,7 +63,7 @@ namespace Sisus.Debugging
 			{
 				if(ShouldHideMessage(text))
 				{
-					BroadcastLogMessageSuppressed(text, formatter.ColorizePlainText(text), StackTraceUtility.ExtractStackTrace(), LogType.Log, context);
+					BroadcastLogMessageSuppressed(text, formatter.ColorizePlainText(text, true), StackTraceUtility.ExtractStackTrace(), LogType.Log, context);
 					return;
 				}
 
@@ -75,7 +75,7 @@ namespace Sisus.Debugging
 						Application.SetStackTraceLogType(LogType.Log, StackTrace);
 					}
 
-					text = formatter.ColorizePlainText(text);
+					text = formatter.ColorizePlainText(text, true);
 					Format(ref text);
 					UnityEngine.Debug.Log(text, context);
 
@@ -137,7 +137,7 @@ namespace Sisus.Debugging
 			#if DEBUG
 			if(ShouldHideMessage(message))
 			{
-				BroadcastLogMessageSuppressed(message, formatter.ColorizePlainText(message), StackTraceUtility.ExtractStackTrace(), LogType.Log, context);
+				BroadcastLogMessageSuppressed(message, formatter.ColorizePlainText(message, true), StackTraceUtility.ExtractStackTrace(), LogType.Log, context);
 				return;
 			}
 
@@ -149,7 +149,7 @@ namespace Sisus.Debugging
 					Application.SetStackTraceLogType(LogType.Log, StackTrace);
 				}
 
-				message = formatter.ColorizePlainText(message);
+				message = formatter.ColorizePlainText(message, true);
 				Format(ref message);
 				UnityEngine.Debug.Log(message, context);
 
@@ -227,7 +227,7 @@ namespace Sisus.Debugging
 			#if DEBUG
 			if(ShouldHideMessage(message))
 			{
-				BroadcastLogMessageSuppressed(message, formatter.ColorizePlainText(message), StackTraceUtility.ExtractStackTrace(), LogType.Warning, context);
+				BroadcastLogMessageSuppressed(message, formatter.ColorizePlainText(message, true), StackTraceUtility.ExtractStackTrace(), LogType.Warning, context);
 				return;
 			}
 
@@ -239,7 +239,7 @@ namespace Sisus.Debugging
 					Application.SetStackTraceLogType(LogType.Warning, StackTrace);
 				}
 
-				message = formatter.ColorizePlainText(message);
+				message = formatter.ColorizePlainText(message, true);
 				Format(ref message);
 				UnityEngine.Debug.LogWarning(message, context);
 
@@ -317,7 +317,7 @@ namespace Sisus.Debugging
 			#if DEBUG
 			if(ShouldHideMessage(message))
 			{
-				BroadcastLogMessageSuppressed(message, formatter.ColorizePlainText(message), StackTraceUtility.ExtractStackTrace(), LogType.Error, context);
+				BroadcastLogMessageSuppressed(message, formatter.ColorizePlainText(message, true), StackTraceUtility.ExtractStackTrace(), LogType.Error, context);
 				return;
 			}
 
@@ -329,7 +329,7 @@ namespace Sisus.Debugging
 					Application.SetStackTraceLogType(LogType.Error, StackTrace);
 				}
 
-				message = formatter.ColorizePlainText(message);
+				message = formatter.ColorizePlainText(message, true);
 				Format(ref message);
 				UnityEngine.Debug.LogError(message, context);
 

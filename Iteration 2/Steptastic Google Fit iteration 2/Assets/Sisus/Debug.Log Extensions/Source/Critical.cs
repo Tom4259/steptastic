@@ -63,7 +63,7 @@ namespace Sisus.Debugging
 			{
 				if(Debug.ShouldHideMessage(text))
 				{
-					Debug.BroadcastLogMessageSuppressed(text, Debug.formatter.ColorizePlainText(text), StackTraceUtility.ExtractStackTrace(), LogType.Log, context);
+					Debug.BroadcastLogMessageSuppressed(text, Debug.formatter.ColorizePlainText(text, true), StackTraceUtility.ExtractStackTrace(), LogType.Log, context);
 					return;
 				}
 
@@ -75,7 +75,7 @@ namespace Sisus.Debugging
 						Application.SetStackTraceLogType(LogType.Log, StackTrace);
 					}
 
-					text = Debug.formatter.ColorizePlainText(text);
+					text = Debug.formatter.ColorizePlainText(text, true);
 					Format(ref text);
 					UnityEngine.Debug.Log(text, context);
 
@@ -134,7 +134,7 @@ namespace Sisus.Debugging
 		{
 			if(Debug.ShouldHideMessage(message))
 			{
-				Debug.BroadcastLogMessageSuppressed(message, Debug.formatter.ColorizePlainText(message), StackTraceUtility.ExtractStackTrace(), LogType.Log, context);
+				Debug.BroadcastLogMessageSuppressed(message, Debug.formatter.ColorizePlainText(message, true), StackTraceUtility.ExtractStackTrace(), LogType.Log, context);
 				return;
 			}
 
@@ -146,7 +146,7 @@ namespace Sisus.Debugging
 					Application.SetStackTraceLogType(LogType.Log, StackTrace);
 				}
 
-				message = Debug.formatter.ColorizePlainText(message);
+				message = Debug.formatter.ColorizePlainText(message, true);
 				Format(ref message);
 				UnityEngine.Debug.Log(message, context);
 
@@ -253,7 +253,7 @@ namespace Sisus.Debugging
 			{
 				if(Debug.ShouldHideMessage(text))
 				{
-					Debug.BroadcastLogMessageSuppressed(text, Debug.formatter.ColorizePlainText(text), StackTraceUtility.ExtractStackTrace(), LogType.Warning, context);
+					Debug.BroadcastLogMessageSuppressed(text, Debug.formatter.ColorizePlainText(text, true), StackTraceUtility.ExtractStackTrace(), LogType.Warning, context);
 					return;
 				}
 
@@ -265,7 +265,7 @@ namespace Sisus.Debugging
 						Application.SetStackTraceLogType(LogType.Warning, StackTrace);
 					}
 
-					text = Debug.formatter.ColorizePlainText(text);
+					text = Debug.formatter.ColorizePlainText(text, true);
 					Format(ref text);
 					UnityEngine.Debug.Log(text, context);
 
@@ -324,7 +324,7 @@ namespace Sisus.Debugging
 		{
 			if(Debug.ShouldHideMessage(message))
 			{
-				Debug.BroadcastLogMessageSuppressed(message, Debug.formatter.ColorizePlainText(message), StackTraceUtility.ExtractStackTrace(), LogType.Warning, context);
+				Debug.BroadcastLogMessageSuppressed(message, Debug.formatter.ColorizePlainText(message, true), StackTraceUtility.ExtractStackTrace(), LogType.Warning, context);
 				return;
 			}
 
@@ -336,7 +336,7 @@ namespace Sisus.Debugging
 					Application.SetStackTraceLogType(LogType.Warning, StackTrace);
 				}
 
-				message = Debug.formatter.ColorizePlainText(message);
+				message = Debug.formatter.ColorizePlainText(message, true);
 				Format(ref message);
 				UnityEngine.Debug.LogWarning(message, context);
 
@@ -443,7 +443,7 @@ namespace Sisus.Debugging
 			{
 				if(Debug.ShouldHideMessage(text))
 				{
-					Debug.BroadcastLogMessageSuppressed(text, Debug.formatter.ColorizePlainText(text), StackTraceUtility.ExtractStackTrace(), LogType.Error, context);
+					Debug.BroadcastLogMessageSuppressed(text, Debug.formatter.ColorizePlainText(text, true), StackTraceUtility.ExtractStackTrace(), LogType.Error, context);
 					return;
 				}
 
@@ -455,7 +455,7 @@ namespace Sisus.Debugging
 						Application.SetStackTraceLogType(LogType.Error, StackTrace);
 					}
 
-					text = Debug.formatter.ColorizePlainText(text);
+					text = Debug.formatter.ColorizePlainText(text, true);
 					Format(ref text);
 					UnityEngine.Debug.Log(text, context);
 
@@ -514,7 +514,7 @@ namespace Sisus.Debugging
 		{
 			if(Debug.ShouldHideMessage(message))
 			{
-				Debug.BroadcastLogMessageSuppressed(message, Debug.formatter.ColorizePlainText(message), StackTraceUtility.ExtractStackTrace(), LogType.Error, context);
+				Debug.BroadcastLogMessageSuppressed(message, Debug.formatter.ColorizePlainText(message, true), StackTraceUtility.ExtractStackTrace(), LogType.Error, context);
 				return;
 			}
 
@@ -526,7 +526,7 @@ namespace Sisus.Debugging
 					Application.SetStackTraceLogType(LogType.Error, StackTrace);
 				}
 
-				message = Debug.formatter.ColorizePlainText(message);
+				message = Debug.formatter.ColorizePlainText(message, true);
 				Format(ref message);
 				UnityEngine.Debug.LogError(message, context);
 

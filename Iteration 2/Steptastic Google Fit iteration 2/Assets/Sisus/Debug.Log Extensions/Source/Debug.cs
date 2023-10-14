@@ -885,7 +885,7 @@ public static class Debug
 	/// Each format item inside the string is replaced by the value of the argument at the same index.
 	/// </para>
 	/// <para>
-	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that Location.
+	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -935,7 +935,7 @@ public static class Debug
 	/// Each format item inside the string is replaced by the value of the argument at the same index.
 	/// </para>
 	/// <para>
-	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that Location.
+	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -982,7 +982,7 @@ public static class Debug
 	/// </para>
 	/// <para>
 	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/>
-	/// string at that Location.
+	/// string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -1030,7 +1030,7 @@ public static class Debug
 	/// </para>
 	/// <para>
 	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/>
-	/// string at that Location.
+	/// string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -1084,7 +1084,7 @@ public static class Debug
 	/// </para>
 	/// <para>
 	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/>
-	/// string at that Location.
+	/// string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -1124,7 +1124,7 @@ public static class Debug
 	/// Each format item inside the string is replaced by the value of the argument at the same index.
 	/// </para>
 	/// <para>
-	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that Location.
+	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -1185,7 +1185,7 @@ public static class Debug
 	/// </para>
 	/// <para>
 	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/>
-	/// string at that Location.
+	/// string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -1435,7 +1435,7 @@ public static class Debug
 		{
 			return;
 		}
-		LogInternal(message, formatter.FormatLarge(formatter.ColorizePlainText(message)), LogType.Log, 0, 0, context, ShouldHideMessage(message) ? StackTraceUtility.ExtractStackTrace() : null, true);
+		LogInternal(message, formatter.FormatLarge(formatter.ColorizePlainText(message, true)), LogType.Log, 0, 0, context, ShouldHideMessage(message) ? StackTraceUtility.ExtractStackTrace() : null, true);
 		#endif
 	}
 
@@ -1463,7 +1463,7 @@ public static class Debug
 		{
 			return;
 		}
-		LogInternal(message, formatter.FormatLarge(formatter.ColorizePlainText(message)), LogType.Log, channel, 0, context, ShouldHideMessage(message) ? StackTraceUtility.ExtractStackTrace() : null, true);
+		LogInternal(message, formatter.FormatLarge(formatter.ColorizePlainText(message, true)), LogType.Log, channel, 0, context, ShouldHideMessage(message) ? StackTraceUtility.ExtractStackTrace() : null, true);
 		#endif
 	}
 
@@ -1492,7 +1492,7 @@ public static class Debug
 		{
 			return;
 		}
-		LogInternal(message, formatter.FormatLarge(formatter.ColorizePlainText(message)), LogType.Log, channel1, channel2, context, ShouldHideMessage(message) ? StackTraceUtility.ExtractStackTrace() : null, true);
+		LogInternal(message, formatter.FormatLarge(formatter.ColorizePlainText(message, true)), LogType.Log, channel1, channel2, context, ShouldHideMessage(message) ? StackTraceUtility.ExtractStackTrace() : null, true);
 		#endif
 	}
 
@@ -2265,7 +2265,7 @@ public static class Debug
 	/// Each format item inside the string is replaced by the value of the argument at the same index.
 	/// </para>
 	/// <para>
-	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that Location.
+	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -2320,7 +2320,7 @@ public static class Debug
 	/// Each format item inside the string is replaced by the value of the argument at the same index.
 	/// </para>
 	/// <para>
-	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that Location.
+	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -2376,7 +2376,7 @@ public static class Debug
 	/// Each format item inside the string is replaced by the value of the argument at the same index.
 	/// </para>
 	/// <para>
-	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that Location.
+	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -2433,7 +2433,7 @@ public static class Debug
 	/// Each format item inside the string is replaced by the value of the argument at the same index.
 	/// </para>
 	/// <para>
-	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that Location.
+	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -2484,7 +2484,7 @@ public static class Debug
 	/// Each format item inside the string is replaced by the value of the argument at the same index.
 	/// </para>
 	/// <para>
-	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that Location.
+	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -2532,7 +2532,7 @@ public static class Debug
 			return;
 		}
 
-		LogInternal(message, formatter.FormatLarge(formatter.ColorizePlainText(message)), LogType.Warning, 0, 0, context, ShouldHideMessage(message) ? StackTraceUtility.ExtractStackTrace() : null, true);
+		LogInternal(message, formatter.FormatLarge(formatter.ColorizePlainText(message, true)), LogType.Warning, 0, 0, context, ShouldHideMessage(message) ? StackTraceUtility.ExtractStackTrace() : null, true);
 		#endif
 	}
 
@@ -3087,7 +3087,7 @@ public static class Debug
 	/// Each format item inside the string is replaced by the value of the argument at the same index.
 	/// </para>
 	/// <para>
-	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that Location.
+	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -3142,7 +3142,7 @@ public static class Debug
 	/// Each format item inside the string is replaced by the value of the argument at the same index.
 	/// </para>
 	/// <para>
-	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that Location.
+	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -3186,7 +3186,7 @@ public static class Debug
 		{
 			return;
 		}
-		LogInternal(message, formatter.FormatLarge(formatter.ColorizePlainText(message)), LogType.Error, 0, 0, context, ShouldHideMessage(message) ? StackTraceUtility.ExtractStackTrace() : null, true);
+		LogInternal(message, formatter.FormatLarge(formatter.ColorizePlainText(message, true)), LogType.Error, 0, 0, context, ShouldHideMessage(message) ? StackTraceUtility.ExtractStackTrace() : null, true);
 		#endif
 	}
 
@@ -3336,7 +3336,7 @@ public static class Debug
 	/// Each format item inside the string is replaced by the value of the argument at the same index.
 	/// </para>
 	/// <para>
-	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that Location.
+	/// A format item consists of braces ("{" and "}") containing the index of the argument whose value should be inserted into the <paramref name="format"/> string at that location.
 	/// </para>
 	/// </param>
 	/// <param name="args">
@@ -4054,7 +4054,7 @@ public static class Debug
 			string stackTrace = StackTraceUtility.ExtractStackTrace();
 			if(failedEnsures.Add(stackTrace))
 			{
-				LogInternal(message, formatter.ColorizePlainText(message), LogType.Assert, channel, 0, context, !channels.IsEnabled(channel) ? stackTrace : null);
+				LogInternal(message, formatter.ColorizePlainText(message, true), LogType.Assert, channel, 0, context, !channels.IsEnabled(channel) ? stackTrace : null);
 			}
 		}
 		#endif
@@ -4289,7 +4289,7 @@ public static class Debug
 			string stackTrace = StackTraceUtility.ExtractStackTrace();
 			if(failedGuards.Add(stackTrace))
 			{
-				LogInternal(message, formatter.ColorizePlainText(message), LogType.Assert, 0, 0, context, ShouldHideMessage(message) ? stackTrace : null);
+				LogInternal(message, formatter.ColorizePlainText(message, true), LogType.Assert, 0, 0, context, ShouldHideMessage(message) ? stackTrace : null);
 			}
 		}
 		#endif
@@ -4411,7 +4411,7 @@ public static class Debug
 			string stackTrace = StackTraceUtility.ExtractStackTrace();
 			if(failedGuards.Add(stackTrace))
 			{
-				LogInternal(message, formatter.ColorizePlainText(message), LogType.Assert, channel, 0, context, !channels.IsEnabled(channel) ? stackTrace : null);
+				LogInternal(message, formatter.ColorizePlainText(message, true), LogType.Assert, channel, 0, context, !channels.IsEnabled(channel) ? stackTrace : null);
 			}
 		}
 		#endif
@@ -5668,7 +5668,7 @@ public static class Debug
 		string textUnformatted = message as string;
 		if(textUnformatted != null)
 		{
-			LogMessageSuppressed(textUnformatted, formatter.ColorizePlainText(textUnformatted), stackTrace, type, context);
+			LogMessageSuppressed(textUnformatted, formatter.ColorizePlainText(textUnformatted, true), stackTrace, type, context);
 			return;
 		}
 
@@ -5697,7 +5697,7 @@ public static class Debug
 				context = ExpressionUtility.GetOwner(method);
 			}
 
-			LogMessageSuppressed(textUnformatted, formatter.ColorizePlainText(textUnformatted), stackTrace, type, context);
+			LogMessageSuppressed(textUnformatted, formatter.ColorizePlainText(textUnformatted, true), stackTrace, type, context);
 			return;
 		}
 
@@ -5795,7 +5795,7 @@ public static class Debug
 		}
 		else
         {
-			formatted = formatter.ColorizePlainText(unformatted);
+			formatted = formatter.ColorizePlainText(unformatted, true);
 		}
 
 		LogMessageSuppressed(unformatted, formatted, stackTrace, type, context);
@@ -5985,7 +5985,7 @@ public static class Debug
 			if(textPrefix.Length > 0)
 			{
 				unformatted.Append(textPrefix);
-				formatted.Append(formatter.ColorizePlainText(textPrefix));
+				formatted.Append(formatter.ColorizePlainText(textPrefix, false));
 			}
 		}
 		else if(ReferenceEquals(messagePrefixOrArg, null))
@@ -6314,7 +6314,7 @@ public static class Debug
 		}
 		else
         {
-			colorized = formatter.Format(formatter.ColorizePlainText(uncolorized));
+			colorized = formatter.Format(formatter.ColorizePlainText(uncolorized, true));
         }
 
 		LastMessageUnformatted = uncolorized;
@@ -6469,7 +6469,7 @@ public static class Debug
 			}
 			else
             {
-				textFormatted = formatter.ColorizePlainText(textUnformatted);
+				textFormatted = formatter.ColorizePlainText(textUnformatted, true);
 			}
 		}
 		else
@@ -6489,7 +6489,7 @@ public static class Debug
 				if(method != null)
 				{
 					textUnformatted = ExpressionUtility.TargetToString(method);
-					textFormatted = formatter.ColorizePlainText(textUnformatted);
+					textFormatted = formatter.ColorizePlainText(textUnformatted, true);
 					if(context == null)
 					{
 						context = ExpressionUtility.GetOwner(method);
@@ -6616,7 +6616,7 @@ public static class Debug
 			}
 			else
             {
-				textFormatted = formatter.ColorizePlainText(textUnformatted);
+				textFormatted = formatter.ColorizePlainText(textUnformatted, true);
 			}
 		}
 		else
@@ -6636,7 +6636,7 @@ public static class Debug
 				if(method != null)
 				{
 					textUnformatted = ExpressionUtility.TargetToString(method);
-					textFormatted = formatter.ColorizePlainText(textUnformatted);
+					textFormatted = formatter.ColorizePlainText(textUnformatted, true);
 					if(context == null)
 					{
 						context = ExpressionUtility.GetOwner(method);

@@ -53,6 +53,7 @@ namespace Sisus.Debugging
 		public readonly string BeginNull = "<color=red>";
 		public readonly string BeginString = "<color=orange>";
 		public readonly string BeginStringWithQuotationMark = "<color=orange>\"";
+		public readonly string StringLineBreak = "</color>" + "\n" + "<color=orange>";
 		public readonly string BeginChar = "<color=orange>'";
 		public readonly string NullChar = "<color=orange>'\\0'</color>";
 		public readonly string BeginNumeric = "<color=cyan>";
@@ -199,6 +200,7 @@ namespace Sisus.Debugging
 
 				BeginString = "";
 				BeginStringWithQuotationMark = "\"";
+				StringLineBreak = "</color>\n" + BeginString;
 				BeginChar = "'";
 				NullChar = "'\\0'";
 
@@ -365,7 +367,7 @@ namespace Sisus.Debugging
 							var compiled = classMember.Compile();
 
 							uncolorized = compiled() as string;
-							colorized = ColorizePlainText(uncolorized);
+							colorized = ColorizePlainText(uncolorized, true);
 							return;
 						}
 
@@ -435,7 +437,7 @@ namespace Sisus.Debugging
 					#endif
 
 					uncolorized = text == null ? NullUncolorized : text;
-					colorized = ColorizePlainText(text);
+					colorized = ColorizePlainText(text, true);
 					return;
 				}
 			}
@@ -498,8 +500,11 @@ namespace Sisus.Debugging
 
 						if(method.GetParameters().Length > 0)
 						{
-							UnityEngine.Debug.LogError("MethodCallExpression MethodInfo had parameters.");
-
+							// We can't invoke the Method but we can compile the original expression into Func<object> and get the result that way.
+							var compiled = classMember.Compile();
+							var result = compiled();						
+							sb.Append(NameValueSeparatorUnformatted);
+							sb.Append(ToStringUncolorized(result, true));
 							return;
 						}
 
@@ -510,15 +515,15 @@ namespace Sisus.Debugging
 
 					var constantExpression = (ConstantExpression)body;
 					sb.Append("const");
-					sb.Append(NameValueSeparator);
+					sb.Append(NameValueSeparatorUnformatted);
 					sb.Append(constantExpression.Value);
 					return;
 				}
 			}
 
 			sb.Append(memberExpression.Member.Name);
-			sb.Append(NameValueSeparator);
-			ToStringColorized(ExpressionUtility.GetValue(memberExpression), sb, false);
+			sb.Append(NameValueSeparatorUnformatted);
+			ToStringUncolorized(ExpressionUtility.GetValue(memberExpression), sb, false);
 		}
 
 		public string ToStringColorized<T>([NotNull]Expression<Func<T>> classMember)
@@ -570,7 +575,7 @@ namespace Sisus.Debugging
 						{
 							var compiled = classMember.Compile();
 							var result = compiled() as string;
-							sb.Append(ColorizePlainText(result));
+							sb.Append(ColorizePlainText(result, true));
 							return;
 						}
 
@@ -610,7 +615,7 @@ namespace Sisus.Debugging
 					Debug.Log(result2);
 					#endif
 
-					sb.Append(ColorizePlainText(result2));
+					sb.Append(ColorizePlainText(result2, true));
 					return;
 				}
 			}
@@ -1039,7 +1044,7 @@ namespace Sisus.Debugging
 						if(text[0] == '"' || text[0] == '\'')
 						{
 							sb.Append(BeginString);
-							sb.Append(text);
+							sb.Append(text.Replace("\n", StringLineBreak));
 							sb.Append("</color>");
 							return;
 						}
@@ -1049,7 +1054,7 @@ namespace Sisus.Debugging
 							return;
 						}
 						sb.Append(BeginStringWithQuotationMark);
-						sb.Append(text);
+						sb.Append(text.Replace("\n", StringLineBreak));
 						sb.Append("\"</color>");
 						return;
 				}
@@ -1825,14 +1830,14 @@ namespace Sisus.Debugging
 						default:
 							if(text[0] == '"' || text[0] == '\'')
 							{
-								return BeginString + text + "</color>";
+								return BeginString + text.Replace("\n", StringLineBreak) + "</color>";
 							}
 							// use IndexOf to check whole string instead?
 							if(text[0] == '<')
 							{
 								return "\"" + text + "\"";
 							}
-							return BeginStringWithQuotationMark + text + "\"</color>";
+							return BeginStringWithQuotationMark + text.Replace("\n", StringLineBreak) + "\"</color>";
 					}
 				}
 				return text;
@@ -2275,6 +2280,7 @@ namespace Sisus.Debugging
 				AppendPrefixColorized(channel, sb);
 				sb.Append(' ');
 			}
+
 			ColorizePlainText(text, sb);
         }
 
@@ -2287,8 +2293,10 @@ namespace Sisus.Debugging
 				{
 					AppendPrefixColorized(channel2, sb);
 				}
+
 				sb.Append(' ');
 			}			
+
 			ColorizePlainText(text, sb);
 		}
 
@@ -2303,7 +2311,7 @@ namespace Sisus.Debugging
 			{
 				// Handle channel prefixes
 				int channelTagsEnd = -1;
-				if(StartsWithChannelPrefix(text))
+				if(StartsWithChannelPrefix(text, true))
 				{
 					int length = text.Length;
 					for(int from = 0, to = text.IndexOf(EndChannel, 1); to != -1; to = text.IndexOf(EndChannel, from + 1))
@@ -2348,21 +2356,15 @@ namespace Sisus.Debugging
 		}
 
 		[MethodImpl(AggressiveInlining)]
-		public bool StartsWithChannelPrefix([NotNull] string text)
+		public bool StartsWithChannelPrefix([NotNull] string text, bool falseIfNotFollowedByAnyOtherText = false)
 		{
 			int length = text.Length;
-			if(length <= 4 || text[0] != BeginChannel)
+			if(length < 3 || text[0] != BeginChannel)
 			{
 				return false;
 			}
 
-			// Avoid interpreting json ouput starting with the [" characters as a channel prefix.
-			if(!char.IsLetterOrDigit(text[1]))
-			{
-				return false;
-			}
-
-			int channelEnd = text.IndexOf(']', 1);
+			int channelEnd = text.IndexOf(']', 2);
 			if(channelEnd == -1)
 			{
 				return false;
@@ -2370,16 +2372,36 @@ namespace Sisus.Debugging
 
 			// Avoid interpreting texts ending with the ] character as having channel prefixes.
 			// It's more likely an array or json output or something else other than a channel prefix.
-			if(channelEnd == length - 1)
+			if(channelEnd == length - 1 && falseIfNotFollowedByAnyOtherText)
 			{
 				return false;
 			}
 
-			return !Debug.channels.IgnoreUnlistedChannels || Debug.channels.Exists(text.Substring(1, channelEnd - 1));
+			string channelName = text.Substring(1, channelEnd - 1);
+			if(Debug.channels.Exists(channelName))
+			{
+				return true;
+			}
+
+			if(Debug.channels.IgnoreUnlistedChannels)
+			{
+				return false;
+			}
+
+			// Avoid interpreting e.g. ["1", 2, false] as a channel prefix.
+			for(int i = 1; i < channelEnd; i++)
+			{
+				if(!char.IsLetterOrDigit(text[i]) && text[i] != ' ')
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		[Pure]
-		public string ColorizePlainText(string text)
+		public string ColorizePlainText(string text, bool isFullText = false)
 		{
 			#if UNITY_EDITOR
 			if(text == null)
@@ -2406,7 +2428,7 @@ namespace Sisus.Debugging
 
 			var sb = new StringBuilder();
 
-			if(StartsWithChannelPrefix(text))
+			if(StartsWithChannelPrefix(text, isFullText))
 			{
 				int channelTagsEnd = -1;
 				for(int from = 0, to = text.IndexOf(EndChannel, 1); to != -1; to = text.IndexOf(EndChannel, from + 1))
@@ -2796,7 +2818,7 @@ namespace Sisus.Debugging
 			}
 			else
 			{
-				if(colorize && StartsWithChannelPrefix(text))
+				if(colorize && StartsWithChannelPrefix(text, true))
 				{
 					length = text.Length;
 					var sb = new StringBuilder();
@@ -3087,12 +3109,12 @@ namespace Sisus.Debugging
 				case 0:
 					return EmptyCollection;
 				case 1:
-					return ColorizePlainText(parts[0]);
+					return ColorizePlainText(parts[0], false);
 				default:
 					var sb = new StringBuilder();
 					for(int n = 0; n < count; n++)
 					{
-						sb.Append(ColorizePlainText(parts[n]));
+						sb.Append(ColorizePlainText(parts[n], false));
 					}
 					return sb.ToString();
 			}
@@ -3104,11 +3126,11 @@ namespace Sisus.Debugging
 		public string JoinColorized(string messagePrefix, string arg, params string[] args)
 		{
 			var sb = new StringBuilder();
-			sb.Append(ColorizePlainText(messagePrefix));
-			sb.Append(ColorizePlainText(arg));
+			sb.Append(ColorizePlainText(messagePrefix, false));
+			sb.Append(ColorizePlainText(arg, false));
 			for(int n = 0, count = args == null ? 0 : args.Length; n < count; n++)
 			{
-				sb.Append(ColorizePlainText(args[n]));
+				sb.Append(ColorizePlainText(args[n], false));
 			}
 			return sb.ToString();
 		}
