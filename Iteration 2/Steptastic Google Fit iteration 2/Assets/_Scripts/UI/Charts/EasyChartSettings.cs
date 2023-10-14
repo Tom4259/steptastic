@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ public class EasyChartSettings : MonoBehaviour
     private BaseChart chart;
 
 
-    void Start()
+    private void Awake()
     {
         chart = GetComponent<BaseChart>();
     }
@@ -32,6 +33,26 @@ public class EasyChartSettings : MonoBehaviour
         }
     }
 
+    public void SetSerieData(List<double> data, List<bool> ignorePoints)
+    {
+        if(data.Count != ignorePoints.Count)
+            Debug.LogWarning("[" + GetType().Name + "] provided lists are not ther same length");
+
+
+        for (int i = 0; i < data.Count; i++)
+        {
+            chart.series[0].UpdateData(i, 1, data[i]);
+        }
+
+
+        for (int i = 0; i < ignorePoints.Count; i++)
+        {
+            SerieData s = chart.series[0].data[i];
+        
+            s.ignore = ignorePoints[i];
+        }
+    }
+
     public void AddSerieData(double value)
     {
         SerieData d = new SerieData
@@ -40,7 +61,7 @@ public class EasyChartSettings : MonoBehaviour
             {
                 0,
                 value
-            }
+            }            
         };
 
         chart.series[0].AddSerieData(d);

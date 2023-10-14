@@ -354,6 +354,7 @@ public class MainWindow : MonoBehaviour
 	private void LoadGraphs(JsonData json)
 	{
 		List<double> steps = new List<double>();
+		List<bool> ignorePoints = new List<bool>();
 
 		for (int i = 0; i < json["bucket"].Count; i++)
 		{
@@ -369,18 +370,21 @@ public class MainWindow : MonoBehaviour
 			catch (KeyNotFoundException) { }
 
             steps.Add(item);
+			ignorePoints.Add(false);
         }
 
-		int remainder = 24 - steps.Count;
+		int remainder = 48 - steps.Count;
 
         for (int i = 0; i < remainder; i++)
 		{
 			steps.Add(0);
-		}
+            ignorePoints.Add(true);
+        }
 
-		Debug.Log(() => steps.Count);
+		//Debug.Log(() => steps.Count);
+		//Debug.Log(() => ignorePoints.Count);
 
-		dayStepsChart.SetSerieData(steps);
+		dayStepsChart.SetSerieData(steps, ignorePoints);
 	}
 
     #endregion
