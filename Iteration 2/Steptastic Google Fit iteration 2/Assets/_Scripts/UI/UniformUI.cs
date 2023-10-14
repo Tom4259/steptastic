@@ -37,6 +37,7 @@ public class UniformUI : MonoBehaviour
         }
     }
 
+    //keeps the colour scheme of UI blocks the same
     private void Update()
     {
         for (int i = 0; i < textElements.Count; i++)

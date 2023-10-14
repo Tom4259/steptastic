@@ -15,6 +15,7 @@ public class RequestUserLocationWindow : MonoBehaviour
     [Space(10)]
     public ButtonManager continueButton;
 
+    //when the toggle is set to on, then my application will request the user's location
     public void RequestLocation()
     {
         if (useLocationToggle.isOn)
@@ -27,7 +28,8 @@ public class RequestUserLocationWindow : MonoBehaviour
 
 
 #if !UNITY_EDITOR
-
+    
+    //requests the user's location and saves to device
     private async void GetLocation()
     {
         continueButton.Interactable(false);
@@ -132,7 +134,7 @@ public class RequestUserLocationWindow : MonoBehaviour
     }
 
 #else
-
+    //uses a set location for development purposes
     private void GetLocation()
     {
         continueButton.Interactable(false);
@@ -169,6 +171,7 @@ public class RequestUserLocationWindow : MonoBehaviour
 
 #endif
 
+    //called when location page has been completed
     public void CompletedLocation()
     {
         if (useLocationToggle.isOn)

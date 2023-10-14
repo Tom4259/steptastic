@@ -304,6 +304,9 @@ public class APIManager : MonoBehaviour
             public UnityAction callback = null;
         }
 
+        /// <summary>
+        /// Downloads image from API using specified data passed into the method
+        /// </summary>
         public static async void GetMapImage(MapData data)
         {
             string URL = "https://www.mapquestapi.com/staticmap/v5/map?key=frXZBd4uCdYXhcwhVMPsug3yjf6oXQ5b";

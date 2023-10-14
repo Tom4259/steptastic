@@ -11,7 +11,6 @@ public class UsefulFunctions
     }
 
 
-
     public static double DistanceTo(double lat1, double lon1, double lat2, double lon2, char unit = 'K')
     {
         double rlat1 = Math.PI*lat1/180;

@@ -32,6 +32,7 @@ public class CanvasManager : MonoBehaviour
 
     private void Awake()
     {
+        //creates an instance so other scripts can access variables and methods
         if(instance == null)
         {
             instance = this;
@@ -87,6 +88,7 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
+    //shows the setup page
     private void LoadSetup()
     {
         setupWindows.gameObject.SetActive(true);
@@ -97,6 +99,7 @@ public class CanvasManager : MonoBehaviour
         challengeSetupWindow.PopulateDropdowns();
     }
 
+    //closes the setup page and opens the main page
     public void SetupCompleted()
     {
         Debug.Log("[" + GetType().Name + "]" + "setup completed");
@@ -107,6 +110,7 @@ public class CanvasManager : MonoBehaviour
         OpenMainWindow(true);
     }
 
+    //closes the setup page
     private async void CloseSetupWindow()
     {
         LeanTween.move(setupWindows, -mainScreenStartLocation, animationTime).setEaseInOutCubic();
@@ -116,6 +120,7 @@ public class CanvasManager : MonoBehaviour
         setupWindows.gameObject.SetActive(false);
     }
 
+    //opens the main window, animation is used for the sliding in effect
     private void OpenMainWindow(bool animation)
     {
         mainScreen.gameObject.SetActive(true);

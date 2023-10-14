@@ -176,6 +176,8 @@ public class ChallengeSetupWindow : MonoBehaviour
             return false;
         }
 
+        UpdateDescriptionText();
+
         saveButton.Interactable(true);
 
         return true;
@@ -196,8 +198,8 @@ public class ChallengeSetupWindow : MonoBehaviour
         return (startLocation.items[startLocation.selectedItemIndex].itemName == endLocation.items[endLocation.selectedItemIndex].itemName);
     }
 
-
-    private void updateDescriptionText()
+    //shows the user a short summary of their challenge
+    private void UpdateDescriptionText()
     {
         float distance = (float)CalculateDistanceToTarget();
 
@@ -241,9 +243,9 @@ public class ChallengeSetupWindow : MonoBehaviour
     }
 
 
+    //calculates the distance between 2 latitude and longitudes
     private double CalculateDistanceToTarget()
-    {
-        //calculates the distance between 2 latitude and longitudes
+    {        
         float startLat = -1;
         float startLong = -1;
 
@@ -278,6 +280,7 @@ public class ChallengeSetupWindow : MonoBehaviour
         return distance;
     }
 
+    //called when the challenge has been setup successfully
     private void CloseChallengeSetup() 
     {
         PlayerPrefsX.Save();

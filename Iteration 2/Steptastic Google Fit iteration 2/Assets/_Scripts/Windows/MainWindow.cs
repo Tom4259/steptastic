@@ -41,6 +41,7 @@ public class MainWindow : MonoBehaviour
 	public EasyChartSettings dayStepsChart;
 
 
+	//called when the main window needs to be refreshed or loaded
 	public async void StartMainWindow()
 	{
 		loadingScreen.SetActive(true);
@@ -59,10 +60,11 @@ public class MainWindow : MonoBehaviour
 
         loadingScreen.SetActive(false);
 
-        animateScreen();
+        AnimateScreen();
     }
 
-	private void animateScreen()
+	//animates to screen
+	private void AnimateScreen()
 	{
         float percentage = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted);
 
@@ -272,12 +274,14 @@ public class MainWindow : MonoBehaviour
 
     #region UI blocks
 
+	//shows a more professional placeholder
 	private void ResetUIBlockText()
 	{
 		stepsBlockValue.text = "------";
 		distanceBlockValue.text = "--- km";
 	}
 
+	//loads data for the UI blocks
 	private async Task LoadUIBlocks()
 	{
         #region request data
@@ -302,7 +306,7 @@ public class MainWindow : MonoBehaviour
         //Debug.Log("[" + GetType().Name + "] " + distanceJson.ToJson());
 
         //creating the graph with the steps
-        LoadGraphs(stepsJson);
+        LoadStepsDayGraph(stepsJson);
 
 
         #region counting up
@@ -351,7 +355,8 @@ public class MainWindow : MonoBehaviour
 
     #region graphs
 
-	private void LoadGraphs(JsonData json)
+	//loads and inputs data into the steps over the day graph
+	private void LoadStepsDayGraph(JsonData json)
 	{
 		List<double> steps = new List<double>();
 		List<bool> ignorePoints = new List<bool>();
