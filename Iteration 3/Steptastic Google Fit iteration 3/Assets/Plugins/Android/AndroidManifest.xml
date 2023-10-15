@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.TomIndustries.Steptastic"
+    xmlns:tools="http://schemas.android.com/tools">
+    <application>
+        <activity android:name="com.unity3d.player.UnityPlayerActivity"
+                  android:theme="@style/UnityThemeSelector">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+
+          <intent-filter android:autoVerify="true">
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />            
+            <data android:scheme="unitydl" />
+            <data android:host="steptastic" />            
+          </intent-filter>
+
+          <!-- used for opening the app from website-->
+          <intent-filter android:autoVerify="true">
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https"
+                  android:host="steptastic-ad9d9.web.app" />
+          </intent-filter>         
+          
+        </activity>
+      
+      <meta-data android:name="unityplayer.SkipPermissionsDialog" android:value="true" />
+    </application>
+
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+</manifest>
