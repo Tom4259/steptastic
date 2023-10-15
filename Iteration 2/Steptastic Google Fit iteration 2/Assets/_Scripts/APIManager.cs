@@ -8,6 +8,7 @@ using LitJson;
 using System.Text;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 public class APIManager : MonoBehaviour
 {
@@ -97,7 +98,7 @@ public class APIManager : MonoBehaviour
 
                 var operation = www.SendWebRequest();
 
-                while(!operation.isDone)
+                while (!operation.isDone)
                 {
                     await Task.Yield();
                 }
@@ -177,6 +178,7 @@ public class APIManager : MonoBehaviour
             }
         }
 
+        #region steps between millis
 
         /// <summary>
         /// this coroutine takes in the requests body as a parameter, as the start and end time of the request can change.
@@ -210,7 +212,7 @@ public class APIManager : MonoBehaviour
                 {
                     string _ = errorRefresh["access_token"].ToString();
 
-                    JsonData json = await GetStepsBetweenMillis(data);
+                    JsonData json = await GetStepsBetweenMillisRetry(data);
 
                     return json;
                 }
@@ -228,6 +230,43 @@ public class APIManager : MonoBehaviour
                 return JsonMapper.ToObject(www.downloadHandler.text);
             }
         }
+
+        //if the token refresh doesn't work, then stop
+        private static async Task<JsonData> GetStepsBetweenMillisRetry(ApiData data)
+        {
+            string body = "{\"aggregateBy\":[{\"dataTypeName\":\"com.google.step_count.delta\",\"dataSourceId\":\"derived:com.google.step_count.delta:com.google.android.gms:estimated_steps\"}],\"bucketByTime\":{\"durationMillis\":" + data.durationMillis + "},\"startTimeMillis\":" + data.startTimeMillis + ",\"endTimeMillis\":" + data.endTimeMillis + "}";
+
+            UnityWebRequest www = UnityWebRequest.PostWwwForm("https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate", body);
+
+            www.SetRequestHeader("Authorization", "Bearer " + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken));
+            www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+            www.uploadHandler.contentType = "application/json";
+
+            var operation = www.SendWebRequest();
+
+            while (!operation.isDone)
+            {
+                await Task.Yield();
+            }
+
+            if (!string.IsNullOrEmpty(www.error))
+            {
+                Debug.LogError("[APIManager] failed to send request and refresh attempt: \n" + www.downloadHandler.text);
+
+                return JsonMapper.ToObject(www.downloadHandler.text);
+            }
+            else
+            {
+                Debug.Log("[APIManager]", () => www.downloadHandler.text);
+
+                return JsonMapper.ToObject(www.downloadHandler.text);
+            }
+        }
+
+
+        #endregion
+
+        #region distance between millis
 
         /// <summary>
         /// this coroutine takes in the requests body as a parameter, as the start and end time of the request can change.
@@ -261,7 +300,7 @@ public class APIManager : MonoBehaviour
                 {
                     string _ = errorRefresh["access_token"].ToString();
 
-                    JsonData json = await GetStepsBetweenMillis(data);
+                    JsonData json = await GetDistanceBetweenMillisRetry(data);
 
                     return json;
                 }
@@ -279,6 +318,40 @@ public class APIManager : MonoBehaviour
                 return JsonMapper.ToObject(www.downloadHandler.text);
             }
         }
+
+        //if the token refresh doesn't work, then stop
+        private static async Task<JsonData> GetDistanceBetweenMillisRetry(ApiData data)
+        {
+            string body = "{\"aggregateBy\":[{\"dataTypeName\":\"com.google.distance.delta\"}],\"bucketByTime\":{\"durationMillis\":" + data.durationMillis + "},\"startTimeMillis\":" + data.startTimeMillis + ",\"endTimeMillis\":" + data.endTimeMillis + "}";
+
+            UnityWebRequest www = UnityWebRequest.PostWwwForm("https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate", body);
+
+            www.SetRequestHeader("Authorization", "Bearer " + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken));
+            www.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
+            www.uploadHandler.contentType = "application/json";
+
+            var operation = www.SendWebRequest();
+
+            while (!operation.isDone)
+            {
+                await Task.Yield();
+            }
+
+            if (!string.IsNullOrEmpty(www.error))
+            {
+                Debug.LogError("[APIManager] failed to send request and refresh attempt: \n" + www.downloadHandler.text);
+
+                return JsonMapper.ToObject(www.downloadHandler.text);
+            }
+            else
+            {
+                Debug.Log("[APIManager]", () => www.downloadHandler.text);
+
+                return JsonMapper.ToObject(www.downloadHandler.text);
+            }
+        }
+
+        #endregion
     }
 
     public class MapQuest
@@ -338,7 +411,7 @@ public class APIManager : MonoBehaviour
                 data.imageToSet.sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), Vector2.zero);
                 data.imageToSet.color = Color.white;
 
-                if(data.callback != null)
+                if (data.callback != null)
                 {
                     data.callback.Invoke();
                 }

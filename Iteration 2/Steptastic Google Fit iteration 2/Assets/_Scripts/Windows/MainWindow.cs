@@ -61,6 +61,9 @@ public class MainWindow : MonoBehaviour
         loadingScreen.SetActive(false);
 
         AnimateScreen();
+
+
+		DebugCanvas.instance.Start();
     }
 
 	//animates to screen

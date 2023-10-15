@@ -53,10 +53,14 @@ public class ProcessDeepLinkMngr : MonoBehaviour
     /// when the user finishes authorizing my app, they will be directed to another site (which i have hosted) which 
     /// points and shows that the site is associated with my application
     /// </summary>
+    /// 
     //demo return link
     //https://steptastic-ad9d9.web.app/?code=4%2F0AfJohXlF9uJL5yPoEbD7LOZUhwzT5pIVfjN86bjd1kEWownIpAdUAcxrftkAo9Ky4op9Xg&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffitness.activity.read
     public void OnDeepLinkActivated(string url)
     {
+        //can check here if all scopes have been enabled, show the user an error if they havent
+
+
         // Update DeepLink Manager global variable, so URL can be accessed from anywhere.
         deeplinkURL = url;
 

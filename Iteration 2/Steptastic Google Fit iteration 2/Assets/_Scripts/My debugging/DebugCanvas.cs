@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 public class DebugCanvas : MonoBehaviour
 {
+    public static DebugCanvas instance;
+
     public CustomInputField authToken;
     public CustomInputField accessToken;
     public CustomInputField refreshToken;
@@ -24,11 +26,20 @@ public class DebugCanvas : MonoBehaviour
 
     private void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+
         //if the build is a development build, then show the debug options
         gameObject.SetActive(Debug.isDebugBuild);
     }
 
-    private void Start()
+    public void Start()
     {
         ReloadTokens();
         LoadDate();

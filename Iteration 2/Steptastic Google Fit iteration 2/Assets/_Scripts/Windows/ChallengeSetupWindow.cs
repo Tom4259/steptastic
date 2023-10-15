@@ -201,7 +201,9 @@ public class ChallengeSetupWindow : MonoBehaviour
     //shows the user a short summary of their challenge
     private void UpdateDescriptionText()
     {
-        float distance = (float)CalculateDistanceToTarget();
+        double distance = CalculateDistanceToTarget();
+
+        distance = Math.Round(distance, 1);
 
         challengeDescriptionText.text = descriptionText.Replace("{{distance}}", distance + " km");
     }
@@ -240,6 +242,8 @@ public class ChallengeSetupWindow : MonoBehaviour
         PlayerPrefsX.SetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
 
         PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, (float)CalculateDistanceToTarget());
+
+        CloseChallengeSetup();
     }
 
 
