@@ -4,9 +4,11 @@ using UnityEngine;
 using TMPro;
 using LitJson;
 using Michsky.MUIP;
+using System;
 
 public class AuthenticateWindow : MonoBehaviour
 {
+    public ModalWindowManager scopeError;
 
     public ButtonManager continueButton;
 
@@ -29,6 +31,30 @@ public class AuthenticateWindow : MonoBehaviour
 #else
         APIManager.GoogleFit.Authorization.GetAuthorizationCode();
 #endif
+    }
+
+    public bool CheckScopes(string url)
+    {
+        try
+        {
+            if (url.Split("scope=")[1].Split("%20").Length < 2)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        catch (IndexOutOfRangeException)
+        {
+            return false;
+        }
+    }
+
+    public void ShowScopeError()
+    {
+        scopeError.Open();
     }
 
 

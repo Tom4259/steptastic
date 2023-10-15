@@ -10,6 +10,8 @@ public class ProcessDeepLinkMngr : MonoBehaviour
     public static ProcessDeepLinkMngr Instance { get; private set; }
     public string deeplinkURL = "unitydl://Steptastic";
 
+    public bool useBelowCodes = true; 
+
     [Space]
     [TextArea]
     public string editorAuth;
@@ -39,13 +41,23 @@ public class ProcessDeepLinkMngr : MonoBehaviour
             Destroy(gameObject);
         }
 
-        if(PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, "_steptastic_!") != "_steptastic_!")
+        //if true then set auth codes to the ones in the inspector
+        if(useBelowCodes && Application.isEditor)
         {
-            if (editorToken != PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken))
-            {
-                editorToken = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
-            }
+            PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, editorAuth);
+            PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, editorToken);
+            PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, editorRefresh);
         }
+        else
+        {
+            if (PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, "_steptastic_!") != "_steptastic_!")
+            {
+                if (editorToken != PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken))
+                {
+                    editorToken = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.accessToken);
+                }
+            }
+        }        
     }
 
 
@@ -58,20 +70,25 @@ public class ProcessDeepLinkMngr : MonoBehaviour
     //https://steptastic-ad9d9.web.app/?code=4%2F0AfJohXlF9uJL5yPoEbD7LOZUhwzT5pIVfjN86bjd1kEWownIpAdUAcxrftkAo9Ky4op9Xg&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffitness.activity.read
     public void OnDeepLinkActivated(string url)
     {
-        //can check here if all scopes have been enabled, show the user an error if they havent
+        //checks to see if all scopes have been enabled, show the user an error if they havent
+        if (CanvasManager.instance.authenticateWindow.CheckScopes(url))
+        {
+            // Update DeepLink Manager global variable, so URL can be accessed from anywhere.
+            deeplinkURL = url;
 
+            Debug.Log("[" + GetType().Name + "]", () => url);
 
-        // Update DeepLink Manager global variable, so URL can be accessed from anywhere.
-        deeplinkURL = url;
+            string[] returnedUrl = url.Split('&');
+            string authCode = returnedUrl[0].Split('=')[1];
 
-        Debug.Log("[" + GetType().Name + "]", () => url);
+            Debug.Log("[" + GetType().Name + "]", () => authCode);
 
-        string[] returnedUrl = url.Split('&');
-        string authCode = returnedUrl[0].Split('=')[1];
-
-        Debug.Log("[" + GetType().Name + "]", () => authCode);
-
-        SaveValuesAndContinue(authCode);
+            SaveValuesAndContinue(authCode);
+        }
+        else
+        {
+            CanvasManager.instance.authenticateWindow.ShowScopeError();
+        }        
     }
 
     /// <summary>

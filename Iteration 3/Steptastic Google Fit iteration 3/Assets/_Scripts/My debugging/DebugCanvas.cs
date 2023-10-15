@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Michsky.MUIP;
-using UnityEngine.UIElements;
 using LitJson;
 using System;
 using System.Threading.Tasks;
+using IngameDebugConsole;
 
 public class DebugCanvas : MonoBehaviour
 {
     public static DebugCanvas instance;
 
+    public DebugLogManager logManager;
+
+    [Space(20)]
     public CustomInputField authToken;
     public CustomInputField accessToken;
     public CustomInputField refreshToken;
@@ -37,6 +40,7 @@ public class DebugCanvas : MonoBehaviour
 
         //if the build is a development build, then show the debug options
         gameObject.SetActive(Debug.isDebugBuild);
+        logManager.gameObject.SetActive(Debug.isDebugBuild);
     }
 
     public void Start()

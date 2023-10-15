@@ -136,4 +136,9 @@ public class CanvasManager : MonoBehaviour
 
         mainScreen.StartMainWindow();
     }
+
+    public void ExitApp()
+    {
+        Application.Quit();
+    }
 }

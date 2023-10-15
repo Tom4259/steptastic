@@ -74,7 +74,8 @@ public class APIManager : MonoBehaviour
                     "&redirect_uri=https://steptastic-ad9d9.web.app" +
                     "&scope=" + scope +
                     "&response_type=code" +
-                    "&access_type=offline";
+                    "&access_type=offline" +
+                    "&include_granted_scopes=true";
 
                 Application.OpenURL(URL);
             }
