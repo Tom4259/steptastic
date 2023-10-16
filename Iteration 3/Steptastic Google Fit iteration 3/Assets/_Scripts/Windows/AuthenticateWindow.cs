@@ -15,23 +15,27 @@ public class AuthenticateWindow : MonoBehaviour
     /// <summary>
     /// opens the oauth2 screen for the user to login to their google account and authorize my app to access their data
     /// </summary>
-    public void LoginToGoogleFit()
+    public void AuthoriseService()
     {
         //add an editor token, so don't need to keep logging in to google account on emulator
 #if UNITY_EDITOR
 
-        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, ProcessDeepLinkMngr.Instance.editorAuth);
-        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, ProcessDeepLinkMngr.Instance.editorToken);
-        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, ProcessDeepLinkMngr.Instance.editorRefresh);
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, GoogleFitService.Instance.editorAuth);
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, GoogleFitService.Instance.editorToken);
+        PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken, GoogleFitService.Instance.editorRefresh);
 
         PlayerPrefsX.Save();
 
         CanvasManager.instance.authenticateWindow.ExchangedAuthForToken();
 
-#else
-        APIManager.GoogleFit.Authorization.GetAuthorizationCode();
+#elif UNITY_ANDROID
+        APIManager.GoogleFit.Authorisation.GetAuthorisationCode();
+#elif UNITY_IOS
+        APIManager.HealthKit.Authorisation.Authorise();    
 #endif
     }
+
+#if UNITY_ANDROID
 
     public bool CheckScopes(string url)
     {
@@ -52,17 +56,30 @@ public class AuthenticateWindow : MonoBehaviour
         }
     }
 
+#elif UNITY_IOS
+
+    public bool CheckScopes()
+    {
+        Debug.Log("Code this bit");
+        return false;
+    }
+
+#endif
+
     public void ShowScopeError()
     {
         scopeError.Open();
     }
 
-
+#if UNITY_ANDROID || UNITY_EDITOR
 
     public void ExchangedAuthForToken(string _ = "")
     {
         UserAuthenticated();
     }
+
+#endif
+
 
     //called when everything about authentication has been completed
     public void UserAuthenticated()

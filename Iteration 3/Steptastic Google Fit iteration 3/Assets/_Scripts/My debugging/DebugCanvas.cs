@@ -14,6 +14,9 @@ public class DebugCanvas : MonoBehaviour
 
     public DebugLogManager logManager;
 
+    [Space]
+    public GameObject objectsToHide;
+
     [Space(20)]
     public CustomInputField authToken;
     public CustomInputField accessToken;
@@ -48,18 +51,24 @@ public class DebugCanvas : MonoBehaviour
         ReloadTokens();
         LoadDate();
         versionText.text = "V " + Application.version;
+
+        objectsToHide.SetActive(false);
     }
     
 
     public void DevLogin()
     {
         CanvasManager.instance.authenticateWindow.UserAuthenticated();
+
+        objectsToHide.SetActive(false);
     }
 
 
     public void RefreshMainWindow()
     {
         CanvasManager.instance.mainScreen.StartMainWindow();
+
+        objectsToHide.SetActive(false);
     }
 
 
@@ -100,7 +109,7 @@ public class DebugCanvas : MonoBehaviour
 
     public async void RefreshTokens()
     {
-        JsonData j = await APIManager.GoogleFit.Authorization.RefreshAccessToken();
+        JsonData j = await APIManager.GoogleFit.Authorisation.RefreshAccessToken();
 
         Debug.Log(j.ToJson());
 

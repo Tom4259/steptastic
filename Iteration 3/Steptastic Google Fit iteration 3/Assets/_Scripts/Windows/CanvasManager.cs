@@ -73,7 +73,7 @@ public class CanvasManager : MonoBehaviour
                     Debug.Log("[" + GetType().Name + "]" + "refreshing token: expiry date reached");
 
                     //refreshes the access token and debugs it to the console
-                    JsonData j = await APIManager.GoogleFit.Authorization.RefreshAccessToken();
+                    JsonData j = await APIManager.GoogleFit.Authorisation.RefreshAccessToken();
                     Debug.Log("[" + GetType().Name + "]" + j.ToJson());
                 }
             }

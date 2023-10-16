@@ -9,6 +9,7 @@ using System.Text;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
+using BeliefEngine.HealthKit;
 
 public class APIManager : MonoBehaviour
 {
@@ -54,7 +55,7 @@ public class APIManager : MonoBehaviour
         }
 
 
-        public class Authorization
+        public class Authorisation
         {
             private static readonly string clientID = "452921919955-n5pr35harq133jfkf2kosvq4kbc724ps.apps.googleusercontent.com";
             private static readonly string clientSecret = "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";
@@ -63,7 +64,7 @@ public class APIManager : MonoBehaviour
             /// <summary>
             /// redirects the user to the google authorization page
             /// </summary>
-            public static void GetAuthorizationCode()
+            public static void GetAuthorisationCode()
             {
                 string scope = "https://www.googleapis.com/auth/fitness.activity.read https://www.googleapis.com/auth/fitness.location.read";
 
@@ -207,7 +208,7 @@ public class APIManager : MonoBehaviour
                 Debug.LogWarning("[APIManager] Attempting to refresh the access token");
 
                 //tries to refresh the token if the request has failed
-                JsonData errorRefresh = await Authorization.RefreshAccessToken();
+                JsonData errorRefresh = await Authorisation.RefreshAccessToken();
 
                 try
                 {
@@ -295,7 +296,7 @@ public class APIManager : MonoBehaviour
                 Debug.LogWarning("[APIManager] Attempting to refresh the access token");
 
                 //tries to refresh the token if the request has failed
-                JsonData errorRefresh = await Authorization.RefreshAccessToken();
+                JsonData errorRefresh = await Authorisation.RefreshAccessToken();
 
                 try
                 {
@@ -353,6 +354,25 @@ public class APIManager : MonoBehaviour
         }
 
         #endregion
+    }
+
+    public class HealthKit
+    {
+        static HealthKitService HK = HealthKitService.Instance;
+
+        public class Authorisation
+        {
+            public static void Authorise()
+            {
+                //initialise healthkit here
+                Debug.Log("[APIManager] Authorising HealthKit");
+
+                HK.healthStore.Authorize(HK.dataTypes, delegate (bool success)
+                {
+                    Debug.LogFormat("authorization: {0}", success);
+                });
+            }
+        }
     }
 
     public class MapQuest

@@ -27,7 +27,7 @@ public class RequestUserLocationWindow : MonoBehaviour
     }
 
 
-#if !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
     
     //requests the user's location and saves to device
     private async void GetLocation()
@@ -131,6 +131,19 @@ public class RequestUserLocationWindow : MonoBehaviour
         {
             PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
         }
+    }
+
+#elif UNITY_IOS
+
+    public void GetLocation()
+    {
+        Debug.Log("Can code this in another time, skipping location for now");
+
+        useLocationToggle.isOn = false;
+        useLocationToggle.GetComponent<CustomToggle>().UpdateState();
+
+        continueButton.Interactable(true);
+        continueButton.onClick.Invoke();
     }
 
 #else

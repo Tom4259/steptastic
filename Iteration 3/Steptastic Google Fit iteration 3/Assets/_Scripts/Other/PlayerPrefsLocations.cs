@@ -17,6 +17,8 @@ public class PlayerPrefsLocations : MonoBehaviour
             /// </summary>
             public static string authenticated = "user.account.authenticated";
 
+#if UNITY_ANDROID || UNITY_EDITOR
+
             public class Credentials
             {
                 /// <summary>
@@ -46,7 +48,11 @@ public class PlayerPrefsLocations : MonoBehaviour
                 public static string expiresIn = "user.account.codes.expiresin";
             }
 
+#endif
+
         }
+
+#if UNITY_ANDROID || UNITY_EDITOR
 
         public class Permissions
         {
@@ -56,6 +62,8 @@ public class PlayerPrefsLocations : MonoBehaviour
             /// </summary>
             public static string Location = "user.permisssions.location";
         }
+
+#endif
 
         public class Challenge
         {

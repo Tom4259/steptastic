@@ -5,9 +5,10 @@ using System;
 using LitJson;
 using UnityEngine.Events;
 
-public class ProcessDeepLinkMngr : MonoBehaviour
+public class GoogleFitService : MonoBehaviour
 {
-    public static ProcessDeepLinkMngr Instance { get; private set; }
+    public static GoogleFitService Instance { get; private set; }
+
     public string deeplinkURL = "unitydl://Steptastic";
 
     public bool useBelowCodes = true; 
@@ -22,6 +23,21 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log(Application.platform);
+
+        //if the device is not android or the editor, then disable this object
+        if(Application.platform != RuntimePlatform.Android &&
+            Application.platform != RuntimePlatform.WindowsEditor &&
+            Application.platform != RuntimePlatform.OSXEditor)
+        {
+            Debug.Log("[" + GetType().Name + "] ", "Not running on Android platform, disabling Google Fit service");
+            
+            gameObject.SetActive(false);
+
+            return;
+        }
+
+
         if (Instance == null)
         {
             Instance = this;
@@ -100,7 +116,7 @@ public class ProcessDeepLinkMngr : MonoBehaviour
 
         PlayerPrefsX.Save();
 
-        await APIManager.GoogleFit.Authorization.ExchangeAuthCodeForToken();
+        await APIManager.GoogleFit.Authorisation.ExchangeAuthCodeForToken();
 
         CanvasManager.instance.authenticateWindow.ExchangedAuthForToken();
     }
