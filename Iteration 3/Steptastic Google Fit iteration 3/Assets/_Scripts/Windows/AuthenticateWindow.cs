@@ -35,7 +35,7 @@ public class AuthenticateWindow : MonoBehaviour
 #endif
     }
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID || UNITY_EDITOR
 
     public bool CheckScopes(string url)
     {

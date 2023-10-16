@@ -118,6 +118,8 @@ public class GoogleFitService : MonoBehaviour
 
         await APIManager.GoogleFit.Authorisation.ExchangeAuthCodeForToken();
 
+#if UNITY_ANDROID || UNITY_EDITOR
         CanvasManager.instance.authenticateWindow.ExchangedAuthForToken();
+#endif
     }
 }
