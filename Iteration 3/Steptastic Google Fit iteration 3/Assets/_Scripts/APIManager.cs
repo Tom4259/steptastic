@@ -386,7 +386,7 @@ public class APIManager : MonoBehaviour
                 {
                     foreach (QuantitySample sample in samplesW)
                     {
-                        Debug.Log(String.Format(" - {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                        Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
                         totalSteps += sample.quantity.doubleValue;
                     }                    
                 }
@@ -404,7 +404,7 @@ public class APIManager : MonoBehaviour
 
         public static async Task<double> GetDistance(DateTimeOffset startPoint, DateTimeOffset endPoint)
         {
-            double totalSteps = 0;
+            double totalDistance = 0;
 
             HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW)
             {
@@ -412,8 +412,8 @@ public class APIManager : MonoBehaviour
                 {
                     foreach (QuantitySample sample in samplesW)
                     {
-                        Debug.Log(String.Format(" - {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
-                        totalSteps += sample.quantity.doubleValue;
+                        Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                        totalDistance += sample.quantity.doubleValue;
                     }
                 }
                 else
@@ -425,7 +425,7 @@ public class APIManager : MonoBehaviour
             //might not need this delay, test with and without it
             //await Task.Delay(1000);
 
-            return totalSteps;
+            return totalDistance;
         }
     }
 

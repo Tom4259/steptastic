@@ -355,7 +355,7 @@ namespace BeliefEngine.HealthKit
                 string identifier = HealthKitDataTypes.GetIdentifier(dataType);
                 string startStamp = DateTimeBridge.DateToString(startDate);
                 string endStamp = DateTimeBridge.DateToString(endDate);
-                Debug.LogFormat("reading quantity from:\n-{0} ({1})\nto:\n-{2} ({3})", startDate, startStamp, endDate, endStamp);
+                Debug.LogFormat("reading quantity from:\n{0} ({1})\nto:\n{2} ({3})", startDate, startStamp, endDate, endStamp);
                 _ReadQuantity(identifier, startStamp, endStamp, combineSamples);
             }
             else
