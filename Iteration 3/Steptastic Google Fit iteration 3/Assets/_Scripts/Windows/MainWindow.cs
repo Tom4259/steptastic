@@ -369,7 +369,6 @@ public class MainWindow : MonoBehaviour
 
 
 #if UNITY_IOS && !UNITY_EDITOR
-//#if !UNITY_IOS && UNITY_EDITOR //for testing
 
     #region progress to target
 
@@ -389,20 +388,6 @@ public class MainWindow : MonoBehaviour
         Debug.Log("[" + GetType().Name + "]", () => distance);
 
         return;
-
-
-        Debug.Log("[" + GetType().Name + "]", () => totalMeters);
-
-        //float distanceToTarget = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, -1);
-        //float userKM = totalMeters / 1000;
-
-        float percentage = (userKM / distanceToTarget) * 100;
-
-        Debug.Log("[" + GetType().Name + "]", () => percentage);
-
-
-        PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted, percentage);
-        PlayerPrefs.Save();
     }
 
     #endregion
