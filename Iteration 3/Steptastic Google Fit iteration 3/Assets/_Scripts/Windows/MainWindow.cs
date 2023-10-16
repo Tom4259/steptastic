@@ -368,7 +368,7 @@ public class MainWindow : MonoBehaviour
     #region Health Kit
 
 
-#if UNITY_IOS
+#if UNITY_IOS && !UNITY_EDITOR
 
     #region progress to target
 
