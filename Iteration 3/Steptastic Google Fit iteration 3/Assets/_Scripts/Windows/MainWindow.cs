@@ -378,8 +378,10 @@ public class MainWindow : MonoBehaviour
     private async Task CalculateUserProgress()
     {
         //if start date is now, then make it beggining of the day
-        DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
-        DateTime now = DateTime.Now;
+        //DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
+        DateTime startDate = DateTime.Today;
+
+        DateTime now = DateTime.UtcNow;
 
         double distance = 0;
 

@@ -402,7 +402,7 @@ public class APIManager : MonoBehaviour
             return totalSteps;
         }
 
-        public static async Task<double> GetDistance(DateTime startPoint, DateTime endPoint)
+        public static async Task<double> GetDistance(DateTimeOffset startPoint, DateTimeOffset endPoint)
         {
             double totalSteps = 0;
 
