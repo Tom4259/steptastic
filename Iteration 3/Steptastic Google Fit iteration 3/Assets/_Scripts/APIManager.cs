@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using BeliefEngine.HealthKit;
+using UnityEngine.XR;
 
 public class APIManager : MonoBehaviour
 {
@@ -379,6 +380,7 @@ public class APIManager : MonoBehaviour
         public static async Task<double> GetSteps(DateTime startPoint, DateTime endPoint)
         {
             double totalSteps = 0;
+            bool done = false;
 
             HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW)
             {
@@ -388,7 +390,9 @@ public class APIManager : MonoBehaviour
                     {
                         Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
                         totalSteps += sample.quantity.doubleValue;
-                    }                    
+                    }
+
+                    done = true;
                 }
                 else
                 {
@@ -396,8 +400,10 @@ public class APIManager : MonoBehaviour
                 }
             });
 
-            //might not need this delay, test with and without it
-            //await Task.Delay(1000);
+            while (!done)
+            {
+                await Task.Delay(500);
+            }
 
             return totalSteps;
         }
@@ -405,6 +411,7 @@ public class APIManager : MonoBehaviour
         public static async Task<double> GetDistance(DateTimeOffset startPoint, DateTimeOffset endPoint)
         {
             double totalDistance = 0;
+            bool done = false;
 
             HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW)
             {
@@ -415,6 +422,8 @@ public class APIManager : MonoBehaviour
                         Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
                         totalDistance += sample.quantity.doubleValue;
                     }
+
+                    done = true;
                 }
                 else
                 {
@@ -422,8 +431,11 @@ public class APIManager : MonoBehaviour
                 }
             });
 
-            //might not need this delay, test with and without it
-            //await Task.Delay(1000);
+
+            while (!done)
+            {
+                await Task.Delay(500);
+            }
 
             return totalDistance;
         }
