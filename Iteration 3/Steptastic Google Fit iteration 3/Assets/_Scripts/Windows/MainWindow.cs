@@ -369,6 +369,7 @@ public class MainWindow : MonoBehaviour
 
 
 #if UNITY_IOS && !UNITY_EDITOR
+//#if !UNITY_IOS && UNITY_EDITOR //for testing
 
     #region progress to target
 
@@ -468,6 +469,33 @@ public class MainWindow : MonoBehaviour
         return Task.CompletedTask;
     }
 
+
+    #endregion
+
+    #region UI blocks
+
+    //shows a more professional placeholder
+    private void ResetUIBlockText()
+    {
+        stepsBlockValue.text = "------";
+        distanceBlockValue.text = "--- km";
+    }
+
+    //loads data for the UI blocks
+    private async Task LoadUIBlocks()
+    {
+        Debug.Log("Need to code LoadUIBlocks method");
+    }
+
+    #endregion
+
+    #region graphs
+
+    //loads and inputs data into the steps over the day graph
+    private void LoadStepsDayGraph(JsonData json)
+    {
+        Debug.Log("Need to code LoadStepsDayGraph method");
+    }
 
     #endregion
 
