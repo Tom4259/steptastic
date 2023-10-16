@@ -37,9 +37,4 @@ public class HealthKitService : MonoBehaviour
         healthStore = GetComponent<HealthStore>();
         dataTypes = GetComponent<HealthKitDataTypes>();        
     }
-
-    private void Start()
-    {
-        
-    }
 }

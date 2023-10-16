@@ -102,6 +102,7 @@ public class MainWindow : MonoBehaviour
     #region GoogleFit
 
 
+#if UNITY_ANDROID || UNITY_EDITOR
 
 
     #region progress to target
@@ -185,8 +186,8 @@ public class MainWindow : MonoBehaviour
         float targetLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[0]);
         float targetLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[1]);
 
-        float currentPointLat = latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item1;
-        float currentPointLong = latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
+        float currentPointLat = UsefulFunctions.latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item1;
+        float currentPointLong = UsefulFunctions.latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
 
         #endregion
 
@@ -217,7 +218,7 @@ public class MainWindow : MonoBehaviour
             imageHeight = (int)Math.Round(mapImage.rectTransform.rect.height),
             imageWidth = (int)Math.Round(mapImage.rectTransform.rect.width),
 
-            zoom = getMapZoomApproximation(),
+            zoom = UsefulFunctions.getMapZoomApproximation(),
 
             imageToSet = mapImage,
 
@@ -231,55 +232,6 @@ public class MainWindow : MonoBehaviour
         APIManager.MapQuest.GetMapImage(mData);
         return Task.CompletedTask;
     }
-
-    #region helpers
-
-    //may need to update these values. test more
-    private int getMapZoomApproximation()
-    {
-        int dist = (int)PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget);
-
-        //Debug.Log("[" + GetType().Name + "]", () => dist);
-
-        if (dist <= 75)
-        {
-            return 6;
-        }
-        else if (dist <= 800)
-        {
-            return 5;
-        }
-        if (dist <= 2000)
-        {
-            return 4;
-        }
-        else if (dist <= 4500)
-        {
-            return 3;
-        }
-        else if (dist <= 8000)
-        {
-            return 2;
-        }
-        else
-        {
-            return 1;//maybe
-        }
-    }
-
-    private Tuple<float, float> latLongBetweenTwoLatLongs(float lat1, float long1, float lat2, float long2, float per)
-    {
-        per /= 100;
-
-        float lat = lat1 + (lat2 - lat1) * per;
-        float lng = long1 + (long2 - long1) * per;
-
-        Debug.Log("[MainWindow] lat long between lat longs: " + lat + "," + lng);
-
-        return Tuple.Create(lat, lng);
-    }
-
-    #endregion
 
     #endregion
 
@@ -406,7 +358,7 @@ public class MainWindow : MonoBehaviour
     #endregion
 
 
-
+#endif
 
     #endregion
 
@@ -416,10 +368,110 @@ public class MainWindow : MonoBehaviour
     #region Health Kit
 
 
+#if UNITY_IOS
 
-    //paste her
+    #region progress to target
+
+    /// <summary>
+    /// calculates the user progress based on the amount of distance the user has covered since the start date
+    /// </summary>
+    private async Task CalculateUserProgress()
+    {
+        //if start date is now, then make it beggining of the day
+        DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
+        DateTime now = DateTime.Now;
+
+        double distance = 0;
+
+        distance = await APIManager.HealthKit.GetDistance(startDate, now);
+
+        Debug.Log("[" + GetType().Name + "]", () => distance);
+
+        return;
 
 
+        Debug.Log("[" + GetType().Name + "]", () => totalMeters);
 
+        //float distanceToTarget = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, -1);
+        //float userKM = totalMeters / 1000;
+
+        float percentage = (userKM / distanceToTarget) * 100;
+
+        Debug.Log("[" + GetType().Name + "]", () => percentage);
+
+
+        PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted, percentage);
+        PlayerPrefs.Save();
+    }
+
+    #endregion
+
+    #region map image
+
+
+    /// <summary>
+    /// requests an image from MapQuest displaying the user's challenge data
+    /// </summary>
+    private Task GetMapImage()
+    {
+        #region variables
+
+        float userLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[0]);
+        float userLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[1]);
+        float targetLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[0]);
+        float targetLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[1]);
+
+        float currentPointLat = UsefulFunctions.latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item1;
+        float currentPointLong = UsefulFunctions.latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
+
+        #endregion
+
+        #region debugging variables
+
+        Debug.Log("[" + GetType().Name + "]", () => userLat);
+        Debug.Log("[" + GetType().Name + "]", () => userLong);
+        Debug.Log("[" + GetType().Name + "]", () => targetLat);
+        Debug.Log("[" + GetType().Name + "]", () => targetLong);
+
+        Debug.Log("[" + GetType().Name + "]", () => currentPointLat);
+        Debug.Log("[" + GetType().Name + "]", () => currentPointLong);
+
+        #endregion
+
+        //can possible optimise more
+        APIManager.MapQuest.MapData mData = new APIManager.MapQuest.MapData
+        {
+            startLocation = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong),
+            endLocation = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong),
+
+            location1 = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong),
+            location2 = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong),
+
+            currentLattitude = currentPointLat,
+            currentLongitude = currentPointLong,
+
+            imageHeight = (int)Math.Round(mapImage.rectTransform.rect.height),
+            imageWidth = (int)Math.Round(mapImage.rectTransform.rect.width),
+
+            zoom = UsefulFunctions.getMapZoomApproximation(),
+
+            imageToSet = mapImage,
+
+            // runs this section of code when the map image has been loaded
+            callback = () =>
+            {
+                //loadingScreen.SetActive(false);
+            }
+        };
+
+        APIManager.MapQuest.GetMapImage(mData);
+        return Task.CompletedTask;
+    }
+
+
+    #endregion
+
+
+#endif
     #endregion
 }

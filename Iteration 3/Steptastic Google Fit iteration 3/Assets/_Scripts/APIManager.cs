@@ -376,9 +376,56 @@ public class APIManager : MonoBehaviour
             }
         }
 
-        public static void GetSteps(DateTime startPoint, DateTime endPoint)
+        public static async Task<double> GetSteps(DateTime startPoint, DateTime endPoint)
         {
+            double totalSteps = 0;
 
+            HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW)
+            {
+                if (samplesW.Count > 0)
+                {
+                    foreach (QuantitySample sample in samplesW)
+                    {
+                        Debug.Log(String.Format(" - {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                        totalSteps += sample.quantity.doubleValue;
+                    }                    
+                }
+                else
+                {
+                    Debug.LogError("[APIManager] samples count is " + samplesW.Count);
+                }
+            });
+
+            //might not need this delay, test with and without it
+            //await Task.Delay(1000);
+
+            return totalSteps;
+        }
+
+        public static async Task<double> GetDistance(DateTime startPoint, DateTime endPoint)
+        {
+            double totalSteps = 0;
+
+            HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW)
+            {
+                if (samplesW.Count > 0)
+                {
+                    foreach (QuantitySample sample in samplesW)
+                    {
+                        Debug.Log(String.Format(" - {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                        totalSteps += sample.quantity.doubleValue;
+                    }
+                }
+                else
+                {
+                    Debug.LogError("[APIManager] samples count is " + samplesW.Count);
+                }
+            });
+
+            //might not need this delay, test with and without it
+            //await Task.Delay(1000);
+
+            return totalSteps;
         }
     }
 

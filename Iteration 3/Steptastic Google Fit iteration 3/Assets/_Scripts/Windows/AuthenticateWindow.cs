@@ -34,10 +34,10 @@ public class AuthenticateWindow : MonoBehaviour
     }
 
 #elif UNITY_IOS
-        APIManager.HealthKit.Authorisation.Authorise(onAuthorised);
+        APIManager.HealthKit.Authorisation.Authorise(OnAuthorised);
     }
 
-    private void onAuthorised(bool authenticated)
+    private void OnAuthorised(bool authenticated)
     {
         PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, authenticated);
 
