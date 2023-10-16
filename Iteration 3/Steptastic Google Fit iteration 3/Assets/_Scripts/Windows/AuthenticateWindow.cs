@@ -18,7 +18,7 @@ public class AuthenticateWindow : MonoBehaviour
     public void AuthoriseService()
     {
         //add an editor token, so don't need to keep logging in to google account on emulator
-#if UNITY_EDITOR
+#if !UNITY_EDITOR
 
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.authorizationCode, GoogleFitService.Instance.editorAuth);
         PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Credentials.accessToken, GoogleFitService.Instance.editorToken);
@@ -27,13 +27,26 @@ public class AuthenticateWindow : MonoBehaviour
         PlayerPrefsX.Save();
 
         CanvasManager.instance.authenticateWindow.ExchangedAuthForToken();
-
-#elif UNITY_ANDROID
-        APIManager.GoogleFit.Authorisation.GetAuthorisationCode();
-#elif UNITY_IOS
-        APIManager.HealthKit.Authorisation.Authorise();    
-#endif
     }
+
+#elif !UNITY_ANDROID
+        APIManager.GoogleFit.Authorisation.GetAuthorisationCode();
+    }
+
+#elif !UNITY_IOS
+        APIManager.HealthKit.Authorisation.Authorise(onAuthorised);
+    }
+
+    private void onAuthorised(bool authenticated)
+    {
+        PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, authenticated);
+
+        //there is no current way to check the allowed scopes, might need to do try and except statements
+
+        UserAuthenticated();
+    }
+
+#endif
 
 #if UNITY_ANDROID || UNITY_EDITOR
 

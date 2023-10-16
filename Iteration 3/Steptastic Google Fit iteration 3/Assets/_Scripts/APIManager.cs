@@ -362,7 +362,7 @@ public class APIManager : MonoBehaviour
 
         public class Authorisation
         {
-            public static async void Authorise()
+            public static void Authorise(UnityAction<bool> callback)
             {
                 //initialise healthkit here
                 Debug.Log("[APIManager] Authorising HealthKit");
@@ -372,24 +372,7 @@ public class APIManager : MonoBehaviour
                     Debug.LogFormat("authorization: {0}", success);
                 });
 
-                int timeOut = 30;
-
-                while (!HK.healthStore.IsHealthDataAvailable() && timeOut > 0)
-                {
-                    await Task.Delay(1000);
-                    timeOut -= 1;
-
-                    Debug.Log("{APIManager] waiting");
-                }
-
-                if (HK.healthStore.IsHealthDataAvailable())
-                {
-                    Debug.Log("{APIManager] available data");
-                }
-                else
-                {
-                    Debug.LogError("{APIManager] didn't authorise available data");
-                }
+                callback.Invoke(HK.healthStore.IsHealthDataAvailable());
             }
         }
 
