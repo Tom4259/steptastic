@@ -58,7 +58,7 @@ public class AuthenticateWindow : MonoBehaviour
 
 #elif UNITY_IOS
 
-    public bool CheckScopes()
+    public bool CheckScopes(string _)
     {
         Debug.Log("Code this bit");
         return false;
