@@ -388,7 +388,7 @@ public class APIManager : MonoBehaviour
                 {
                     foreach (QuantitySample sample in samplesW)
                     {
-                        Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                        //Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
                         totalSteps += sample.quantity.doubleValue;
                     }
 
@@ -419,7 +419,7 @@ public class APIManager : MonoBehaviour
                 {
                     foreach (QuantitySample sample in samplesW)
                     {
-                        Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                        //Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
                         totalDistance += sample.quantity.doubleValue;
                     }
 
