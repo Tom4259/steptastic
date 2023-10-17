@@ -519,16 +519,9 @@ public class MainWindow : MonoBehaviour
 
         //need to set x axis points to 
 
-        dayStepsChart.SetXAxisPoints((new string[stepsQuantityData.Count]).ToList());
+        dayStepsChart.SetXAxisPoints((new string[48]).ToList());
 
         List<double> stepsList = new List<double>( new double[48] );
-        Debug.Log("[DailyStepsGraphIOS]", () => stepsList.Count);
-
-        //setting list to have 48 entries
-        //for (int i = 0; i < 48; i++)
-        //{
-        //    stepsList.Add(0);
-        //}
 
         for (int i = 0; i < stepsQuantityData.Count; i++)
         {
