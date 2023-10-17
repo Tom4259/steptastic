@@ -510,28 +510,30 @@ public class MainWindow : MonoBehaviour
         DateTime now = DateTime.Now;
         DateTime startOfDay = DateTime.Today;
 
-        Debug.Log(now.ToString("f"));
-        Debug.Log(startOfDay.ToString("f"));
+        List<APIManager.HealthKit.QuantityData> stepsQuantityData = new List<APIManager.HealthKit.QuantityData>();
 
-        List<APIManager.HealthKit.QuantityData> stepsList = new List<APIManager.HealthKit.QuantityData>();
-        List<bool> ignorePoints = new List<bool>();
+        stepsQuantityData = await APIManager.HealthKit.GetStepsList(startOfDay, now);
 
-        stepsList = await APIManager.HealthKit.GetStepsList(startOfDay, now);
+        Debug.Log(() => stepsQuantityData.Count);
 
-        Debug.Log(() => stepsList.Count);
-
-        for (int i = 0; i < stepsList.Count; i++)
+        for (int i = 0; i < stepsQuantityData.Count; i++)
         {
             Debug.LogFormat("Item {0} is value {1} for start date of {2} and end date of {3}",
-                i, stepsList[i].value, stepsList[i].startDate, stepsList[i].endDate);
+                i, stepsQuantityData[i].value, stepsQuantityData[i].startDate, stepsQuantityData[i].endDate);
         }
-
 
         //need to set x axis points to 
 
-        //dayStepsChart.SetXAxisPoints();
+        dayStepsChart.SetXAxisPoints((new string[stepsQuantityData.Count]).ToList());
 
-        //dayStepsChart.SetSerieData(steps, ignorePoints);
+        List<double> stepsList = new List<double>();
+
+        for (int i = 0; i < stepsQuantityData.Count; i++)
+        {
+            stepsList.Add(stepsQuantityData[i].value);
+        }
+
+        dayStepsChart.SetSerieData(stepsList);
     }
 
     #endregion
