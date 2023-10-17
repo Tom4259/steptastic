@@ -382,8 +382,8 @@ public class MainWindow : MonoBehaviour
     private async Task CalculateUserProgress()
     {
         //if start date is now, then make it beggining of the day
-        //DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
-        DateTime startDate = DateTime.Today;
+        DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
+        //DateTime startDate = DateTime.Today;
 
         DateTime now = DateTime.UtcNow;
 
@@ -418,22 +418,22 @@ public class MainWindow : MonoBehaviour
     {
         #region variables
 
-        float userLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[0]);
-        float userLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[1]);
-        float targetLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[0]);
-        float targetLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[1]);
+        float startLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[0]);
+        float startLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[1]);
+        float endLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[0]);
+        float endLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[1]);
 
-        float currentPointLat = UsefulFunctions.latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item1;
-        float currentPointLong = UsefulFunctions.latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
+        float currentPointLat = UsefulFunctions.latLongBetweenTwoLatLongs(startLat, startLong, endLat, endLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item1;
+        float currentPointLong = UsefulFunctions.latLongBetweenTwoLatLongs(startLat, startLong, endLat, endLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
 
         #endregion
 
         #region debugging variables
 
-        Debug.Log("[" + GetType().Name + "]", () => userLat);
-        Debug.Log("[" + GetType().Name + "]", () => userLong);
-        Debug.Log("[" + GetType().Name + "]", () => targetLat);
-        Debug.Log("[" + GetType().Name + "]", () => targetLong);
+        Debug.Log("[" + GetType().Name + "]", () => startLat);
+        Debug.Log("[" + GetType().Name + "]", () => startLong);
+        Debug.Log("[" + GetType().Name + "]", () => endLat);
+        Debug.Log("[" + GetType().Name + "]", () => endLong);
 
         Debug.Log("[" + GetType().Name + "]", () => currentPointLat);
         Debug.Log("[" + GetType().Name + "]", () => currentPointLong);
