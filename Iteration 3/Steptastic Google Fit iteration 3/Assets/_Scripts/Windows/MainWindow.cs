@@ -519,7 +519,14 @@ public class MainWindow : MonoBehaviour
 
         //need to set x axis points to 
 
-        dayStepsChart.SetXAxisPoints((new string[48]).ToList());
+        List<string> xPoints = new List<string>();
+        for (int i = 0; i < 48; i++)
+        {
+            xPoints.Add(i.ToString());
+        }
+
+        dayStepsChart.SetXAxisPoints(xPoints);
+
 
         List<double> stepsList = new List<double>( new double[48] );
 
