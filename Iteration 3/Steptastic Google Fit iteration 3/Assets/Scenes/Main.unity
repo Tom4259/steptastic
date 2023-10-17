@@ -12244,6 +12244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 787f1a39c4dcec84eb81526c9c3a5527, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  windowManager: {fileID: 2012851110}
   testWithLocation: 1
   useLocationToggle: {fileID: 1304389437}
   continueButton: {fileID: 1861620983}
@@ -22159,7 +22160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d11117bc093109b478ee0b3201b72e4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testSetupStage: 0
+  testSetupStage: 1
   setupWindows: {fileID: 40556082}
   setupWindowmanager: {fileID: 2012851110}
   authenticateWindow: {fileID: 2020268422}
@@ -22695,6 +22696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d037c6db4f7d274687ac8b6815605ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  windowManager: {fileID: 2012851110}
   pathToCountriesResource: Text/countryCapitalList
   startLocation: {fileID: 1642871275}
   endLocation: {fileID: 698529989}
@@ -35210,7 +35212,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88c7c4d8b685ef9448e5b485037727ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  windowManager: {fileID: 2012851110}
   scopeError: {fileID: 1372571634}
+  locationWindowIndex: 1
   continueButton: {fileID: 1947661047}
 --- !u!1 &2027582042
 GameObject:

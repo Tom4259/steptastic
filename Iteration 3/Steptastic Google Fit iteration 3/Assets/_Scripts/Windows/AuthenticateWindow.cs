@@ -8,9 +8,29 @@ using System;
 
 public class AuthenticateWindow : MonoBehaviour
 {
+    public WindowManager windowManager;
+
+    [Space]
     public ModalWindowManager scopeError;
 
+    [Space]
+    public int locationWindowIndex = 1;
+
+    [Space(30)]
     public ButtonManager continueButton;
+
+
+    private void Start()
+    {
+        //hides the location option, can code this in in the future, but isn't necessary right now
+#if UNITY_IOS
+
+        Destroy(windowManager.windows[locationWindowIndex].buttonObject);
+        windowManager.windows.RemoveAt(locationWindowIndex);
+        windowManager.InitializeWindows();
+#endif
+    }
+
 
     /// <summary>
     /// opens the oauth2 screen for the user to login to their google account and authorize my app to access their data

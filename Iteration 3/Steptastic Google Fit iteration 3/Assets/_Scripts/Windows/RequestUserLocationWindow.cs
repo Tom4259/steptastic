@@ -6,13 +6,15 @@ using UnityEngine.UI;
 
 public class RequestUserLocationWindow : MonoBehaviour
 {
+    public WindowManager windowManager;
 
+    [Space(20)]
     public bool testWithLocation;
 
     [Space]
     public Toggle useLocationToggle;
 
-    [Space(10)]
+    [Space(30)]
     public ButtonManager continueButton;
 
     //when the toggle is set to on, then my application will request the user's location

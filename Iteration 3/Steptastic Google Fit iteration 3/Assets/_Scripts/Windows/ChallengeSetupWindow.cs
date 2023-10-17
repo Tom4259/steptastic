@@ -9,6 +9,9 @@ using Michsky.MUIP;
 
 public class ChallengeSetupWindow : MonoBehaviour
 {
+    public WindowManager windowManager;
+
+    [Space(20)]
     public string pathToCountriesResource = "Text/countryCapitalList";
     private JsonData countriesList;
 
@@ -25,7 +28,7 @@ public class ChallengeSetupWindow : MonoBehaviour
     [TextArea]
     public string descriptionText = "You will be virtually walking {{distance}} which will take you approximatly {{days}} days.";
 
-    [Space(20)]
+    [Space(30)]
     public ButtonManager saveButton;
 
     private void Start()
