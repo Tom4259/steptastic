@@ -361,6 +361,7 @@ public class APIManager : MonoBehaviour
     {
         static HealthKitService HK = HealthKitService.Instance;
 
+
         public class Authorisation
         {
             public static void Authorise(UnityAction<bool> callback)
@@ -376,6 +377,19 @@ public class APIManager : MonoBehaviour
                 callback.Invoke(HK.healthStore.IsHealthDataAvailable());
             }
         }
+
+
+
+        public class QuantityData
+        {
+            public DateTimeOffset startDate; 
+            public DateTimeOffset endDate;
+            public double value;
+        }
+
+
+        #region values
+
 
         public static async Task<double> GetSteps(DateTime startPoint, DateTime endPoint)
         {
@@ -396,7 +410,7 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("[APIManager] samples count is " + samplesW.Count);
+                    Debug.LogError("[APIManager] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
                 }
             });
 
@@ -407,6 +421,7 @@ public class APIManager : MonoBehaviour
 
             return totalSteps;
         }
+
 
         public static async Task<double> GetDistance(DateTimeOffset startPoint, DateTimeOffset endPoint)
         {
@@ -419,7 +434,7 @@ public class APIManager : MonoBehaviour
                 {
                     foreach (QuantitySample sample in samplesW)
                     {
-                        //Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                        Debug.Log(String.Format("{0} from {1}{3} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate, sample.quantity.unit));
                         totalDistance += sample.quantity.doubleValue;
                     }
 
@@ -427,7 +442,7 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("[APIManager] samples count is " + samplesW.Count);
+                    Debug.LogError("[APIManager] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
                 }
             });
 
@@ -439,6 +454,91 @@ public class APIManager : MonoBehaviour
 
             return totalDistance;
         }
+
+        #endregion
+
+        #region lists
+
+        public static async Task<List<QuantityData>> GetStepsList(DateTime startPoint, DateTime endPoint)
+        {
+            List<QuantityData> stepsList = new List<QuantityData>();
+            bool done = false;
+
+            HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW)
+            {
+                if (samplesW.Count > 0)
+                {
+                    foreach (QuantitySample sample in samplesW)
+                    {
+                        //Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+
+                        QuantityData item = new QuantityData()
+                        {
+                            startDate = sample.startDate,
+                            endDate = sample.endDate,
+                            value = sample.quantity.doubleValue
+                        };
+
+                        stepsList.Add(item);
+                    }
+
+                    done = true;
+                }
+                else
+                {
+                    Debug.LogError("[APIManager] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                }
+            });
+
+            while (!done)
+            {
+                await Task.Delay(500);
+            }
+
+            return stepsList;
+        }
+
+
+        public static async Task<List<QuantityData>> GetDistanceList(DateTime startPoint, DateTime endPoint)
+        {
+            List<QuantityData> distanceList = new List<QuantityData>();
+            bool done = false;
+
+            HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW)
+            {
+                if (samplesW.Count > 0)
+                {
+                    foreach (QuantitySample sample in samplesW)
+                    {
+                        //Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+
+                        QuantityData item = new QuantityData()
+                        {
+                            startDate = sample.startDate,
+                            endDate = sample.endDate,
+                            value = sample.quantity.doubleValue
+                        };
+
+                        distanceList.Add(item);
+                    }
+
+                    done = true;
+                }
+                else
+                {
+                    Debug.LogError("[APIManager] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                }
+            });
+
+            while (!done)
+            {
+                await Task.Delay(500);
+            }
+
+            return distanceList;
+        }
+
+        #endregion
     }
 
     public class MapQuest

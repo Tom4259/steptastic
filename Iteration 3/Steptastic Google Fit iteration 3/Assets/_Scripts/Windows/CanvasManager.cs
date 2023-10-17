@@ -68,6 +68,7 @@ public class CanvasManager : MonoBehaviour
             //if the expiry time of access token has passed and the user is authenticated, refresh the access token
             if (PlayerPrefsX.GetBool(PlayerPrefsLocations.User.Account.authenticated)) 
             {
+#if UNITY_ANDROID || UNITY_EDITOR
                 if(DateTime.Compare(PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Account.Credentials.expiresIn, DateTime.Now.AddHours(-1)), DateTime.Now) < 0)
                 {
                     Debug.Log("[" + GetType().Name + "]" + "refreshing token: expiry date reached");
@@ -76,6 +77,7 @@ public class CanvasManager : MonoBehaviour
                     JsonData j = await APIManager.GoogleFit.Authorisation.RefreshAccessToken();
                     Debug.Log("[" + GetType().Name + "]" + j.ToJson());
                 }
+#endif
             }
 
             CloseSetupWindow();

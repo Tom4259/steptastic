@@ -58,6 +58,10 @@ public class MainWindow : MonoBehaviour
         await GetMapImage();
         await LoadUIBlocks();
 
+#if UNITY_IOS && !UNITY_EDITOR
+        await LoadStepsDayGraph();
+#endif
+
         loadingScreen.SetActive(false);
 
         AnimateScreen();
@@ -383,11 +387,21 @@ public class MainWindow : MonoBehaviour
 
         DateTime now = DateTime.UtcNow;
 
-        double distance = 0;
+        double userDistance = await APIManager.HealthKit.GetDistance(startDate, now);
 
-        distance = await APIManager.HealthKit.GetDistance(startDate, now);
+        float distanceToTarget = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, -1);
 
-        Debug.Log("[" + GetType().Name + "]", () => distance);
+
+        float percentage = (float)(userDistance / distanceToTarget) * 100;
+
+
+
+        Debug.Log("[" + GetType().Name + "]", () => userDistance);
+        Debug.Log("[" + GetType().Name + "]", () => distanceToTarget);
+        Debug.Log("[" + GetType().Name + "]", () => percentage);
+
+        PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted, percentage);
+        PlayerPrefs.Save();
 
         return;
     }
@@ -471,7 +485,19 @@ public class MainWindow : MonoBehaviour
     //loads data for the UI blocks
     private async Task LoadUIBlocks()
     {
-        Debug.Log("Need to code LoadUIBlocks method");
+        DateTime now = DateTime.Now;
+        DateTime startOfDay = DateTime.Today;
+
+        double stepsToday = await APIManager.HealthKit.GetSteps(startOfDay, now);
+        double distanceToday = await APIManager.HealthKit.GetDistance(startOfDay, now);
+
+        distanceToday = Math.Round(distanceToday, 2);
+
+        Debug.Log("[" + GetType().Name + "]", () => stepsToday);
+        Debug.Log("[" + GetType().Name + "]", () => distanceToday);
+
+        distanceBlockValue.text = distanceToday.ToString();
+        stepsBlockValue.text = stepsToday.ToString();
     }
 
     #endregion
@@ -479,14 +505,40 @@ public class MainWindow : MonoBehaviour
     #region graphs
 
     //loads and inputs data into the steps over the day graph
-    private void LoadStepsDayGraph(JsonData json)
+    private async Task LoadStepsDayGraph()
     {
-        Debug.Log("Need to code LoadStepsDayGraph method");
+        DateTime now = DateTime.Now;
+        DateTime startOfDay = DateTime.Today;
+
+        Debug.Log(now.ToString("f"));
+        Debug.Log(startOfDay.ToString("f"));
+
+        List<APIManager.HealthKit.QuantityData> stepsList = new List<APIManager.HealthKit.QuantityData>();
+        List<bool> ignorePoints = new List<bool>();
+
+        stepsList = await APIManager.HealthKit.GetStepsList(startOfDay, now);
+
+        Debug.Log(() => stepsList.Count);
+
+        for (int i = 0; i < stepsList.Count; i++)
+        {
+            Debug.LogFormat("Item {0} is value {1} for start date of {2} and end date of {3}",
+                i, stepsList[i].value, stepsList[i].startDate, stepsList[i].endDate);
+        }
+
+
+        //need to set x axis points to 
+
+        //dayStepsChart.SetXAxisPoints();
+
+        //dayStepsChart.SetSerieData(steps, ignorePoints);
     }
 
     #endregion
 
 
 #endif
+
+
     #endregion
 }
