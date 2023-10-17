@@ -513,19 +513,26 @@ public class MainWindow : MonoBehaviour
 
         for (int i = 0; i < stepsQuantityData.Count; i++)
         {
-            Debug.LogFormat("Item {0} is value {1} for start date of {2} and end date of {3}",
-                i, stepsQuantityData[i].value, stepsQuantityData[i].startDate, stepsQuantityData[i].endDate);
+            //Debug.LogFormat("Item {0} is value {1} for start date of {2} and end date of {3}",
+            //    i, stepsQuantityData[i].value, stepsQuantityData[i].startDate, stepsQuantityData[i].endDate);
         }
 
         //need to set x axis points to 
 
         dayStepsChart.SetXAxisPoints((new string[stepsQuantityData.Count]).ToList());
 
-        List<double> stepsList = new List<double>();
+        List<double> stepsList = new List<double>( new double[48] );
+        Debug.Log(() => stepsList.Count);
+
+        //setting list to have 48 entries
+        //for (int i = 0; i < 48; i++)
+        //{
+        //    stepsList.Add(0);
+        //}
 
         for (int i = 0; i < stepsQuantityData.Count; i++)
         {
-            stepsList.Add(stepsQuantityData[i].value);
+            stepsList[stepsQuantityData[i].startDate.Hour] = stepsQuantityData[i].value;
         }
 
         dayStepsChart.SetSerieData(stepsList);

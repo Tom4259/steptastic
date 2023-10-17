@@ -434,9 +434,11 @@ public class APIManager : MonoBehaviour
                 {
                     foreach (QuantitySample sample in samplesW)
                     {
-                        Debug.Log(String.Format("{0} from {1}{3} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate, sample.quantity.unit));
+                        //Debug.Log(String.Format("{0} from {1}{3} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate, sample.quantity.unit));
                         totalDistance += sample.quantity.doubleValue;
                     }
+
+                    //can set units in playerprefs to the value unit
 
                     done = true;
                 }
