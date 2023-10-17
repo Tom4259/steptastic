@@ -410,7 +410,9 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                    Debug.LogWarning("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+
+                    done = true;
                 }
             });
 
@@ -444,7 +446,9 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                    Debug.LogWarning("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+
+                    done = true;
                 }
             });
 
@@ -488,7 +492,9 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                    Debug.LogWarning("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+
+                    done = true;
                 }
             });
 
@@ -528,7 +534,9 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                    Debug.LogWarning("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+
+                    done = true;
                 }
             });
 
