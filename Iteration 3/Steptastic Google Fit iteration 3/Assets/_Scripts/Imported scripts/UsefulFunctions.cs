@@ -73,7 +73,7 @@ public class UsefulFunctions
     {
         int dist = (int)PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget);
 
-        //Debug.Log("[" + GetType().Name + "]", () => dist);
+        //Debug.Log("[UsefulFunctions]", () => dist);
 
         if (dist <= 75)
         {
@@ -108,7 +108,7 @@ public class UsefulFunctions
         float lat = lat1 + (lat2 - lat1) * per;
         float lng = long1 + (long2 - long1) * per;
 
-        Debug.Log("[MainWindow] lat long between lat longs: " + lat + "," + lng);
+        Debug.Log("[UsefulFunctions] lat long between lat longs: " + lat + "," + lng);
 
         return Tuple.Create(lat, lng);
     }

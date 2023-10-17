@@ -36,7 +36,7 @@ public class EasyChartSettings : MonoBehaviour
     public void SetSerieData(List<double> data, List<bool> ignorePoints)
     {
         if(data.Count != ignorePoints.Count)
-            Debug.LogWarning("[" + GetType().Name + "] provided lists are not ther same length");
+            Debug.LogWarning("[Charts] provided lists are not ther same length");
 
 
         for (int i = 0; i < data.Count; i++)
@@ -92,8 +92,6 @@ public class EasyChartSettings : MonoBehaviour
 
     public void AnimateGraph()
     {
-        //Debug.Log("[" + GetType().Name + "] Playing chart animation");
-
         chart.AnimationReset();
         chart.AnimationResume();
     }

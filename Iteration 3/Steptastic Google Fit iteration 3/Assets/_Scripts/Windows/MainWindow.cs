@@ -122,9 +122,9 @@ public class MainWindow : MonoBehaviour
 
         double dif = (now - startDate).TotalMinutes;
 
-        Debug.Log("[" + GetType().Name + "]", () => startDate);
-        Debug.Log("[" + GetType().Name + "]", () => now);
-        Debug.Log("[" + GetType().Name + "]", () => dif);
+        Debug.Log("[CalculateUserProgressAndroid]", () => startDate);
+        Debug.Log("[CalculateUserProgressAndroid]", () => now);
+        Debug.Log("[CalculateUserProgressAndroid]", () => dif);
 
         API.ApiData data = new API.ApiData();
 
@@ -140,7 +140,7 @@ public class MainWindow : MonoBehaviour
 
 
         JsonData json = await API.GetDistanceBetweenMillis(data);
-        //Debug.Log("[" + GetType().Name + "]" + json.ToJson());
+        //Debug.Log("[CalculateUserProgressAndroid]" + json.ToJson());
 
 
 
@@ -157,17 +157,17 @@ public class MainWindow : MonoBehaviour
             catch (ArgumentOutOfRangeException) { }
             catch (KeyNotFoundException) { }
 
-            //Debug.Log("[" + GetType().Name + "]", () => totalMeters);
+            //Debug.Log("[CalculateUserProgressAndroid]", () => totalMeters);
         }
 
-        Debug.Log("[" + GetType().Name + "]", () => totalMeters);
+        Debug.Log("[CalculateUserProgressAndroid]", () => totalMeters);
 
         float distanceToTarget = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, -1);
         float userKM = totalMeters / 1000;
 
         float percentage = (userKM / distanceToTarget) * 100;
 
-        Debug.Log("[" + GetType().Name + "]", () => percentage);
+        Debug.Log("[CalculateUserProgressAndroid]", () => percentage);
 
 
         PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted, percentage);
@@ -197,13 +197,13 @@ public class MainWindow : MonoBehaviour
 
         #region debugging variables
 
-        Debug.Log("[" + GetType().Name + "]", () => userLat);
-        Debug.Log("[" + GetType().Name + "]", () => userLong);
-        Debug.Log("[" + GetType().Name + "]", () => targetLat);
-        Debug.Log("[" + GetType().Name + "]", () => targetLong);
+        Debug.Log("[MapImageAndroid]", () => userLat);
+        Debug.Log("[MapImageAndroid]", () => userLong);
+        Debug.Log("[MapImageAndroid]", () => targetLat);
+        Debug.Log("[MapImageAndroid]", () => targetLong);
 
-        Debug.Log("[" + GetType().Name + "]", () => currentPointLat);
-        Debug.Log("[" + GetType().Name + "]", () => currentPointLong);
+        Debug.Log("[MapImageAndroid]", () => currentPointLat);
+        Debug.Log("[MapImageAndroid]", () => currentPointLong);
 
         #endregion
 
@@ -258,9 +258,9 @@ public class MainWindow : MonoBehaviour
 
         API.ApiData body = API.GenerateAPIbody(date.Subtract(t), DateTime.Now, (3600000 / 2)); //30 minute time gap
 
-        //Debug.Log("[" + GetType().Name + "]", () => body.startTimeMillis);
-        //Debug.Log("[" + GetType().Name + "]", () => body.endTimeMillis);
-        //Debug.Log("[" + GetType().Name + "]", () => body.durationMillis);
+        //Debug.Log("[UIBlocksAndroid]", () => body.startTimeMillis);
+        //Debug.Log("[UIBlocksAndroid]", () => body.endTimeMillis);
+        //Debug.Log("[UIBlocksAndroid]", () => body.durationMillis);
 
         #endregion
 
@@ -269,8 +269,8 @@ public class MainWindow : MonoBehaviour
         JsonData distanceJson = await API.GetDistanceBetweenMillis(body);
 
 
-        //Debug.Log("[" + GetType().Name + "] " + stepsJson.ToJson());
-        //Debug.Log("[" + GetType().Name + "] " + distanceJson.ToJson());
+        //Debug.Log("[UIBlocksAndroid] " + stepsJson.ToJson());
+        //Debug.Log("[UIBlocksAndroid] " + distanceJson.ToJson());
 
         //creating the graph with the steps
         LoadStepsDayGraph(stepsJson);
@@ -293,7 +293,7 @@ public class MainWindow : MonoBehaviour
             catch (ArgumentOutOfRangeException) { }
         }
 
-        Debug.Log("[" + GetType().Name + "]", () => totalSteps);
+        Debug.Log("[UIBlocksAndroid]", () => totalSteps);
 
 
         for (int i = 0; i < distanceJson["bucket"].Count; i++)
@@ -308,7 +308,7 @@ public class MainWindow : MonoBehaviour
             catch (ArgumentOutOfRangeException) { }
         }
 
-        Debug.Log("[" + GetType().Name + "]", () => totalMeters);
+        Debug.Log("[UIBlocksAndroid]", () => totalMeters);
 
         #endregion
 
@@ -353,8 +353,8 @@ public class MainWindow : MonoBehaviour
             ignorePoints.Add(true);
         }
 
-        //Debug.Log(() => steps.Count);
-        //Debug.Log(() => ignorePoints.Count);
+        //Debug.Log("[DailyStepsGraphAndroid]", () => steps.Count);
+        //Debug.Log("[DailyStepsGraphAndroid]", () => ignorePoints.Count);
 
         dayStepsChart.SetSerieData(steps, ignorePoints);
     }
@@ -391,9 +391,9 @@ public class MainWindow : MonoBehaviour
         float percentage = (float)(userDistance / distanceToTarget) * 100;
 
 
-        Debug.Log("[" + GetType().Name + "]", () => userDistance);
-        Debug.Log("[" + GetType().Name + "]", () => distanceToTarget);
-        Debug.Log("[" + GetType().Name + "]", () => percentage);
+        Debug.Log("[CalculateUserProgressIOS]", () => userDistance);
+        Debug.Log("[CalculateUserProgressIOS]", () => distanceToTarget);
+        Debug.Log("[CalculateUserProgressIOS]", () => percentage);
 
         PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted, percentage);
         PlayerPrefs.Save();
@@ -425,13 +425,13 @@ public class MainWindow : MonoBehaviour
 
         #region debugging variables
 
-        Debug.Log("[" + GetType().Name + "]", () => startLat);
-        Debug.Log("[" + GetType().Name + "]", () => startLong);
-        Debug.Log("[" + GetType().Name + "]", () => endLat);
-        Debug.Log("[" + GetType().Name + "]", () => endLong);
+        Debug.Log("[MapImageIOS]", () => startLat);
+        Debug.Log("[MapImageIOS]", () => startLong);
+        Debug.Log("[MapImageIOS]", () => endLat);
+        Debug.Log("[MapImageIOS]", () => endLong);
 
-        Debug.Log("[" + GetType().Name + "]", () => currentPointLat);
-        Debug.Log("[" + GetType().Name + "]", () => currentPointLong);
+        Debug.Log("[MapImageIOS]", () => currentPointLat);
+        Debug.Log("[MapImageIOS]", () => currentPointLong);
 
         #endregion
 
@@ -488,8 +488,8 @@ public class MainWindow : MonoBehaviour
 
         distanceToday = Math.Round(distanceToday, 2);
 
-        Debug.Log("[" + GetType().Name + "]", () => stepsToday);
-        Debug.Log("[" + GetType().Name + "]", () => distanceToday);
+        Debug.Log("[UIBlocksIOS]", () => stepsToday);
+        Debug.Log("[UIBlocksIOS]", () => distanceToday);
 
         distanceBlockValue.text = distanceToday.ToString();
         stepsBlockValue.text = stepsToday.ToString();
@@ -509,11 +509,11 @@ public class MainWindow : MonoBehaviour
 
         stepsQuantityData = await APIManager.HealthKit.GetStepsList(startOfDay, now);
 
-        Debug.Log(() => stepsQuantityData.Count);
+        Debug.Log("[DailyStepsGraphIOS]", () => stepsQuantityData.Count);
 
         for (int i = 0; i < stepsQuantityData.Count; i++)
         {
-            //Debug.LogFormat("Item {0} is value {1} for start date of {2} and end date of {3}",
+            //Debug.LogFormat("[DailyStepsGraphIOS] Item {0} is value {1} for start date of {2} and end date of {3}",
             //    i, stepsQuantityData[i].value, stepsQuantityData[i].startDate, stepsQuantityData[i].endDate);
         }
 
@@ -522,7 +522,7 @@ public class MainWindow : MonoBehaviour
         dayStepsChart.SetXAxisPoints((new string[stepsQuantityData.Count]).ToList());
 
         List<double> stepsList = new List<double>( new double[48] );
-        Debug.Log(() => stepsList.Count);
+        Debug.Log("[DailyStepsGraphIOS]", () => stepsList.Count);
 
         //setting list to have 48 entries
         //for (int i = 0; i < 48; i++)

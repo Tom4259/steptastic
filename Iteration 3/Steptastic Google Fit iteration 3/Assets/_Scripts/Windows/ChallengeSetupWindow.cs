@@ -101,11 +101,11 @@ public class ChallengeSetupWindow : MonoBehaviour
                 closestIndex = i;
                 closestDistance = itemDistance;
 
-                //Debug.Log("[" + GetType().Name + "] ", "Closest city: " + countriesList["Countries"][i]["Country"].ToString());
+                Debug.Log("[GPSStartLocation] ", "Closest city: " + countriesList["Countries"][i]["Country"].ToString());
             }
         }
 
-        Debug.Log("[" + GetType().Name + "] " + "Closest city to the user is " + countriesList["Countries"][closestIndex]["Country"].ToString() + ", " + countriesList["Countries"][closestIndex]["Capital"].ToString());
+        Debug.Log("[GPSStartLocation] Closest city to the user is " + countriesList["Countries"][closestIndex]["Country"].ToString() + ", " + countriesList["Countries"][closestIndex]["Capital"].ToString());
 
         if (closestIndex >= 0)
         {
@@ -113,7 +113,7 @@ public class ChallengeSetupWindow : MonoBehaviour
         }
         else
         {
-            Debug.LogError("[" + GetType().Name + "]", "closestIndex: " + closestIndex + ", closestDistance: " + closestDistance);
+            Debug.LogError("[GPSStartLocation] closestIndex: " + closestIndex + ", closestDistance: " + closestDistance);
         }
 
         //remove the SELECT option from the dropdown items
@@ -162,7 +162,7 @@ public class ChallengeSetupWindow : MonoBehaviour
     {
         if (DropdownsTheSame())
         {
-            Debug.LogError("[" + GetType().Name + "]", "chosen locations are the same");
+            Debug.LogError("[ChallengeSetup] Chosen locations are the same");
 
             sameLocationMessage.Open();
 
@@ -172,7 +172,7 @@ public class ChallengeSetupWindow : MonoBehaviour
         }
         else if ((startLocation.items[startLocation.selectedItemIndex].itemName == "SELECT") || (endLocation.items[endLocation.selectedItemIndex].itemName == "SELECT"))
         {
-            Debug.LogWarning("[" + GetType().Name + "]", "need to choose a location");
+            Debug.LogWarning("[ChallengeSetup] Need to choose a location");
 
             saveButton.Interactable(false);
 
@@ -195,8 +195,8 @@ public class ChallengeSetupWindow : MonoBehaviour
         string startName = startLocation.items[startLocation.selectedItemIndex].itemName;
         string endName = endLocation.items[endLocation.selectedItemIndex].itemName;
 
-        Debug.Log("[" + GetType().Name + "]", () => startName);
-        Debug.Log("[" + GetType().Name + "]", () => endName);
+        Debug.Log("[ChallengeSetup]", () => startName);
+        Debug.Log("[ChallengeSetup]", () => endName);
 
         return (startLocation.items[startLocation.selectedItemIndex].itemName == endLocation.items[endLocation.selectedItemIndex].itemName);
     }
@@ -287,7 +287,7 @@ public class ChallengeSetupWindow : MonoBehaviour
 
         double distance = UsefulFunctions.DistanceTo(start, end);
 
-        Debug.Log("[" + GetType().Name + "]", () => distance);
+        Debug.Log("[ChallengeSetup]", () => distance);
 
         return distance;
     }

@@ -12,14 +12,25 @@ public static class Channel
 {
 	public const int None = 0;
 	public static readonly int tomre = 1;
-	public static readonly int APIManager = 2;
-	public static readonly int ProcessDeepLinkMngr = 3;
-	public static readonly int PlayerPrefsX = 4;
-	public static readonly int AuthenticateWindow = 5;
-	public static readonly int CanvasManager = 6;
-	public static readonly int ChallengeSetupWindow = 7;
-	public static readonly int MainWindow = 8;
-	public static readonly int RequestUserLocation = 9;
-	public static readonly int DebugCanvas = 10;
+	public static readonly int LocationRequest = 2;
+	public static readonly int CanvasManager = 3;
+	public static readonly int Setup = 4;
+	public static readonly int GPSStartLocation = 5;
+	public static readonly int StartEndLocations = 6;
+	public static readonly int GoogleFitAPI = 7;
+	public static readonly int HealthKitAPI = 8;
+	public static readonly int MapQuestAPI = 9;
+	public static readonly int HealthKitService = 10;
+	public static readonly int GoogleFitService = 11;
+	public static readonly int CalculateUserProgressIOS = 12;
+	public static readonly int CalculateUserProgressAndroid = 13;
+	public static readonly int MapImageIOS = 14;
+	public static readonly int MapImageAndroid = 15;
+	public static readonly int UIBlocksIOS = 16;
+	public static readonly int UIBlocksAndroid = 17;
+	public static readonly int DailyStepsGraphIOS = 18;
+	public static readonly int DailyStepsGraphAndroid = 19;
+	public static readonly int Charts = 20;
+	public static readonly int UsefulFunctions = 21;
 }
 #endregion

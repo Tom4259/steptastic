@@ -71,11 +71,11 @@ public class CanvasManager : MonoBehaviour
 #if UNITY_ANDROID || UNITY_EDITOR
                 if(DateTime.Compare(PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Account.Credentials.expiresIn, DateTime.Now.AddHours(-1)), DateTime.Now) < 0)
                 {
-                    Debug.Log("[" + GetType().Name + "]" + "refreshing token: expiry date reached");
+                    Debug.Log("[CanvasManager]" + "refreshing token: expiry date reached");
 
                     //refreshes the access token and debugs it to the console
                     JsonData j = await APIManager.GoogleFit.Authorisation.RefreshAccessToken();
-                    Debug.Log("[" + GetType().Name + "]" + j.ToJson());
+                    Debug.Log("[CanvasManager]" + j.ToJson());
                 }
 #endif
             }
@@ -104,7 +104,7 @@ public class CanvasManager : MonoBehaviour
     //closes the setup page and opens the main page
     public void SetupCompleted()
     {
-        Debug.Log("[" + GetType().Name + "]" + "setup completed");
+        Debug.Log("[Setup] Setup completed");
 
         PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.setup, true);
 

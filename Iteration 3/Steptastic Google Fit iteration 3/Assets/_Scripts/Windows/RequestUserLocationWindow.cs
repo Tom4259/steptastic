@@ -22,7 +22,7 @@ public class RequestUserLocationWindow : MonoBehaviour
     {
         if (useLocationToggle.isOn)
         {
-            Debug.Log("[" + GetType().Name + "] " + "Getting location");
+            Debug.Log("[LocationRequest] " + "Getting location");
 
             GetLocation();
         }
@@ -41,7 +41,7 @@ public class RequestUserLocationWindow : MonoBehaviour
 
         AndroidRuntimePermissions.Permission[] result = await AndroidRuntimePermissions.RequestPermissionsAsync("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION");
 
-        Debug.Log(result[0].ToString());
+        //Debug.Log(result[0].ToString());
 
         //fine Location
         if (result[0] == AndroidRuntimePermissions.Permission.Granted)
@@ -49,7 +49,7 @@ public class RequestUserLocationWindow : MonoBehaviour
             // Check if the user has Location service enabled.
             if (!Input.location.isEnabledByUser)
             {
-                Debug.Log("[" + GetType().Name + "] " + "Location not enabled on device or app does not have permission to access location");
+                Debug.Log("[LocationRequest] " + "Location not enabled on device or app does not have permission to access location");
                 PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
 
                 useLocationToggle.isOn = false;
@@ -67,7 +67,7 @@ public class RequestUserLocationWindow : MonoBehaviour
             {
                 await Task.Delay(1000);
 
-                //Debug.Log("[" + GetType().Name + "] " + "Location services are initializing: maxWait " + maxWait);
+                //Debug.Log("[LocationRequest] " + "Location services are initializing: maxWait " + maxWait);
 
                 useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
@@ -77,7 +77,7 @@ public class RequestUserLocationWindow : MonoBehaviour
             // If the service didn't initialize in 20 seconds this cancels Location service use.
             if (maxWait < 1)
             {
-                Debug.Log("[" + GetType().Name + "] " + "Timed out");
+                Debug.Log("[LocationRequest] " + "Timed out");
 
                 PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
 
@@ -92,7 +92,7 @@ public class RequestUserLocationWindow : MonoBehaviour
             // If the connection failed this cancels Location service use.
             if (Input.location.status == LocationServiceStatus.Failed)
             {
-                Debug.LogError("[" + GetType().Name + "] " + "Unable to determine device location");
+                Debug.LogError("[LocationRequest] " + "Unable to determine device location");
 
                 PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
 
@@ -111,7 +111,7 @@ public class RequestUserLocationWindow : MonoBehaviour
                 float lon = Input.location.lastData.longitude;
 
                 // If the connection succeeded, this retrieves the device's current Location and displays it in the Console window.
-                Debug.Log("[" + GetType().Name + "] " + "Location: " + lat + " " + lon + " " + Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " + Input.location.lastData.timestamp);
+                Debug.Log("[LocationRequest] " + "Location: " + lat + " " + lon + " " + Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " + Input.location.lastData.timestamp);
 
 
                 PlayerPrefsX.SetFloat(PlayerPrefsLocations.User.Challenge.UserData.setupLatitude, lat);
@@ -139,7 +139,7 @@ public class RequestUserLocationWindow : MonoBehaviour
 
     public void GetLocation()
     {
-        Debug.Log("Can code this in another time, skipping location for now");
+        Debug.Log("[LocationRequest] Can code this in another time, skipping location for now");
 
         useLocationToggle.isOn = false;
         useLocationToggle.GetComponent<CustomToggle>().UpdateState();
@@ -157,7 +157,7 @@ public class RequestUserLocationWindow : MonoBehaviour
         useLocationToggle.isOn = true;
         useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
-        Debug.Log("[" + GetType().Name + "]", () => testWithLocation);
+        Debug.Log("[LocationRequest]", () => testWithLocation);
 
         if (testWithLocation)
         {

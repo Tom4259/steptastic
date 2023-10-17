@@ -48,9 +48,9 @@ public class APIManager : MonoBehaviour
                 durationMillis = timeGap
             };
 
-            //Debug.Log("[APIManager]", () => apiData.startTimeMillis);
-            //Debug.Log("[APIManager]", () => apiData.endTimeMillis);
-            //Debug.Log("[APIManager]", () => apiData.durationMillis);
+            //Debug.Log("[GoogleFitAPI]", () => apiData.startTimeMillis);
+            //Debug.Log("[GoogleFitAPI]", () => apiData.endTimeMillis);
+            //Debug.Log("[GoogleFitAPI]", () => apiData.durationMillis);
 
             return apiData;
         }
@@ -108,12 +108,12 @@ public class APIManager : MonoBehaviour
 
                 if (!string.IsNullOrEmpty(www.error))
                 {
-                    Debug.LogError(www.downloadHandler.text);
+                    Debug.LogError("[GoogleFitAPI]" + www.downloadHandler.text);
                     return www.downloadHandler.text;
                 }
                 else
                 {
-                    Debug.Log("[APIManager]", () => www.downloadHandler.text);
+                    Debug.Log("[GoogleFitAPI]", () => www.downloadHandler.text);
 
                     JsonData json = JsonMapper.ToObject(www.downloadHandler.text);
 
@@ -146,7 +146,7 @@ public class APIManager : MonoBehaviour
                 form.AddField("refresh_token", PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken));
                 form.AddField("grant_type", "refresh_token");
 
-                Debug.Log("[APIManager]" + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken));
+                Debug.Log("[GoogleFitAPI]" + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Credentials.refreshToken));
 
                 UnityWebRequest www = UnityWebRequest.Post("https://oauth2.googleapis.com/token", form);
 
@@ -164,7 +164,7 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("[APIManager]", () => www.downloadHandler.text);
+                    Debug.Log("[GoogleFitAPI]", () => www.downloadHandler.text);
 
                     JsonData json = JsonMapper.ToObject(www.downloadHandler.text);
 
@@ -206,7 +206,7 @@ public class APIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(www.error))
             {
-                Debug.LogWarning("[APIManager] Attempting to refresh the access token");
+                Debug.LogWarning("[GoogleFitAPI] Attempting to refresh the access token");
 
                 //tries to refresh the token if the request has failed
                 JsonData errorRefresh = await Authorisation.RefreshAccessToken();
@@ -221,14 +221,14 @@ public class APIManager : MonoBehaviour
                 }
                 catch (KeyNotFoundException)
                 {
-                    Debug.LogError("[APIManager] failed to send request and refresh attempt: \n" + www.downloadHandler.text + "\n" + errorRefresh.ToJson());
+                    Debug.LogError("[GoogleFitAPI] failed to send request and refresh attempt: \n" + www.downloadHandler.text + "\n" + errorRefresh.ToJson());
 
                     return JsonMapper.ToObject(www.downloadHandler.text);
                 }
             }
             else
             {
-                Debug.Log("[APIManager]", () => www.downloadHandler.text);
+                Debug.Log("[GoogleFitAPI]", () => www.downloadHandler.text);
 
                 return JsonMapper.ToObject(www.downloadHandler.text);
             }
@@ -254,13 +254,13 @@ public class APIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(www.error))
             {
-                Debug.LogError("[APIManager] failed to send request and refresh attempt: \n" + www.downloadHandler.text);
+                Debug.LogError("[GoogleFitAPI] Failed to send request and refresh attempt: \n" + www.downloadHandler.text);
 
                 return JsonMapper.ToObject(www.downloadHandler.text);
             }
             else
             {
-                Debug.Log("[APIManager]", () => www.downloadHandler.text);
+                Debug.Log("[GoogleFitAPI]", () => www.downloadHandler.text);
 
                 return JsonMapper.ToObject(www.downloadHandler.text);
             }
@@ -294,7 +294,7 @@ public class APIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(www.error))
             {
-                Debug.LogWarning("[APIManager] Attempting to refresh the access token");
+                Debug.LogWarning("[GoogleFitAPI] Attempting to refresh the access token");
 
                 //tries to refresh the token if the request has failed
                 JsonData errorRefresh = await Authorisation.RefreshAccessToken();
@@ -309,14 +309,14 @@ public class APIManager : MonoBehaviour
                 }
                 catch (KeyNotFoundException)
                 {
-                    Debug.LogError("[APIManager] failed to send request and refresh attempt: \n" + www.downloadHandler.text + "\n" + errorRefresh.ToJson());
+                    Debug.LogError("[GoogleFitAPI] Failed to send request and refresh attempt: \n" + www.downloadHandler.text + "\n" + errorRefresh.ToJson());
 
                     return JsonMapper.ToObject(www.downloadHandler.text);
                 }
             }
             else
             {
-                Debug.Log("[APIManager]", () => www.downloadHandler.text);
+                Debug.Log("[GoogleFitAPI]", () => www.downloadHandler.text);
 
                 return JsonMapper.ToObject(www.downloadHandler.text);
             }
@@ -342,13 +342,13 @@ public class APIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(www.error))
             {
-                Debug.LogError("[APIManager] failed to send request and refresh attempt: \n" + www.downloadHandler.text);
+                Debug.LogError("[GoogleFitAPI] Failed to send request and refresh attempt: \n" + www.downloadHandler.text);
 
                 return JsonMapper.ToObject(www.downloadHandler.text);
             }
             else
             {
-                Debug.Log("[APIManager]", () => www.downloadHandler.text);
+                Debug.Log("[GoogleFitAPI]", () => www.downloadHandler.text);
 
                 return JsonMapper.ToObject(www.downloadHandler.text);
             }
@@ -367,11 +367,11 @@ public class APIManager : MonoBehaviour
             public static void Authorise(UnityAction<bool> callback)
             {
                 //initialise healthkit here
-                Debug.Log("[APIManager] Authorising HealthKit");
+                Debug.Log("[HealthKitAPI] Authorising HealthKit");
 
                 HK.healthStore.Authorize(HK.dataTypes, delegate (bool success)
                 {
-                    Debug.LogFormat("authorization: {0}", success);
+                    Debug.LogFormat("[HealthKitAPI] HealthKit authorisation: {0}", success);
                 });
 
                 callback.Invoke(HK.healthStore.IsHealthDataAvailable());
@@ -402,7 +402,7 @@ public class APIManager : MonoBehaviour
                 {
                     foreach (QuantitySample sample in samplesW)
                     {
-                        //Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                        //Debug.Log(String.Format("[HealthKitAPI] {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
                         totalSteps += sample.quantity.doubleValue;
                     }
 
@@ -410,7 +410,7 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("[APIManager] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                    Debug.LogError("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
                 }
             });
 
@@ -434,7 +434,7 @@ public class APIManager : MonoBehaviour
                 {
                     foreach (QuantitySample sample in samplesW)
                     {
-                        //Debug.Log(String.Format("{0} from {1}{3} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate, sample.quantity.unit));
+                        //Debug.Log(String.Format("[HealthKitAPI] {0} from {1}{3} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate, sample.quantity.unit));
                         totalDistance += sample.quantity.doubleValue;
                     }
 
@@ -444,7 +444,7 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("[APIManager] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                    Debug.LogError("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
                 }
             });
 
@@ -472,7 +472,7 @@ public class APIManager : MonoBehaviour
                 {
                     foreach (QuantitySample sample in samplesW)
                     {
-                        //Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                        //Debug.Log(String.Format("[HealthKitAPI] {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
 
                         QuantityData item = new QuantityData()
                         {
@@ -488,7 +488,7 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("[APIManager] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                    Debug.LogError("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
                 }
             });
 
@@ -512,7 +512,7 @@ public class APIManager : MonoBehaviour
                 {
                     foreach (QuantitySample sample in samplesW)
                     {
-                        //Debug.Log(String.Format("{0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                        //Debug.Log(String.Format("[HealthKitAPI] {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
 
                         QuantityData item = new QuantityData()
                         {
@@ -528,7 +528,7 @@ public class APIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("[APIManager] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                    Debug.LogError("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
                 }
             });
 
@@ -578,7 +578,7 @@ public class APIManager : MonoBehaviour
             URL += "&zoom=" + data.zoom;
             URL += "&routeArc=true";
 
-            //Debug.Log("[APIManager]", () => URL);
+            //Debug.Log("[MapQuestAPI]", () => URL);
 
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(URL);
 
@@ -591,7 +591,7 @@ public class APIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(www.error))
             {
-                Debug.LogError(string.Format("Error: {0}", www.error));
+                Debug.LogError(string.Format("[MapQuestAPI] Error: {0}", www.error));
             }
             else
             {

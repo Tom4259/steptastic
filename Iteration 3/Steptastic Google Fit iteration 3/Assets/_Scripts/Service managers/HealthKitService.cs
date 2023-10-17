@@ -17,7 +17,7 @@ public class HealthKitService : MonoBehaviour
     {
         if(Application.platform != RuntimePlatform.IPhonePlayer)
         {
-            Debug.Log("[" + GetType().Name + "] ", "Not running on iOS platform, disabling Health Kit service");
+            Debug.Log("[HealthKitService] ", "Not running on iOS platform, disabling Health Kit service");
 
             gameObject.SetActive(false);
 

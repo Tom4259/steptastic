@@ -20,40 +20,84 @@ MonoBehaviour:
     color: {r: 0, g: 0, b: 0, a: 1}
     enabledByDefault: 0
     colorText: 
-  - id: APIManager
+  - id: LocationRequest
     color: {r: 0.07256084, g: 0.3089163, b: 0.77032864, a: 1}
-    enabledByDefault: 1
-    colorText: 
-  - id: ProcessDeepLinkMngr
-    color: {r: 0.6792453, g: 0.6792453, b: 0.24029905, a: 1}
-    enabledByDefault: 1
-    colorText: 
-  - id: PlayerPrefsX
-    color: {r: 0.050105754, g: 0.13311379, b: 0.28798655, a: 1}
-    enabledByDefault: 1
-    colorText: 
-  - id: AuthenticateWindow
-    color: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 1}
     enabledByDefault: 1
     colorText: 
   - id: CanvasManager
     color: {r: 1, g: 1, b: 1, a: 1}
     enabledByDefault: 1
     colorText: FFFFFF
-  - id: ChallengeSetupWindow
-    color: {r: 0.20852618, g: 0.6226415, b: 0.51911265, a: 1}
+  - id: Setup
+    color: {r: 0.4339623, g: 0.34594163, b: 0.38968524, a: 1}
     enabledByDefault: 1
     colorText: 
-  - id: MainWindow
-    color: {r: 0.1251335, g: 0.58770907, b: 0.7169812, a: 1}
+  - id: GPSStartLocation
+    color: {r: 0.8773585, g: 0.1269154, b: 0.10346207, a: 1}
     enabledByDefault: 1
     colorText: 
-  - id: RequestUserLocation
-    color: {r: 0.24516429, g: 0.24733844, b: 0.19697247, a: 1}
+  - id: StartEndLocations
+    color: {r: 0.30495724, g: 0.8396226, b: 0.6657805, a: 1}
     enabledByDefault: 1
     colorText: 
-  - id: DebugCanvas
-    color: {r: 0.7735849, g: 0.13501246, b: 0.16194718, a: 1}
+  - id: GoogleFitAPI
+    color: {r: 0.28282395, g: 1, b: 0.07075471, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: HealthKitAPI
+    color: {r: 0.7924528, g: 0.21306513, b: 0.5115779, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: MapQuestAPI
+    color: {r: 0, g: 0.6132076, b: 0.19428952, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: HealthKitService
+    color: {r: 0.34438652, g: 0.54672116, b: 0.23648347, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: GoogleFitService
+    color: {r: 0.09210442, g: 0.10848311, b: 0.17475344, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: CalculateUserProgressIOS
+    color: {r: 0.16019939, g: 0.35689673, b: 0.754717, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: CalculateUserProgressAndroid
+    color: {r: 0.16078432, g: 0.35686275, b: 0.75294125, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: MapImageIOS
+    color: {r: 0.514151, g: 0.77860045, b: 1, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: MapImageAndroid
+    color: {r: 0.50980395, g: 0.77647066, b: 0.9960785, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: UIBlocksIOS
+    color: {r: 0.24504296, g: 0.53576374, b: 0.54740685, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: UIBlocksAndroid
+    color: {r: 0.24313727, g: 0.5372549, b: 0.54901963, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: DailyStepsGraphIOS
+    color: {r: 0.7803922, g: 0.92549026, b: 0.20392159, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: DailyStepsGraphAndroid
+    color: {r: 0.7803922, g: 0.92549026, b: 0.20392159, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: Charts
+    color: {r: 0.6132374, g: 0.67032945, b: 0.7190437, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: UsefulFunctions
+    color: {r: 0.1981132, g: 0.047659304, b: 0.122886255, a: 1}
     enabledByDefault: 1
     colorText: 
   toggleView:

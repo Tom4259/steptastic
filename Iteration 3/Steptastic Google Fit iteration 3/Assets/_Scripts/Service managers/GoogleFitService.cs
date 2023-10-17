@@ -23,14 +23,12 @@ public class GoogleFitService : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log(Application.platform);
-
         //if the device is not android or the editor, then disable this object
         if(Application.platform != RuntimePlatform.Android &&
             Application.platform != RuntimePlatform.WindowsEditor &&
             Application.platform != RuntimePlatform.OSXEditor)
         {
-            Debug.Log("[" + GetType().Name + "] ", "Not running on Android platform, disabling Google Fit service");
+            Debug.Log("[GoogleFitService] ", "Not running on Android platform, disabling Google Fit service");
             
             gameObject.SetActive(false);
 
@@ -92,12 +90,12 @@ public class GoogleFitService : MonoBehaviour
             // Update DeepLink Manager global variable, so URL can be accessed from anywhere.
             deeplinkURL = url;
 
-            Debug.Log("[" + GetType().Name + "]", () => url);
+            Debug.Log("[GoogleFitService]", () => url);
 
             string[] returnedUrl = url.Split('&');
             string authCode = returnedUrl[0].Split('=')[1];
 
-            Debug.Log("[" + GetType().Name + "]", () => authCode);
+            Debug.Log("[GoogleFitService]", () => authCode);
 
             SaveValuesAndContinue(authCode);
         }
