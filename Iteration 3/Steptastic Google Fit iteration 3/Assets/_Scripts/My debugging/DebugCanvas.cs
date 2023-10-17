@@ -16,6 +16,8 @@ public class DebugCanvas : MonoBehaviour
 
     [Space]
     public GameObject objectsToHide;
+    public GameObject[] androidOnlyObjects;
+    public GameObject[] iosOnlyObjects;
 
     [Space(20)]
     public CustomInputField authToken;
@@ -44,11 +46,30 @@ public class DebugCanvas : MonoBehaviour
         //if the build is a development build, then show the debug options
         gameObject.SetActive(Debug.isDebugBuild);
         logManager.gameObject.SetActive(Debug.isDebugBuild);
+
+#if UNITY_ANDROID || UNITY_EDITOR
+
+        for (int i = 0; i < iosOnlyObjects.Length; i++)
+        {
+            iosOnlyObjects[i].SetActive(false);
+        }
+
+#elif UNITY_IOS
+
+        for (int i = 0; i < androidOnlyObjects.Length; i++)
+        {
+            androidOnlyObjects[i].SetActive(false);
+        }
+
+#endif
     }
 
     public void Start()
     {
+#if UNITY_ANDROID || UNITY_EDITOR
         ReloadTokens();
+#endif
+
         LoadDate();
         versionText.text = "V " + Application.version;
 

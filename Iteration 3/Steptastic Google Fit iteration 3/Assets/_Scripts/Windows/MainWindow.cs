@@ -383,17 +383,12 @@ public class MainWindow : MonoBehaviour
     {
         //if start date is now, then make it beggining of the day
         DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
-        //DateTime startDate = DateTime.Today;
-
         DateTime now = DateTime.UtcNow;
 
         double userDistance = await APIManager.HealthKit.GetDistance(startDate, now);
-
         float distanceToTarget = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, -1);
 
-
         float percentage = (float)(userDistance / distanceToTarget) * 100;
-
 
 
         Debug.Log("[" + GetType().Name + "]", () => userDistance);
