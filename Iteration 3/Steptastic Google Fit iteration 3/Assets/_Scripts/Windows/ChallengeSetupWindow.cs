@@ -138,7 +138,7 @@ public class ChallengeSetupWindow : MonoBehaviour
     /// </summary>
     private IEnumerator UpdateDropdown(CustomDropdown d)
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.15f);
 
         if (d.items[0].itemName == "SELECT")
         {
@@ -206,6 +206,11 @@ public class ChallengeSetupWindow : MonoBehaviour
         distance = Math.Round(distance, 1);
 
         challengeDescriptionText.text = descriptionText.Replace("{{distance}}", distance + " km");
+    }
+
+    public void ClearDescriptionText()
+    {
+        challengeDescriptionText.text = "";
     }
 
 

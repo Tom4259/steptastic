@@ -4691,7 +4691,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -52.5}
-  m_SizeDelta: {x: 0, y: 225}
+  m_SizeDelta: {x: 0, y: 310}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &148828087
 MonoBehaviour:
@@ -8088,7 +8088,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -52.5}
-  m_SizeDelta: {x: 0, y: 225}
+  m_SizeDelta: {x: 0, y: 310}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &324284271
 MonoBehaviour:
@@ -9328,7 +9328,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
+  m_AnchoredPosition: {x: 0, y: -0.000091552734}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &359809519
@@ -11710,10 +11710,10 @@ RectTransform:
   - {fileID: 1642871271}
   m_Father: {fileID: 1272756445}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 240.53}
-  m_SizeDelta: {x: 600, y: 656.15}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -398.30353}
+  m_SizeDelta: {x: 600, y: 795.8171}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &506515755
 MonoBehaviour:
@@ -11730,8 +11730,8 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Top: -75
+    m_Bottom: 30
   m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
@@ -14032,7 +14032,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -2}
+  m_AnchoredPosition: {x: 0, y: -2.0000305}
   m_SizeDelta: {x: 25, y: -18}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &644754940
@@ -14078,7 +14078,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 181874463}
   m_HandleRect: {fileID: 181874462}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -15021,7 +15021,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 260693339}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1283687442}
+        m_TargetAssemblyTypeName: ChallengeSetupWindow, Assembly-CSharp
+        m_MethodName: ClearDescriptionText
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &698529989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15066,7 +15078,7 @@ MonoBehaviour:
   selectedItemIndex: 0
   animationType: 0
   panelDirection: 0
-  panelSize: 225
+  panelSize: 310
   curveSpeed: 3
   animationCurve:
     serializedVersion: 2
@@ -15743,8 +15755,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -229}
-  m_SizeDelta: {x: 500, y: 222.3}
+  m_AnchoredPosition: {x: 0, y: -259.6987}
+  m_SizeDelta: {x: 500, y: 160.9026}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &780483158
 MonoBehaviour:
@@ -15794,12 +15806,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33.72
+  m_fontSize: 30
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 33.72
+  m_fontSizeMax: 30
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -27630,7 +27642,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.000030517578}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1533468158
@@ -29340,7 +29352,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1864603141}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1283687442}
+        m_TargetAssemblyTypeName: ChallengeSetupWindow, Assembly-CSharp
+        m_MethodName: ClearDescriptionText
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1642871275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29385,7 +29409,7 @@ MonoBehaviour:
   selectedItemIndex: 0
   animationType: 0
   panelDirection: 0
-  panelSize: 225
+  panelSize: 310
   curveSpeed: 3
   animationCurve:
     serializedVersion: 2
