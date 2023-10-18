@@ -8,9 +8,10 @@ using LitJson;
 using System.Text;
 using UnityEngine.UI;
 using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
+
+#if UNITY_IOS || UNITY_EDITOR
 using BeliefEngine.HealthKit;
-using UnityEngine.XR;
+#endif
 
 public class APIManager : MonoBehaviour
 {
@@ -357,6 +358,8 @@ public class APIManager : MonoBehaviour
         #endregion
     }
 
+#if UNITY_IOS || UNITY_EDITOR
+
     public class HealthKit
     {
         static HealthKitService HK = HealthKitService.Instance;
@@ -550,6 +553,8 @@ public class APIManager : MonoBehaviour
 
         #endregion
     }
+
+#endif
 
     public class MapQuest
     {

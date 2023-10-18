@@ -59,7 +59,7 @@ public class MainWindow : MonoBehaviour
         await LoadUIBlocks();
 
 #if UNITY_IOS && !UNITY_EDITOR
-        await LoadStepsDayGraph();
+        await LoadActivityGraph();
 #endif
 
         loadingScreen.SetActive(false);
@@ -327,6 +327,28 @@ public class MainWindow : MonoBehaviour
     {
         StepsData(stepsJson);
         DistanceData(distanceJson);
+
+        //creating the x axis points
+        List<string> xPoints = new List<string>();
+        for (int i = 0; i < 24; i++)
+        {
+            //xPoints.Add(i.ToString() + ((i >= 12) ? " pm" : " am"));
+
+            if(i == 0)
+            {
+                xPoints.Add("12 am");
+            }
+            else if(i >= 13)
+            {
+                xPoints.Add((i - 12).ToString() + " pm");
+            }
+            else
+            {
+                xPoints.Add(i.ToString() + " am");
+            }
+        }
+
+        activityChart.SetXAxisPoints(xPoints);
     }
 
     //plotting the steps data on the activity graph
@@ -390,11 +412,6 @@ public class MainWindow : MonoBehaviour
         for (int i = 0; i < remainder; i++)
         {
             distance.Add(0);
-        }
-
-        for (int i = 0; i < distance.Count; i++)
-        {
-
         }
 
         Debug.Log("[ActivityGraphAndroid]", () => distance.Count);
@@ -653,7 +670,20 @@ public class MainWindow : MonoBehaviour
         List<string> xPoints = new List<string>();
         for (int i = 0; i < 24; i++)
         {
-            xPoints.Add(i.ToString());
+            //xPoints.Add(i.ToString() + ((i >= 12) ? " pm" : " am"));
+
+            if(i == 0)
+            {
+                xPoints.Add("12 am");
+            }
+            else if(i >= 13)
+            {
+                xPoints.Add((i - 12).ToString() + " pm");
+            }
+            else
+            {
+                xPoints.Add(i.ToString() + " am");
+            }
         }
 
         activityChart.SetXAxisPoints(xPoints);
