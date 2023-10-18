@@ -20,9 +20,9 @@ public class EasyChartSettings : MonoBehaviour
         chart.GetChartComponent<SingleAxis>().data = points;
     }
 
-    public void SetSerieData(SerieData data)
+    public void SetSerieData(SerieData data, int serieIndex)
     {
-        chart.series[0].AddSerieData(data);
+        chart.series[serieIndex].AddSerieData(data);
     }
 
     public void SetSerieData(List<double> data, int serieIndex)
@@ -33,7 +33,7 @@ public class EasyChartSettings : MonoBehaviour
         }
     }
 
-    public void SetSerieData(List<double> data, List<bool> ignorePoints)
+    public void SetSerieData(List<double> data, List<bool> ignorePoints, int serieIndex)
     {
         if(data.Count != ignorePoints.Count)
             Debug.LogWarning("[Charts] provided lists are not ther same length");
@@ -41,19 +41,19 @@ public class EasyChartSettings : MonoBehaviour
 
         for (int i = 0; i < data.Count; i++)
         {
-            chart.series[0].UpdateData(i, 1, data[i]);
+            chart.series[serieIndex].UpdateData(i, 1, data[i]);
         }
 
 
         for (int i = 0; i < ignorePoints.Count; i++)
         {
-            SerieData s = chart.series[0].data[i];
+            SerieData s = chart.series[serieIndex].data[i];
         
             s.ignore = ignorePoints[i];
         }
     }
 
-    public void AddSerieData(double value)
+    public void AddSerieData(double value, int serieIndex)
     {
         SerieData d = new SerieData
         {
@@ -64,10 +64,10 @@ public class EasyChartSettings : MonoBehaviour
             }            
         };
 
-        chart.series[0].AddSerieData(d);
+        chart.series[serieIndex].AddSerieData(d);
     }
 
-    public void AddSerieData(double value, string axisPoint)
+    public void AddSerieData(double value, string axisPoint, int serieIndex)
     {
         SerieData d = new SerieData
         {
@@ -80,14 +80,14 @@ public class EasyChartSettings : MonoBehaviour
 
         List<string> points = chart.GetChartComponent<XAxis>().data;
 
-        if (points.Count < chart.series[0].data.Count)
+        if (points.Count < chart.series[serieIndex].data.Count)
         {
             points.Add(axisPoint);
 
             SetXAxisPoints(points);
         }
 
-        chart.series[0].AddSerieData(d);
+        chart.series[serieIndex].AddSerieData(d);
     }
 
     public void AnimateGraph()

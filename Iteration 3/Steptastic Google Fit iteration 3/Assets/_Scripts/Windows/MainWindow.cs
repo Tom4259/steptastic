@@ -256,7 +256,7 @@ public class MainWindow : MonoBehaviour
         DateTime date = DateTime.Now;
         TimeSpan t = new TimeSpan(0, date.Hour, date.Minute, date.Second);
 
-        API.ApiData body = API.GenerateAPIbody(date.Subtract(t), DateTime.Now, (3600000 / 2)); //30 minute time gap
+        API.ApiData body = API.GenerateAPIbody(date.Subtract(t), DateTime.Now, 3600000); //1 hour time gap
 
         //Debug.Log("[UIBlocksAndroid]", () => body.startTimeMillis);
         //Debug.Log("[UIBlocksAndroid]", () => body.endTimeMillis);
@@ -273,7 +273,7 @@ public class MainWindow : MonoBehaviour
         //Debug.Log("[UIBlocksAndroid] " + distanceJson.ToJson());
 
         //creating the graph with the steps
-        LoadStepsDayGraph(stepsJson);
+        LoadActivityGraph(stepsJson, distanceJson);
 
 
         #region counting up
@@ -323,10 +323,16 @@ public class MainWindow : MonoBehaviour
     #region graphs
 
     //loads and inputs data into the steps over the day graph
-    private void LoadStepsDayGraph(JsonData json)
+    private void LoadActivityGraph(JsonData stepsJson, JsonData distanceJson)
+    {
+        StepsData(stepsJson);
+        DistanceData(distanceJson);
+    }
+
+    //plotting the steps data on the activity graph
+    private void StepsData(JsonData json)
     {
         List<double> steps = new List<double>();
-        List<bool> ignorePoints = new List<bool>();
 
         for (int i = 0; i < json["bucket"].Count; i++)
         {
@@ -342,21 +348,58 @@ public class MainWindow : MonoBehaviour
             catch (KeyNotFoundException) { }
 
             steps.Add(item);
-            ignorePoints.Add(false);
         }
 
-        int remainder = 48 - steps.Count;
+        int remainder = 24 - steps.Count;
 
         for (int i = 0; i < remainder; i++)
         {
             steps.Add(0);
-            ignorePoints.Add(true);
         }
 
-        //Debug.Log("[DailyStepsGraphAndroid]", () => steps.Count);
-        //Debug.Log("[DailyStepsGraphAndroid]", () => ignorePoints.Count);
+        //Debug.Log("[ActivityGraphAndroid]", () => steps.Count);
 
-        activityChart.SetSerieData(steps, ignorePoints);
+        activityChart.SetSerieData(steps, 0);
+    }
+
+    //plotting the distance data on the activity graph
+    private void DistanceData(JsonData json)
+    {
+        List<double> distance = new List<double>();
+
+        for (int i = 0; i < json["bucket"].Count; i++)
+        {
+            JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
+
+            double item = 0;
+
+            try
+            {
+                item = double.Parse(stepData[0]["value"][0]["fpVal"].ToString());
+            }
+            catch (ArgumentOutOfRangeException) { }
+            catch (KeyNotFoundException) { }
+
+            double distanceKM = Math.Round((item / 1000), 2);
+
+            distance.Add(distanceKM);
+        }
+
+        int remainder = 24 - distance.Count;
+
+        for (int i = 0; i < remainder; i++)
+        {
+            distance.Add(0);
+        }
+
+        for (int i = 0; i < distance.Count; i++)
+        {
+
+        }
+
+        Debug.Log("[ActivityGraphAndroid]", () => distance.Count);
+
+        activityChart.SetSerieData(distance, 1);
     }
 
     #endregion
@@ -500,7 +543,7 @@ public class MainWindow : MonoBehaviour
     #region graphs
 
     //loads and inputs data into the steps over the day graph
-    private async Task LoadStepsDayGraph()
+    private async Task LoadActivityGraph()
     {
         DateTime endOfDay = DateTime.Today.AddDays(1);
         DateTime startOfDay = DateTime.Today;
