@@ -382,8 +382,8 @@ public class APIManager : MonoBehaviour
 
         public class QuantityData
         {
-            public DateTimeOffset startDate; 
-            public DateTimeOffset endDate;
+            public DateTime startDate; 
+            public DateTime endDate;
             public double value;
         }
 
@@ -480,8 +480,8 @@ public class APIManager : MonoBehaviour
 
                         QuantityData item = new QuantityData()
                         {
-                            startDate = sample.startDate,
-                            endDate = sample.endDate,
+                            startDate = sample.startDate.DateTime,
+                            endDate = sample.endDate.DateTime,
                             value = sample.quantity.doubleValue
                         };
 
@@ -522,8 +522,8 @@ public class APIManager : MonoBehaviour
 
                         QuantityData item = new QuantityData()
                         {
-                            startDate = sample.startDate,
-                            endDate = sample.endDate,
+                            startDate = sample.startDate.DateTime,
+                            endDate = sample.endDate.DateTime,
                             value = sample.quantity.doubleValue
                         };
 

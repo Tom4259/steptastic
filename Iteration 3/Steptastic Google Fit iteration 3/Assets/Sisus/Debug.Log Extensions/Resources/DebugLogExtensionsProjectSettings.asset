@@ -16,6 +16,10 @@ MonoBehaviour:
   stripAllCallsFromBuilds: 0
   unlistedChannelsEnabledByDefault: 1
   channels:
+  - id: tom
+    color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    enabledByDefault: 0
+    colorText: 
   - id: tomre
     color: {r: 0, g: 0, b: 0, a: 1}
     enabledByDefault: 0
@@ -84,11 +88,11 @@ MonoBehaviour:
     color: {r: 0.24313727, g: 0.5372549, b: 0.54901963, a: 1}
     enabledByDefault: 1
     colorText: 
-  - id: DailyStepsGraphIOS
+  - id: ActivityGraphIOS
     color: {r: 0.7803922, g: 0.92549026, b: 0.20392159, a: 1}
     enabledByDefault: 1
     colorText: 
-  - id: DailyStepsGraphAndroid
+  - id: ActivityGraphAndroid
     color: {r: 0.7803922, g: 0.92549026, b: 0.20392159, a: 1}
     enabledByDefault: 1
     colorText: 

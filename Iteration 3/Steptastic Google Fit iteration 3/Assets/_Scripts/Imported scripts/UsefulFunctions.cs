@@ -64,12 +64,8 @@ public class UsefulFunctions
     }
 
 
-
-
-    //for map image
-
     //may need to update these values. test more
-    public static int getMapZoomApproximation()
+    public static int GetMapZoomApproximation()
     {
         int dist = (int)PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget);
 
@@ -101,7 +97,7 @@ public class UsefulFunctions
         }
     }
 
-    public static Tuple<float, float> latLongBetweenTwoLatLongs(float lat1, float long1, float lat2, float long2, float per)
+    public static Tuple<float, float> LatLongBetweenTwoLatLongs(float lat1, float long1, float lat2, float long2, float per)
     {
         per /= 100;
 
@@ -111,5 +107,21 @@ public class UsefulFunctions
         Debug.Log("[UsefulFunctions] lat long between lat longs: " + lat + "," + lng);
 
         return Tuple.Create(lat, lng);
+    }
+
+
+
+    public static DateTime AverageDateBetweenDateTimes(List<DateTime> dates)
+    {
+        var count = dates.Count;
+
+        double temp = 0D;
+
+        for (int i = 0; i < count; i++)
+        {
+            temp += dates[i].Ticks / (double)count;
+        }
+
+        return new DateTime((long)temp);
     }
 }

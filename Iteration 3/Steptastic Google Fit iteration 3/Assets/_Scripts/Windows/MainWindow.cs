@@ -38,7 +38,7 @@ public class MainWindow : MonoBehaviour
 
 	[Space]
 	[Header("Graphs")]
-	public EasyChartSettings dayStepsChart;
+	public EasyChartSettings activityChart;
 
 
 	//called when the main window needs to be refreshed or loaded
@@ -80,7 +80,7 @@ public class MainWindow : MonoBehaviour
             progressBar.currentPercent = f;
         }, 0, percentage, animationTime);
 
-		dayStepsChart.AnimateGraph();
+		activityChart.AnimateGraph();
 
 
 		int animationSteps = int.Parse(stepsBlockValue.text);
@@ -190,8 +190,8 @@ public class MainWindow : MonoBehaviour
         float targetLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[0]);
         float targetLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[1]);
 
-        float currentPointLat = UsefulFunctions.latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item1;
-        float currentPointLong = UsefulFunctions.latLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
+        float currentPointLat = UsefulFunctions.LatLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item1;
+        float currentPointLong = UsefulFunctions.LatLongBetweenTwoLatLongs(userLat, userLong, targetLat, targetLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
 
         #endregion
 
@@ -222,7 +222,7 @@ public class MainWindow : MonoBehaviour
             imageHeight = (int)Math.Round(mapImage.rectTransform.rect.height),
             imageWidth = (int)Math.Round(mapImage.rectTransform.rect.width),
 
-            zoom = UsefulFunctions.getMapZoomApproximation(),
+            zoom = UsefulFunctions.GetMapZoomApproximation(),
 
             imageToSet = mapImage,
 
@@ -356,7 +356,7 @@ public class MainWindow : MonoBehaviour
         //Debug.Log("[DailyStepsGraphAndroid]", () => steps.Count);
         //Debug.Log("[DailyStepsGraphAndroid]", () => ignorePoints.Count);
 
-        dayStepsChart.SetSerieData(steps, ignorePoints);
+        activityChart.SetSerieData(steps, ignorePoints);
     }
 
     #endregion
@@ -418,8 +418,8 @@ public class MainWindow : MonoBehaviour
         float endLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[0]);
         float endLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[1]);
 
-        float currentPointLat = UsefulFunctions.latLongBetweenTwoLatLongs(startLat, startLong, endLat, endLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item1;
-        float currentPointLong = UsefulFunctions.latLongBetweenTwoLatLongs(startLat, startLong, endLat, endLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
+        float currentPointLat = UsefulFunctions.LatLongBetweenTwoLatLongs(startLat, startLong, endLat, endLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item1;
+        float currentPointLong = UsefulFunctions.LatLongBetweenTwoLatLongs(startLat, startLong, endLat, endLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
 
         #endregion
 
@@ -450,7 +450,7 @@ public class MainWindow : MonoBehaviour
             imageHeight = (int)Math.Round(mapImage.rectTransform.rect.height),
             imageWidth = (int)Math.Round(mapImage.rectTransform.rect.width),
 
-            zoom = UsefulFunctions.getMapZoomApproximation(),
+            zoom = UsefulFunctions.GetMapZoomApproximation(),
 
             imageToSet = mapImage,
 
@@ -502,40 +502,123 @@ public class MainWindow : MonoBehaviour
     //loads and inputs data into the steps over the day graph
     private async Task LoadStepsDayGraph()
     {
-        DateTime now = DateTime.Now;
+        DateTime endOfDay = DateTime.Today.AddDays(1);
         DateTime startOfDay = DateTime.Today;
 
-        List<APIManager.HealthKit.QuantityData> stepsQuantityData = new List<APIManager.HealthKit.QuantityData>();
+        //getting the data
+        List<APIManager.HealthKit.QuantityData> stepsQuantityData = await APIManager.HealthKit.GetStepsList(startOfDay, endOfDay);
+        List<APIManager.HealthKit.QuantityData> distanceQuantityData = await APIManager.HealthKit.GetDistanceList(startOfDay, endOfDay);
 
-        stepsQuantityData = await APIManager.HealthKit.GetStepsList(startOfDay, now);
 
-        Debug.Log("[DailyStepsGraphIOS]", () => stepsQuantityData.Count);
+        //Debug.Log("[ActivityGraphIOS]", () => stepsQuantityData.Count);
 
-        for (int i = 0; i < stepsQuantityData.Count; i++)
+        //for (int i = 0; i < stepsQuantityData.Count; i++)
+        //{
+        //    Debug.LogFormat("[ActivityGraphIOS] Item {0} is value {1} for start date of {2} and end date of {3}",
+        //        i, stepsQuantityData[i].value, stepsQuantityData[i].startDate, stepsQuantityData[i].endDate);
+        //}
+
+
+        #region steps count up
+
+        List<double> stepsCountPerHour = new List<double>();
+
+        for (int i = 0; i < 24; i++)
         {
-            //Debug.LogFormat("[DailyStepsGraphIOS] Item {0} is value {1} for start date of {2} and end date of {3}",
-            //    i, stepsQuantityData[i].value, stepsQuantityData[i].startDate, stepsQuantityData[i].endDate);
+            try
+            {
+                double hourTotal = 0;
+
+                for (int z = 0; z < stepsQuantityData.Count; z++)
+                {
+                    DateTime averageDate = UsefulFunctions.AverageDateBetweenDateTimes(new List<DateTime>()
+                    {
+                        stepsQuantityData[z].startDate,
+                        stepsQuantityData[z].endDate
+
+                    });
+
+
+                    if (averageDate.Hour == i)
+                    {
+                        hourTotal += stepsQuantityData[z].value;
+                    }
+                }
+
+                stepsCountPerHour.Add(hourTotal);
+
+
+                //Debug.LogWarning("[ActivityGraphIOS] For hour " + i + ", user has done " + hourTotal);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                //Debug.LogWarning("[ActivityGraphIOS] For hour " + i + ", user has done 0 steps, (argumant out of range)");
+
+                stepsCountPerHour.Add(0);
+            }
         }
 
-        //need to set x axis points to 
+        #endregion
 
+
+        #region distance count up
+
+        List<double> distanceCountPerHour = new List<double>();
+
+        for (int i = 0; i < 24; i++)
+        {
+            try
+            {
+                double hourTotal = 0;
+
+                for (int z = 0; z < stepsQuantityData.Count; z++)
+                {
+                    DateTime averageDate = UsefulFunctions.AverageDateBetweenDateTimes(new List<DateTime>()
+                    {
+                        distanceQuantityData[z].startDate,
+                        distanceQuantityData[z].endDate
+
+                    });
+
+                    double value = Math.Round(distanceQuantityData[z].value, 2);
+
+
+                    if (averageDate.Hour == i)
+                    {
+                        hourTotal += value;
+                    }
+                }
+
+                distanceCountPerHour.Add(hourTotal);
+
+
+                Debug.LogWarning("[ActivityGraphIOS] For hour " + i + ", user has done " + hourTotal);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Debug.LogWarning("[ActivityGraphIOS] For hour " + i + ", user has made 0 distance, (argumant out of range)");
+
+                distanceCountPerHour.Add(0);
+            }
+        }
+
+        #endregion
+
+
+
+        //creating the x axis points
         List<string> xPoints = new List<string>();
-        for (int i = 0; i < 48; i++)
+        for (int i = 0; i < 24; i++)
         {
             xPoints.Add(i.ToString());
         }
 
-        dayStepsChart.SetXAxisPoints(xPoints);
+        activityChart.SetXAxisPoints(xPoints);
 
 
-        List<double> stepsList = new List<double>( new double[48] );
-
-        for (int i = 0; i < stepsQuantityData.Count; i++)
-        {
-            stepsList[stepsQuantityData[i].startDate.Hour] = stepsQuantityData[i].value;
-        }
-
-        dayStepsChart.SetSerieData(stepsList);
+        //inputting the data into the chart
+        activityChart.SetSerieData(stepsCountPerHour, 0);
+        activityChart.SetSerieData(distanceCountPerHour, 1);
     }
 
     #endregion

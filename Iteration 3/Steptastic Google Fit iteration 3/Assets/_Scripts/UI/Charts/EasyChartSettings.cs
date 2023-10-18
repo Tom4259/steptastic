@@ -17,7 +17,7 @@ public class EasyChartSettings : MonoBehaviour
 
     public void SetXAxisPoints(List<string> points)
     {
-        chart.GetChartComponent<XAxis>().data = points;
+        chart.GetChartComponent<SingleAxis>().data = points;
     }
 
     public void SetSerieData(SerieData data)
@@ -25,11 +25,11 @@ public class EasyChartSettings : MonoBehaviour
         chart.series[0].AddSerieData(data);
     }
 
-    public void SetSerieData(List<double> data)
+    public void SetSerieData(List<double> data, int serieIndex)
     {
         for (int i = 0; i < data.Count; i++)
         {
-            chart.series[0].UpdateData(i, 1, data[i]);
+            chart.series[serieIndex].UpdateData(i, 1, data[i]);
         }
     }
 
