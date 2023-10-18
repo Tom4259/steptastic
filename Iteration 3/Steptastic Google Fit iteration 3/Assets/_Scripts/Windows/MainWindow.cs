@@ -548,11 +548,11 @@ public class MainWindow : MonoBehaviour
                 stepsCountPerHour.Add(hourTotal);
 
 
-                //Debug.LogWarning("[ActivityGraphIOS] For hour " + i + ", user has done " + hourTotal);
+                //Debug.Log("[ActivityGraphIOS] For hour " + i + ", user has done " + hourTotal);
             }
             catch (ArgumentOutOfRangeException)
             {
-                //Debug.LogWarning("[ActivityGraphIOS] For hour " + i + ", user has done 0 steps, (argumant out of range)");
+                //Debug.Log("[ActivityGraphIOS] For hour " + i + ", user has done 0 steps, (argumant out of range)");
 
                 stepsCountPerHour.Add(0);
             }
@@ -571,7 +571,7 @@ public class MainWindow : MonoBehaviour
             {
                 double hourTotal = 0;
 
-                for (int z = 0; z < stepsQuantityData.Count; z++)
+                for (int z = 0; z < distanceQuantityData.Count; z++)
                 {
                     DateTime averageDate = UsefulFunctions.AverageDateBetweenDateTimes(new List<DateTime>()
                     {
@@ -592,11 +592,11 @@ public class MainWindow : MonoBehaviour
                 distanceCountPerHour.Add(hourTotal);
 
 
-                Debug.LogWarning("[ActivityGraphIOS] For hour " + i + ", user has done " + hourTotal);
+                //Debug.Log("[ActivityGraphIOS] For hour " + i + ", user has done " + hourTotal);
             }
             catch (ArgumentOutOfRangeException)
             {
-                Debug.LogWarning("[ActivityGraphIOS] For hour " + i + ", user has made 0 distance, (argumant out of range)");
+                //Debug.Log("[ActivityGraphIOS] For hour " + i + ", user has made 0 distance, (argumant out of range)");
 
                 distanceCountPerHour.Add(0);
             }
