@@ -104,6 +104,10 @@ MonoBehaviour:
     color: {r: 0.1981132, g: 0.047659304, b: 0.122886255, a: 1}
     enabledByDefault: 1
     colorText: 
+  - id: BEHealthKit
+    color: {r: 1, g: 1, b: 1, a: 1}
+    enabledByDefault: 1
+    colorText: 
   toggleView:
     key: DebugLogExtensions.ToggleView
     keyCode: 277

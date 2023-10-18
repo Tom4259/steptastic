@@ -33,5 +33,6 @@ public static class Channel
 	public static readonly int ActivityGraphAndroid = 20;
 	public static readonly int Charts = 21;
 	public static readonly int UsefulFunctions = 22;
+	public static readonly int BEHealthKit = 23;
 }
 #endregion

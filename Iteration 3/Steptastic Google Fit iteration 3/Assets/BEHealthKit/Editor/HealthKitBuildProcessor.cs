@@ -73,8 +73,7 @@ public class HealthKitBuildProcessor : IPostprocessBuild, IProcessScene
 			proj.ReadFromFile(projPath);
 
 			string targetName = new PBXProject().GetUnityMainTargetGuid();
-			//string target = proj.TargetGuidByName(targetName);
-			string target = proj.TargetGuidByName("Unity-iPhone");
+			string target = proj.TargetGuidByName(targetName);
 
 
 			// Entitlements

@@ -82,7 +82,7 @@ namespace BeliefEngine.HealthKit
 			status = (HKAuthorizationStatus)_AuthorizationStatusForType(identifier);
 		}
 		catch (System.Exception) {
-			Debug.LogErrorFormat("error parsing authorization status: '{0}'", identifier);
+			Debug.LogErrorFormat("[BEHealthKit] Error parsing authorization status: '{0}'", identifier);
 		}
 #endif
 
@@ -94,7 +94,7 @@ namespace BeliefEngine.HealthKit
         {
 #if UNITY_IOS && !UNITY_EDITOR
 		if (handler != null) this.authorizationHandler += handler;
-		Debug.Log("--- authorizing ---");
+		//Debug.Log("[BEHealthKit] --- Authorizing ---");
 		_Authorize(types.Transmit());
 #endif
         }
@@ -109,10 +109,10 @@ namespace BeliefEngine.HealthKit
         public void GenerateDummyData(HealthKitDataTypes types)
         {
 #if UNITY_IOS && !UNITY_EDITOR
-		Debug.Log("--- generating debug data ---");
+		Debug.Log("[BEHealthKit] --- Generating debug data ---");
 		_GenerateDummyData(types.Transmit());
 #else
-            Debug.LogError("Dummy data is not currently available in the editor.");
+            Debug.LogError("[BEHealthKit] Dummy data is not currently available in the editor.");
 #endif
         }
 
@@ -166,7 +166,7 @@ namespace BeliefEngine.HealthKit
             }
             else
             {
-                Debug.LogError("Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
+                Debug.LogError("[BEHealthKit] Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
             }
         }
 
@@ -203,7 +203,7 @@ namespace BeliefEngine.HealthKit
             }
             else
             {
-                Debug.LogError("Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
+                Debug.LogError("[BEHealthKit] Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
             }
         }
 
@@ -270,7 +270,7 @@ namespace BeliefEngine.HealthKit
             }
             else
             {
-                Debug.LogError("Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
+                Debug.LogError("[BEHealthKit] Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
             }
         }
 
@@ -293,7 +293,7 @@ namespace BeliefEngine.HealthKit
             }
             else
             {
-                Debug.LogError("Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
+                Debug.LogError("[BEHealthKit] Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
             }
         }
 
@@ -356,12 +356,12 @@ namespace BeliefEngine.HealthKit
                 string identifier = HealthKitDataTypes.GetIdentifier(dataType);
                 string startStamp = DateTimeBridge.DateToString(startDate);
                 string endStamp = DateTimeBridge.DateToString(endDate);
-                Debug.LogFormat("reading quantity from:\n{0} ({1})\nto:\n{2} ({3})", startDate, startStamp, endDate, endStamp);
+                Debug.LogFormat("[BEHealthKit] Reading quantity from:\n{0} ({1})\nto:\n{2} ({3})", startDate, startStamp, endDate, endStamp);
                 _ReadQuantity(identifier, startStamp, endStamp, combineSamples);
             }
             else
             {
-                Debug.LogError("Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
+                Debug.LogError("[BEHealthKit] Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
             }
         }
 
@@ -374,7 +374,7 @@ namespace BeliefEngine.HealthKit
             }
             else
             {
-                Debug.LogError("Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
+                Debug.LogError("[BEHealthKit] Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
             }
         }
 
@@ -387,7 +387,7 @@ namespace BeliefEngine.HealthKit
             }
             else
             {
-                Debug.LogError("Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
+                Debug.LogError("[BEHealthKit] Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
             }
         }
 
@@ -400,7 +400,7 @@ namespace BeliefEngine.HealthKit
             }
             else
             {
-                Debug.LogError("Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
+                Debug.LogError("[BEHealthKit] Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
             }
         }
 
@@ -412,7 +412,7 @@ namespace BeliefEngine.HealthKit
             }
             else
             {
-                Debug.LogError("Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
+                Debug.LogError("[BEHealthKit] Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
             }
         }
 
@@ -424,7 +424,7 @@ namespace BeliefEngine.HealthKit
             }
             else
             {
-                Debug.LogError("Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
+                Debug.LogError("[BEHealthKit] Error: no health data is available. Are you running on an iOS device that supports HealthKit?");
             }
         }
 
@@ -518,7 +518,7 @@ namespace BeliefEngine.HealthKit
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(xmlString);
             Error error = new Error(xml.SelectSingleNode("error"));
-            Debug.LogError("error from HealthKit plugin: ERROR domain:" + error.domain + " code:" + error.code + " \"" + error.localizedDescription + "\"");
+            Debug.LogError("[BEHealthKit] Error from HealthKit plugin: ERROR domain:" + error.domain + " code:" + error.code + " \"" + error.localizedDescription + "\"");
             BroadcastMessage("ErrorOccurred", error);
         }
 

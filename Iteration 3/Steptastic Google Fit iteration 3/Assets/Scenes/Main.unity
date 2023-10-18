@@ -16751,7 +16751,7 @@ GameObject:
   - component: {fileID: 583102152}
   - component: {fileID: 583102151}
   m_Layer: 0
-  m_Name: Google Fit
+  m_Name: Google Fit Service
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16787,7 +16787,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1873142080}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &598771967
 GameObject:
@@ -31229,7 +31229,7 @@ GameObject:
   - component: {fileID: 1369624882}
   - component: {fileID: 1369624881}
   m_Layer: 0
-  m_Name: Health Kit
+  m_Name: Health Kit Service
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31248,7 +31248,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1873142080}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1369624881
 MonoBehaviour:
@@ -41284,39 +41284,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871473909}
   m_CullTransparentMesh: 0
---- !u!1 &1873142079
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1873142080}
-  m_Layer: 0
-  m_Name: Authorisation Services
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1873142080
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1873142079}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 583102152}
-  - {fileID: 1369624880}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1874558654
 GameObject:
   m_ObjectHideFlags: 0
@@ -47809,7 +47776,8 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 374734753}
-  - {fileID: 1873142080}
+  - {fileID: 583102152}
+  - {fileID: 1369624880}
   - {fileID: 519420032}
   - {fileID: 1264634517}
   - {fileID: 1727138075}
