@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_IOS || UNITY_EDITOR
+using UnityEngine;
 using System;
 using System.Globalization;
 
@@ -45,3 +46,4 @@ public class DateTimeBridge : ScriptableObject {
 } 
 
 }
+#endif

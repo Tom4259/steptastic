@@ -1,3 +1,4 @@
+#if UNITY_IOS || UNITY_EDITOR
 using UnityEngine;
 using System;
 using System.Xml;
@@ -582,3 +583,4 @@ namespace BeliefEngine.HealthKit
     }
 
 }
+#endif

@@ -2,14 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using XCharts;
 using System;
 using LitJson;
 using API = APIManager.GoogleFit;
 using UnityEngine.UI;
 using Michsky.MUIP;
-using XCharts.Runtime;
-using System.Linq;
 using System.Threading.Tasks;
 
 public class MainWindow : MonoBehaviour
