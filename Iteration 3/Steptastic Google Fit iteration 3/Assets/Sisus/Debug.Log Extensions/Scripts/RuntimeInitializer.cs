@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Sisus.Debugging
 {
@@ -14,7 +15,11 @@ namespace Sisus.Debugging
         private static void InitializeRuntimeDebugger()
         {
             Debug.Initialize();
-            RuntimeDebugger.Initialize();
+            try
+            {
+                RuntimeDebugger.Initialize();
+            }
+            catch (NullReferenceException) { }
         }
     }
 }

@@ -4,49 +4,49 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using System;
 
 [ExecuteInEditMode]
 public class UniformUI : MonoBehaviour
 {
     public Color blockColour;
 
-    public TMP_Text[] ignoredTextElements;
-    public Image[] ignoredImageElements;
-
-    private List<TMP_Text> textElements = new List<TMP_Text>();
-    private List<Image> imageElements = new List<Image>();
-
-    private void Start()
-    {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            if (transform.GetChild(i).TryGetComponent<TMP_Text>(out TMP_Text txt))
-            {
-                if (!ignoredTextElements.Contains(txt))
-                {
-                    textElements.Add(txt);
-                }
-            }
-            else if (transform.GetChild(i).TryGetComponent<Image>(out Image img))
-            {
-                if (!ignoredImageElements.Contains(img))
-                {
-                    imageElements.Add(img);
-                }
-            }
-        }
-    }
+    [Space]
+    public UniformUI[] uniformUis;
+    public TMP_Text[] textElements;
+    public Image[] imageElements;
 
     //keeps the colour scheme of UI blocks the same
     private void Update()
     {
-        for (int i = 0; i < textElements.Count; i++)
+        try
         {
-            textElements[i].color = blockColour;
+            for (int i = 0; i < uniformUis.Length; i++)
+            {
+                uniformUis[i].blockColour = blockColour;
+            }
         }
-        for (int i = 0; i < imageElements.Count; i++)
+        catch(NullReferenceException) { }
+
+        try
         {
-            imageElements[i].color = blockColour;
+            for (int i = 0; i < textElements.Length; i++)
+            {
+                textElements[i].color = blockColour;
+            }
         }
+        catch(NullReferenceException) { }
+
+        try
+        {
+            if (imageElements.Length > 0)
+            {
+                for (int i = 0; i < imageElements.Length; i++)
+                {
+                    imageElements[i].color = blockColour;
+                }
+            }
+        }
+        catch (NullReferenceException) { }
     }
 }

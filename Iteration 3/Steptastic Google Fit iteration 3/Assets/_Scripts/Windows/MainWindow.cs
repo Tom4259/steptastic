@@ -17,11 +17,11 @@ public class MainWindow : MonoBehaviour
 
     [Space(25)]
     [Header("Home screen")]
-    public GameObject homeScren;
+    public GameObject homeScreen;
 
     [Space(10)]
 	[Header("Progress bar")]
-	public PartialProgressBar progressBar;
+	public CircleProgressBar progressBar;
 	public float animationTime = 1;
 
     [Space(10)]
@@ -36,10 +36,18 @@ public class MainWindow : MonoBehaviour
 
 	[Space(10)]
 	[Header("Smaller UI blocks")]
-	public TMP_Text stepsBlockValue;
-	public TMP_Text distanceBlockValue;
+    [Header("Steps")]
+	public TMP_Text stepsTodayText;
+	public TMP_Text stepsGoalText;
+	public ProgressBar stepsGoalProgressBar;
 
-	[Space]
+    [Space(5)]
+    [Header("Distance")]
+    public TMP_Text distanceTodayText;
+    public TMP_Text distanceGoalText;
+    public ProgressBar distanceGoalProgressBar;
+
+    [Space]
 	[Header("Graphs")]
 	public EasyChartSettings activityChart;
 
@@ -90,20 +98,20 @@ public class MainWindow : MonoBehaviour
 		activityChart.AnimateGraph();
 
 
-		int animationSteps = int.Parse(stepsBlockValue.text);
-		float animationDistance = float.Parse(distanceBlockValue.text);
+		int animationSteps = int.Parse(stepsTodayText.text);
+		float animationDistance = float.Parse(distanceTodayText.text);
 
 		//animating the steps UI block
 		LeanTween.value(gameObject, (float f) =>
 		{
-			stepsBlockValue.text = f.ToString("#,##0");
+			stepsTodayText.text = f.ToString("#,##0");
 		}, 0, animationSteps, animationTime);
 
 
 		//animating the distance UI block
 		LeanTween.value(gameObject, (float f) =>
 		{
-			distanceBlockValue.text = Math.Round(f, 2) + " km";
+            distanceTodayText.text = Math.Round(f, 2) + " km";
 		}, 0, animationDistance, animationTime);
     }
 
@@ -251,8 +259,8 @@ public class MainWindow : MonoBehaviour
     //shows a more professional placeholder
     private void ResetUIBlockText()
     {
-        stepsBlockValue.text = "------";
-        distanceBlockValue.text = "--- km";
+        stepsTodayText.text = "------";
+        distanceTodayText.text = "--- km";
     }
 
     //loads data for the UI blocks
@@ -321,8 +329,8 @@ public class MainWindow : MonoBehaviour
 
         double distanceKM = Math.Round((totalMeters / 1000), 2);
 
-        distanceBlockValue.text = distanceKM.ToString();
-        stepsBlockValue.text = totalSteps.ToString();
+        distanceTodayText.text = distanceKM.ToString();
+        stepsTodayText.text = totalSteps.ToString();
     }
 
     #endregion
@@ -345,7 +353,7 @@ public class MainWindow : MonoBehaviour
             {
                 xPoints.Add("12 am");
             }
-            else if(i >= 13)
+            else if(i >= 12)
             {
                 xPoints.Add((i - 12).ToString() + " pm");
             }
@@ -683,7 +691,7 @@ public class MainWindow : MonoBehaviour
             {
                 xPoints.Add("12 am");
             }
-            else if(i >= 13)
+            else if(i >= 12)
             {
                 xPoints.Add((i - 12).ToString() + " pm");
             }
