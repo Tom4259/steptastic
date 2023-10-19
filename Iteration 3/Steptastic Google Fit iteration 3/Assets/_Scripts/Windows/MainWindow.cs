@@ -13,22 +13,28 @@ public class MainWindow : MonoBehaviour
 {
 	public GameObject loadingScreen;
 
-	[Space(20)]
+
+
+    [Space(25)]
+    [Header("Home screen")]
+    public GameObject homeScren;
+
+    [Space(10)]
 	[Header("Progress bar")]
-	public ProgressBar progressBar;
+	public PartialProgressBar progressBar;
 	public float animationTime = 1;
 
-	//[Space(10)]
-	//[TextArea]
-	//public string challengeDescriptionText;
-	//public TMP_Text challengeDescriptionLabel;
+    [Space(10)]
+    [Header("Challenge details")]
+    public TMP_Text startLocation;
+    public TMP_Text endLocation;
 
-	[Space(20)]
+	[Space(10)]
 	[Header("Map visualisation")]
 	public Image mapImage;
 
 
-	[Space(20)]
+	[Space(10)]
 	[Header("Smaller UI blocks")]
 	public TMP_Text stepsBlockValue;
 	public TMP_Text distanceBlockValue;
@@ -37,18 +43,22 @@ public class MainWindow : MonoBehaviour
 	[Header("Graphs")]
 	public EasyChartSettings activityChart;
 
+    [Space(25)]
+    [Header("Goals screen")]
+    public GameObject goalsScreen;
+
+    //[Space(10)]
+
+
 
 	//called when the main window needs to be refreshed or loaded
 	public async void StartMainWindow()
 	{
 		loadingScreen.SetActive(true);
 
-		//shows the user their start and end Location
-		//challengeDescriptionLabel.text = challengeDescriptionText.Replace("{{startLocation}}",
-		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital) + ", " +
-		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName)).Replace("{{endLocation}}",
-		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital) + ", " +
-		//	PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName));
+        //shows the user their start and end Location
+        startLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName).Replace(",", ", ");
+        endLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName).Replace(",", ", ");
 
 		ResetUIBlockText();
         await CalculateUserProgress();
@@ -74,7 +84,7 @@ public class MainWindow : MonoBehaviour
 
         LeanTween.value(gameObject, (float f) =>
         {
-            progressBar.currentPercent = f;
+            progressBar.percent = f;
         }, 0, percentage, animationTime);
 
 		activityChart.AnimateGraph();

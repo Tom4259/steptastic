@@ -21,7 +21,7 @@ public class AuthenticateWindow : MonoBehaviour
     private void Start()
     {
         //hides the location option, can code this in in the future, but isn't necessary right now
-#if UNITY_IOS
+#if UNITY_IOS && !UNITY_EDITOR
 
         Destroy(windowManager.windows[locationWindowIndex].buttonObject);
         windowManager.windows.RemoveAt(locationWindowIndex);
