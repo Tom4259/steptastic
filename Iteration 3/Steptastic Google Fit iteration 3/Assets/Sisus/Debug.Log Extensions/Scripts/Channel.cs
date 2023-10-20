@@ -34,5 +34,7 @@ public static class Channel
 	public static readonly int Charts = 21;
 	public static readonly int UsefulFunctions = 22;
 	public static readonly int BEHealthKit = 23;
+	public static readonly int ChallengeInfo = 24;
+	public static readonly int Statistics = 25;
 }
 #endregion

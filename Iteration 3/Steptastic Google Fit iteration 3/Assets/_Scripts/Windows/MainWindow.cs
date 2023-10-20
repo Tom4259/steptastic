@@ -18,9 +18,10 @@ public class MainWindow : MonoBehaviour
     [Space(25)]
     [Header("Home screen")]
     public GameObject homeScreen;
+    public StatisticsWindow statisticsWindow;
 
 
-    [Header("Today's stats")]
+    [Header("Today's summary")]
 	[Header("Progress bar")]
 	public CircleProgressBar progressBar;
 	public float animationTime = 1;
@@ -90,7 +91,7 @@ public class MainWindow : MonoBehaviour
 		DebugCanvas.instance.Start();
     }
 
-	//animates to screen
+	//animates the screen
 	private void AnimateScreen()
 	{
         float percentage = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted);
@@ -137,6 +138,18 @@ public class MainWindow : MonoBehaviour
         }, 0, distanceToday, animationTime).setEaseInOutCubic();
     }
 
+
+    public void OpenChallengeInfoScreen()
+    {
+        Debug.Log("[ChallengeInfo] Opening statistics window");
+    }
+
+    public void OpenStepsAndDistanceStatistics()
+    {
+        Debug.Log("[Statistics] Opening statistics window");
+
+        statisticsWindow.OpenWindow();
+    }
 
 
 

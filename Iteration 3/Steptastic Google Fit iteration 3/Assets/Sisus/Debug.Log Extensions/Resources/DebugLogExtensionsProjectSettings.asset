@@ -107,6 +107,14 @@ MonoBehaviour:
   - id: BEHealthKit
     color: {r: 1, g: 1, b: 1, a: 1}
     enabledByDefault: 1
+    colorText: FFFFFF
+  - id: ChallengeInfo
+    color: {r: 0.6302807, g: 0.59970284, b: 0.59687734, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: Statistics
+    color: {r: 0.7748072, g: 0.5738028, b: 0.49691874, a: 1}
+    enabledByDefault: 1
     colorText: 
   toggleView:
     key: DebugLogExtensions.ToggleView
