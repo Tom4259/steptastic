@@ -583,8 +583,8 @@ public class MainWindow : MonoBehaviour
     //shows a more professional placeholder
     private void ResetUIBlockText()
     {
-        stepsBlockValue.text = "------";
-        distanceBlockValue.text = "--- km";
+        stepsTodayText.text = "------";
+        distanceTodayText.text = "--- km";
     }
 
     //loads data for the UI blocks
@@ -601,8 +601,8 @@ public class MainWindow : MonoBehaviour
         Debug.Log("[UIBlocksIOS]", () => stepsToday);
         Debug.Log("[UIBlocksIOS]", () => distanceToday);
 
-        distanceBlockValue.text = distanceToday.ToString();
-        stepsBlockValue.text = stepsToday.ToString();
+        stepsTodayText.text = stepsToday.ToString();
+        distanceTodayText.text = distanceToday.ToString();
     }
 
     #endregion
