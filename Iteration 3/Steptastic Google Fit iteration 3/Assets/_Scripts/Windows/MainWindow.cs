@@ -19,43 +19,48 @@ public class MainWindow : MonoBehaviour
     [Header("Home screen")]
     public GameObject homeScreen;
 
-    [Space(10)]
+
+    [Header("Today's stats")]
 	[Header("Progress bar")]
 	public CircleProgressBar progressBar;
 	public float animationTime = 1;
 
-    [Space(10)]
-    [Header("Challenge details")]
-    public TMP_Text startLocation;
-    public TMP_Text endLocation;
-
-	[Space(10)]
-	[Header("Map visualisation")]
-	public Image mapImage;
-
-
-	[Space(10)]
+    [Space(5)]
 	[Header("Smaller UI blocks")]
     [Header("Steps")]
 	public TMP_Text stepsTodayText;
-	public TMP_Text stepsGoalText;
-	public ProgressBar stepsGoalProgressBar;
+	//public TMP_Text stepsGoalText;
+	public ImageFillController stepsGoalProgressBar;
 
-    [Space(5)]
+    [Space(2)]
     [Header("Distance")]
     public TMP_Text distanceTodayText;
-    public TMP_Text distanceGoalText;
-    public ProgressBar distanceGoalProgressBar;
+    //public TMP_Text distanceGoalText;
+    public ImageFillController distanceGoalProgressBar;
 
-    [Space]
-	[Header("Graphs")]
-	public EasyChartSettings activityChart;
+    [Space(5)]
+    [Header("Map visualisation")]
+    public Image mapImage;
+
+
 
     [Space(25)]
     [Header("Goals screen")]
     public GoalsWindow goalsScreen;
 
-    //[Space(10)]
+
+
+
+
+    //putting these item in a different window
+    [Space(30)]
+    [Header("Challenge details")]
+    public TMP_Text startLocation;
+    public TMP_Text endLocation;
+
+    [Space]
+	[Header("Graphs")]
+	public EasyChartSettings activityChart;
 
 
 
@@ -65,8 +70,8 @@ public class MainWindow : MonoBehaviour
 		loadingScreen.SetActive(true);
 
         //shows the user their start and end Location
-        startLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName).Replace(",", ", ");
-        endLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName).Replace(",", ", ");
+        //startLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName).Replace(",", ", ");
+        //endLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName).Replace(",", ", ");
 
 		ResetUIBlockText();
         await CalculateUserProgress();
@@ -74,7 +79,7 @@ public class MainWindow : MonoBehaviour
         await LoadUIBlocks();
 
 #if UNITY_IOS && !UNITY_EDITOR
-        await LoadActivityGraph();
+        //await LoadActivityGraph();
 #endif
 
         loadingScreen.SetActive(false);
@@ -90,29 +95,46 @@ public class MainWindow : MonoBehaviour
 	{
         float percentage = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted);
 
+        //animating the main challenge progress bar
         LeanTween.value(gameObject, (float f) =>
         {
             progressBar.percent = f;
-        }, 0, percentage, animationTime);
-
-		activityChart.AnimateGraph();
+        }, 0, percentage, animationTime).setEaseInOutCubic();
 
 
-		int animationSteps = int.Parse(stepsTodayText.text);
-		float animationDistance = float.Parse(distanceTodayText.text);
+		//activityChart.AnimateGraph();
+
+
+		int stepsToday = int.Parse(stepsTodayText.text);
+		float distanceToday = float.Parse(distanceTodayText.text);
 
 		//animating the steps UI block
 		LeanTween.value(gameObject, (float f) =>
 		{
 			stepsTodayText.text = f.ToString("#,##0");
-		}, 0, animationSteps, animationTime);
+		}, 0, stepsToday, animationTime).setEaseInOutCubic();
 
 
 		//animating the distance UI block
 		LeanTween.value(gameObject, (float f) =>
 		{
             distanceTodayText.text = Math.Round(f, 2) + " km";
-		}, 0, animationDistance, animationTime);
+		}, 0, distanceToday, animationTime).setEaseInOutCubic();
+
+
+        //animating the small UI object goal progress bars
+        int stepGoal = PlayerPrefsX.GetInt(PlayerPrefsLocations.User.Goals.dailyStepGoal, 10000);
+        float distanceGoal = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Goals.dailyDistanceGoal, 8);
+
+        LeanTween.value(gameObject, (float f) =>
+        {
+            stepsGoalProgressBar.percent = f / stepGoal;
+        }, 0, stepsToday, animationTime).setEaseInOutCubic();
+
+        LeanTween.value(gameObject, (float f) =>
+        {
+            distanceGoalProgressBar.percent = f / distanceGoal;
+        }, 0, distanceToday, animationTime).setEaseInOutCubic();
     }
 
 
@@ -288,7 +310,7 @@ public class MainWindow : MonoBehaviour
         //Debug.Log("[UIBlocksAndroid] " + distanceJson.ToJson());
 
         //creating the graph with the steps
-        LoadActivityGraph(stepsJson, distanceJson);
+        //LoadActivityGraph(stepsJson, distanceJson);
 
 
         #region counting up
