@@ -53,7 +53,7 @@ public class MainWindow : MonoBehaviour
 
     [Space(25)]
     [Header("Goals screen")]
-    public GameObject goalsScreen;
+    public GoalsWindow goalsScreen;
 
     //[Space(10)]
 

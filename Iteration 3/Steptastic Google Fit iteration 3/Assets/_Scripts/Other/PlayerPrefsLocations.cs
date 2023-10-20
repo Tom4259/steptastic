@@ -102,6 +102,18 @@ public class PlayerPrefsLocations : MonoBehaviour
             /// </summary>
             public static string setup = "user.completedwindows.setup";
         }
+
+        public class Goals
+        {
+            public static string dailyStepGoal = "user.goals.dailystepgoal";
+
+            public static string weeklyStepGoal = "user.goal.weeklystepgoal";
+
+
+            public static string dailyDistanceGoal = "user.goals.dailydistamcegoal";
+
+            public static string weeklyDistanceGoal = "user.goals.weeklydistancegoal";
+        }
     }
 
     public class Developer

@@ -381,7 +381,7 @@ public class APIManager : MonoBehaviour
             }
         }
 
-
+        #region getting data
 
         public class QuantityData
         {
@@ -552,6 +552,76 @@ public class APIManager : MonoBehaviour
         }
 
         #endregion
+
+        #endregion
+
+        /// <summary>
+        /// Orders a list of quantity data
+        /// </summary>
+        /// <param name="unorderedData"></param>
+        /// <param name="splitIntoHours">The amount of hours to split each quantity data into in hours</param>
+        /// <returns></returns>
+        /*
+        public static List<QuantityData> OrganiseQuantityList(List<QuantityData> unorderedData, int splitIntoHours = 24)
+        {
+            List<QuantityData> orderedList = new List<QuantityData>();
+
+            TimeSpan dataInterval = new TimeSpan(splitIntoHours, 0, 0);
+
+
+
+            for (int i = 0; i < unorderedData.Count; i++)
+            {
+                if(UsefulFunctions.da)
+            }
+
+
+
+            for (int i = 0; i < 24; i++)
+            {
+                try
+                {
+                    double hourTotal = 0;
+
+                    QuantityData item = new QuantityData();
+
+                    for (int z = 0; z < unorderedData.Count; z++)
+                    {
+                        DateTime averageDate = UsefulFunctions.AverageDateBetweenDateTimes(new List<DateTime>()
+                        {
+                            unorderedData[z].startDate,
+                            unorderedData[z].endDate
+
+                        });
+
+
+                        if (averageDate.Hour == (i * splitIntoHours))
+                        {
+                            hourTotal += unorderedData[z].value;
+
+                            item.startDate = unorderedData[z].startDate;
+                            item.endDate = unorderedData[z].endDate;
+                            
+                        }
+                    }
+
+
+                    item.value = hourTotal;
+
+                    orderedList.Add(hourTotal);
+
+
+                    //Debug.Log("[ActivityGraphIOS] For hour " + i + ", user has done " + hourTotal);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    //Debug.Log("[ActivityGraphIOS] For hour " + i + ", user has done 0 steps, (argumant out of range)");
+
+                    orderedList.Add(0);
+                }
+            }
+        }
+        */
     }
 
 #endif
