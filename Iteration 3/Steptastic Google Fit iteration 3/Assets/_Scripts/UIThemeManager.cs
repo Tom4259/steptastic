@@ -42,7 +42,7 @@ public class UIThemeManager : MonoBehaviour
 
 #elif UNITY_IOS && !UNITY_EDITOR
 
-    [DllImport("DarkModeDetector")]
+    [DllImport("__Internal")]
     private static extern bool IsDarkModeEnabled();
 
     private void Start()
