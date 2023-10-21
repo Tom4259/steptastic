@@ -18,26 +18,27 @@ public class UIThemeManager : MonoBehaviour
 
 #elif UNITY_ANDROID && !UNITY_EDITOR                               
 
-    private AndroidJavaObject darkModeHelper;
+    //private AndroidJavaObject javaClass = new AndroidJavaObject("com.tomindustries.darkmodedetectorlibrary.AndroidThemDetector");
+
 
     private void Start()
     {
-        darkModeHelper = new AndroidJavaObject("com.TomIndustries.Steptastic.DarkModeHelper");
+        bool dark = IsDarkMode();
 
-        Debug.Log(IsDarkMode());
+        Debug.Log(dark);
     }
 
+    
     public bool IsDarkMode()
     {
-        if (darkModeHelper != null)
-        {
-            return darkModeHelper.CallStatic<bool>("isDarkMode", new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity"));
-        }
-        else
-        {
-            Debug.LogError("DarkModeHelper not initialized.");
-            return false;
-        }
+        AndroidJavaObject javaClass = new AndroidJavaObject("com.tomindustries.darkmodedetectorlibrary.AndroidThemDetector");
+        AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+        AndroidJavaObject context = activity.Call<AndroidJavaObject>("getApplicationContext");
+
+        bool dark = javaClass.Call<bool>("IsDarkTheme", context);
+
+        return dark;
     }
 
 #elif UNITY_IOS && !UNITY_EDITOR

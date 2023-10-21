@@ -28,7 +28,7 @@ public class UIThemeObject : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         bool isDarkMode = manager.IsDarkMode();
 
