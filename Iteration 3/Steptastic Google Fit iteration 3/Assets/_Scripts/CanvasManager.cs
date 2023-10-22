@@ -27,6 +27,7 @@ public class CanvasManager : MonoBehaviour
 
     [Space]
     public MainWindow mainScreen;
+    public NavigationBar navigationBar;
     private Vector2 mainScreenStartLocation;
     public float animationTime = 1.2f;
 
@@ -95,6 +96,7 @@ public class CanvasManager : MonoBehaviour
     {
         setupWindows.gameObject.SetActive(true);
         mainScreen.gameObject.SetActive(false);
+        navigationBar.gameObject.SetActive(false);
 
         setupWindowmanager.OpenWindowByIndex(0);
 
@@ -126,6 +128,7 @@ public class CanvasManager : MonoBehaviour
     private void OpenMainWindow(bool animation)
     {
         mainScreen.gameObject.SetActive(true);
+        navigationBar.gameObject.SetActive(true);
 
         if (animation)
         {
