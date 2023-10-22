@@ -4,19 +4,27 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+[ExecuteInEditMode]
 public class UIThemeObject : MonoBehaviour
 {
     private UIThemeManager manager;
 
-    public Color lightMode;
-    public Color darkMode;
+    public Color lightMode = Color.white;
+    public Color darkMode = new Color(0.1215686f, 0.1215686f, 0.1215686f);
 
     private TMP_Text text;
     private Image img;
 
+
+    private bool isDark;
+
     private void Start()
     {
         manager = FindObjectOfType<UIThemeManager>();
+
+        manager.onDarkMode += SetDarkMode;
+        manager.onLightMode += SetLightMode;
 
         if (TryGetComponent<TMP_Text>(out TMP_Text c))
         {
@@ -28,17 +36,31 @@ public class UIThemeObject : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        bool isDarkMode = manager.IsDarkMode();
 
+    private void SetDarkMode()
+    {
+        isDark = true;
+
+        UpdateUI();
+    }
+
+    private void SetLightMode()
+    {
+        isDark = false;
+
+        UpdateUI();
+    }
+
+
+    private void UpdateUI()
+    {
         if (text != null)
         {
-            text.color = isDarkMode ? darkMode : lightMode;
+            text.color = isDark ? darkMode : lightMode;
         }
-        else if(img != null)
+        else if (img != null)
         {
-            img.color = isDarkMode ? darkMode : lightMode;
+            img.color = isDark ? darkMode : lightMode;
         }
     }
 }

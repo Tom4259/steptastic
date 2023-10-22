@@ -19,6 +19,8 @@ public class MainWindow : MonoBehaviour
     [Header("Home screen")]
     public GameObject homeScreen;
     public StatisticsWindow statisticsWindow;
+    [Space(5)]
+    public TMP_Text todayDate;
 
 
     [Header("Today's summary")]
@@ -70,11 +72,19 @@ public class MainWindow : MonoBehaviour
 	{
 		loadingScreen.SetActive(true);
 
+        DateTime now = DateTime.Now;
+
+        string day = now.ToString("dddd");
+        string date = UsefulFunctions.AddOrdinal(int.Parse(now.ToString("M").Split(' ')[0]));
+        string month = now.ToString("M").Split(' ')[1];
+
+        todayDate.text = day + " " + date + " " + month;
+
         //shows the user their start and end Location
         //startLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName).Replace(",", ", ");
         //endLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName).Replace(",", ", ");
 
-		ResetUIBlockText();
+        ResetUIBlockText();
         await CalculateUserProgress();
         await GetMapImage();
         await LoadUIBlocks();
