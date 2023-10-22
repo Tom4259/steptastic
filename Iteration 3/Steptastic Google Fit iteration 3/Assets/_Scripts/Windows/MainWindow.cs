@@ -26,7 +26,7 @@ public class MainWindow : MonoBehaviour
     [Header("Today's summary")]
 	[Header("Progress bar")]
 	public CircleProgressBar progressBar;
-	public float animationTime = 1;
+	private float animationTime = 1;
 
     [Space(5)]
 	[Header("Smaller UI blocks")]
@@ -65,10 +65,14 @@ public class MainWindow : MonoBehaviour
 	[Header("Graphs")]
 	public EasyChartSettings activityChart;
 
+    private void Start()
+    {
+        animationTime = CanvasManager.animationTime;
+    }
 
 
-	//called when the main window needs to be refreshed or loaded
-	public async void StartMainWindow()
+    //called when the main window needs to be refreshed or loaded
+    public async void StartMainWindow()
 	{
 		loadingScreen.SetActive(true);
 
@@ -154,11 +158,11 @@ public class MainWindow : MonoBehaviour
         Debug.Log("[ChallengeInfo] Opening statistics window");
     }
 
-    public void OpenStepsAndDistanceStatistics()
+    public void OpenStatisticsScreen(int dataType)
     {
         Debug.Log("[Statistics] Opening statistics window");
 
-        statisticsWindow.OpenWindow();
+        statisticsWindow.OpenWindow(dataType);
     }
 
 

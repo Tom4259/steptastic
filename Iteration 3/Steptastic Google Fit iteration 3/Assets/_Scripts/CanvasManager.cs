@@ -29,7 +29,8 @@ public class CanvasManager : MonoBehaviour
     public MainWindow mainScreen;
     public NavigationBar navigationBar;
     private Vector2 mainScreenStartLocation;
-    public float animationTime = 1.2f;
+    public static float animationTime = 1.75f;
+    public static float windowAnimationTime = 0.75f;
 
     private void Awake()
     {

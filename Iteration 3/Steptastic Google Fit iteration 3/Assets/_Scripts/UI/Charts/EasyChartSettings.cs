@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using XCharts.Runtime;
 
+
+[RequireComponent(typeof(BaseChart))]
 public class EasyChartSettings : MonoBehaviour
 {
     private BaseChart chart;
