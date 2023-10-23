@@ -15,19 +15,17 @@ public class UIThemeChart : MonoBehaviour
 
     private BaseChart chart;
 
-    public Font chartFont;
+    [Space]
+    public Color darkTheme;
+    public Color lightTheme;
 
     [Space]
-    public Color32 darkBackground;
-    public Color32 lightBackground;
+    public TextStyle darkText;
+    public TextStyle lightText;
 
     [Space]
-    public Color32 darkText;
-    public Color32 lightText;
-
-    [Space]
-    public Color32 darkLine;
-    public Color32 lightLine;
+    public LineStyle darkLine;
+    public LineStyle lightLine;
 
 
     private void Start()
@@ -58,7 +56,7 @@ public class UIThemeChart : MonoBehaviour
     {
         ThemeStyle newTheme = new ThemeStyle
         {
-            customBackgroundColor = isDark ? darkBackground : lightBackground,
+            customBackgroundColor = isDark ? darkTheme : lightTheme,
             enableCustomTheme = true,
             customColorPalette = new List<Color32>
             {
@@ -69,45 +67,26 @@ public class UIThemeChart : MonoBehaviour
         chart.theme = newTheme;
 
 
-
-        TextStyle newTextStyle = new TextStyle
-        {
-            color = isDark ? darkText : lightText,
-            font = chartFont
-        };
-
-        TitleStyle newTitle = new TitleStyle
-        {
-            textStyle = newTextStyle
-        };
-
-
-        LineStyle newLineStyle = new LineStyle
-        {
-            color = isDark ? darkLine : lightLine,
-        };
-
-
         AxisLine newAxisLine = new AxisLine
         {
-            lineStyle = newLineStyle
+            lineStyle = isDark ? darkLine : lightLine
         };
 
         AxisLabel newAxisLabel = new AxisLabel
         {
-            textStyle = newTextStyle,
+            textStyle = isDark ? darkText : lightText,
             distance = 8
         };
 
         AxisTick newAxisTick = new AxisTick
         {
-            lineStyle = newLineStyle,
+            lineStyle = isDark ? darkLine : lightLine,
             alignWithLabel = true // single axis's tick is in the middle of the chart
         };
 
 
-        chart.GetChartComponent<Title>().labelStyle.textStyle = newTextStyle;
-        chart.GetChartComponent<Title>().subLabelStyle.textStyle = newTextStyle;
+        chart.GetChartComponent<Title>().labelStyle.textStyle = isDark ? darkText : lightText;
+        chart.GetChartComponent<Title>().subLabelStyle.textStyle = isDark ? darkText : lightText;
 
 
         chart.GetChartComponent<SingleAxis>().axisLabel = newAxisLabel;
