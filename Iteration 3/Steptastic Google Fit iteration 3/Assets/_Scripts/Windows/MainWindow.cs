@@ -11,11 +11,6 @@ using System.Threading.Tasks;
 
 public class MainWindow : MonoBehaviour
 {
-	public GameObject loadingScreen;
-
-
-
-    [Space(25)]
     [Header("Home screen")]
     public GameObject homeScreen;
     public StatisticsWindow statisticsWindow;
@@ -74,7 +69,7 @@ public class MainWindow : MonoBehaviour
     //called when the main window needs to be refreshed or loaded
     public async void StartMainWindow()
 	{
-		loadingScreen.SetActive(true);
+		CanvasManager.instance.loadingScreen.gameObject.SetActive(true);
 
         DateTime now = DateTime.Now;
 
@@ -97,7 +92,7 @@ public class MainWindow : MonoBehaviour
         //await LoadActivityGraph();
 #endif
 
-        loadingScreen.SetActive(false);
+        CanvasManager.instance.loadingScreen.gameObject.SetActive(false);
 
         AnimateScreen();
 

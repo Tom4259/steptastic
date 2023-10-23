@@ -16,6 +16,8 @@ public class CanvasManager : MonoBehaviour
     public bool testSetupStage = true;
 #endif
 
+    public LoadingScreen loadingScreen;
+
     [Space]
     public RectTransform setupWindows;
     public WindowManager setupWindowmanager;
@@ -51,8 +53,10 @@ public class CanvasManager : MonoBehaviour
             PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, false);
             PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.setup, false);
         }
-
 #endif
+
+        loadingScreen.gameObject.SetActive(false);
+
         mainScreenStartLocation = new Vector2(GetComponent<CanvasScaler>().referenceResolution.x, 0);
 
         setupWindows.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
