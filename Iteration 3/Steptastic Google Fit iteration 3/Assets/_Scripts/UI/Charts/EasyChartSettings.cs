@@ -17,10 +17,32 @@ public class EasyChartSettings : MonoBehaviour
     }
 
 
-    public void SetXAxisPoints(List<string> points)
+    public void SetChartTitle(string title)
+    {
+        chart.GetChartComponent<Title>().text = title;
+    }
+
+    public void SetChartSubText(string subtext)
+    {
+        chart.GetChartComponent<Title>().subText = subtext;
+    }
+
+
+    public void SetSingleAxisPoints(List<string> points)
     {
         chart.GetChartComponent<SingleAxis>().data = points;
     }
+
+    public void SetXAxisPoints(List<string> points)
+    {
+        chart.GetChartComponent<XAxis>().data = points;
+    }
+
+    public void SetSingleAxisSplitNumber(int splitNumber)
+    {
+        chart.GetChartComponent<SingleAxis>().splitNumber = splitNumber;
+    }
+
 
     public void SetSerieData(SerieData data, int serieIndex)
     {
@@ -86,7 +108,7 @@ public class EasyChartSettings : MonoBehaviour
         {
             points.Add(axisPoint);
 
-            SetXAxisPoints(points);
+            SetSingleAxisPoints(points);
         }
 
         chart.series[serieIndex].AddSerieData(d);
@@ -96,5 +118,14 @@ public class EasyChartSettings : MonoBehaviour
     {
         chart.AnimationReset();
         chart.AnimationResume();
+        chart.AnimationFadeIn();
+    }
+
+
+    public void RefreshGraph(bool animation)
+    {
+        chart.RefreshAllComponent();
+
+        if (animation) AnimateGraph();
     }
 }

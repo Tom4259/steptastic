@@ -13130,8 +13130,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1166842266}
   - {fileID: 679442870}
+  - {fileID: 1166842266}
   - {fileID: 73368394}
   m_Father: {fileID: 718375802}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15280,40 +15280,28 @@ MonoBehaviour:
     itemIndex: 0
     OnItemSelection:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 718375806}
-          m_TargetAssemblyTypeName: StatisticsWindow, Assembly-CSharp
-          m_MethodName: UpdateUI
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
   - itemName: Distance
     itemIcon: {fileID: 0}
     itemIndex: 0
     OnItemSelection:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 718375806}
-          m_TargetAssemblyTypeName: StatisticsWindow, Assembly-CSharp
-          m_MethodName: UpdateUI
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 718375806}
+        m_TargetAssemblyTypeName: StatisticsWindow, Assembly-CSharp
+        m_MethodName: UpdateUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onItemTextChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -16408,8 +16396,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae50252eb7e6a341b578addb5371255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewPeriodDropdown: {fileID: 1166842270}
   dataTypeDropdown: {fileID: 679442874}
+  viewPeriodDropdown: {fileID: 1166842270}
   dataOverPeriodChart: {fileID: 1469122153}
 --- !u!1 &733340719
 GameObject:
@@ -24477,40 +24465,28 @@ MonoBehaviour:
     itemIndex: 0
     OnItemSelection:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 718375806}
-          m_TargetAssemblyTypeName: StatisticsWindow, Assembly-CSharp
-          m_MethodName: UpdateUI
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
   - itemName: Week
     itemIcon: {fileID: 0}
     itemIndex: 0
     OnItemSelection:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 718375806}
-          m_TargetAssemblyTypeName: StatisticsWindow, Assembly-CSharp
-          m_MethodName: UpdateUI
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 718375806}
+        m_TargetAssemblyTypeName: StatisticsWindow, Assembly-CSharp
+        m_MethodName: UpdateUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onItemTextChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -31559,7 +31535,7 @@ GameObject:
   - component: {fileID: 1469122152}
   - component: {fileID: 1469122153}
   m_Layer: 5
-  m_Name: BarChart
+  m_Name: activity over period chart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31626,7 +31602,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_EnableTextMeshPro: 0
-  m_ChartName: 
+  m_ChartName: statistics chart 1
   m_Theme:
     m_Show: 1
     m_SharedTheme: {fileID: 11400000, guid: e1dc23a10de1e4c5dbfbaf74c4dfd218, type: 2}
@@ -32740,7 +32716,7 @@ MonoBehaviour:
     m_Offset: -24
     m_Min: 0
     m_Max: 0
-    m_SplitNumber: 0
+    m_SplitNumber: 14
     m_Interval: 0
     m_BoundaryGap: 1
     m_MaxCache: 0
@@ -33469,6 +33445,60 @@ MonoBehaviour:
     m_DashLength: 4
     m_DotLength: 2
     m_GapLength: 2
+  darkTick:
+    m_Show: 1
+    m_LineStyle:
+      m_Show: 1
+      m_Type: 5
+      m_Color:
+        serializedVersion: 2
+        rgba: 16777215
+      m_ToColor:
+        serializedVersion: 2
+        rgba: 0
+      m_ToColor2:
+        serializedVersion: 2
+        rgba: 0
+      m_Width: 0
+      m_Length: 0
+      m_Opacity: 1
+      m_DashLength: 4
+      m_DotLength: 2
+      m_GapLength: 2
+    m_AlignWithLabel: 1
+    m_Inside: 0
+    m_ShowStartTick: 0
+    m_ShowEndTick: 0
+    m_Distance: 0
+    m_SplitNumber: 0
+    m_AutoColor: 0
+  lightTick:
+    m_Show: 1
+    m_LineStyle:
+      m_Show: 1
+      m_Type: 5
+      m_Color:
+        serializedVersion: 2
+        rgba: 2039583
+      m_ToColor:
+        serializedVersion: 2
+        rgba: 0
+      m_ToColor2:
+        serializedVersion: 2
+        rgba: 0
+      m_Width: 0
+      m_Length: 0
+      m_Opacity: 1
+      m_DashLength: 4
+      m_DotLength: 2
+      m_GapLength: 2
+    m_AlignWithLabel: 1
+    m_Inside: 0
+    m_ShowStartTick: 0
+    m_ShowEndTick: 0
+    m_Distance: 0
+    m_SplitNumber: 0
+    m_AutoColor: 0
 --- !u!114 &1469122153
 MonoBehaviour:
   m_ObjectHideFlags: 0

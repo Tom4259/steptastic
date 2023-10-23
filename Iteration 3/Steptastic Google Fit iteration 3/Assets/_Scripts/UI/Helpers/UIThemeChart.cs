@@ -27,6 +27,10 @@ public class UIThemeChart : MonoBehaviour
     public LineStyle darkLine;
     public LineStyle lightLine;
 
+    [Space]
+    public AxisTick darkTick;
+    public AxisTick lightTick;
+
 
     private void Start()
     {
@@ -78,12 +82,6 @@ public class UIThemeChart : MonoBehaviour
             distance = 8
         };
 
-        AxisTick newAxisTick = new AxisTick
-        {
-            lineStyle = isDark ? darkLine : lightLine,
-            alignWithLabel = true // single axis's tick is in the middle of the chart
-        };
-
 
         chart.GetChartComponent<Title>().labelStyle.textStyle = isDark ? darkText : lightText;
         chart.GetChartComponent<Title>().subLabelStyle.textStyle = isDark ? darkText : lightText;
@@ -91,17 +89,17 @@ public class UIThemeChart : MonoBehaviour
 
         chart.GetChartComponent<SingleAxis>().axisLabel = newAxisLabel;
         chart.GetChartComponent<SingleAxis>().axisLine = newAxisLine;
-        chart.GetChartComponent<SingleAxis>().axisTick = newAxisTick;
+        chart.GetChartComponent<SingleAxis>().axisTick = isDark ? darkTick : lightTick;
 
 
         chart.GetChartComponent<XAxis>().axisLabel = newAxisLabel;
         chart.GetChartComponent<XAxis>().axisLine = newAxisLine;
-        chart.GetChartComponent<XAxis>().axisTick = newAxisTick;
-        
+        chart.GetChartComponent<XAxis>().axisTick = isDark ? darkTick : lightTick;
+
 
         chart.GetChartComponent<YAxis>().axisLabel = newAxisLabel;
         chart.GetChartComponent<YAxis>().axisLine = newAxisLine;
-        chart.GetChartComponent<YAxis>().axisTick = newAxisTick;
+        chart.GetChartComponent<YAxis>().axisTick = isDark ? darkTick : lightTick;
 
 
         chart.GetChartComponent<SingleAxis>().axisLabel.show = true;

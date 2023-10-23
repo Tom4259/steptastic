@@ -18,8 +18,8 @@ public class StatisticsWindow : MonoBehaviour
     }
 
 
-    public CustomDropdown viewPeriodDropdown;
     public CustomDropdown dataTypeDropdown;
+    public CustomDropdown viewPeriodDropdown;
 
 
     [Space]
@@ -75,20 +75,22 @@ public class StatisticsWindow : MonoBehaviour
 
     public void UpdateUI()
     {
+        Debug.Log("[Statistics] Updating UI");
+
         //updating the new view
-        if (viewPeriodDropdown.selectedItemIndex == 0 && dataTypeDropdown.selectedItemIndex == 0)
+        if (dataTypeDropdown.selectedItemIndex == 0 && viewPeriodDropdown.selectedItemIndex == 0)
         {
             currentView = Views.StepsDay;
         }
-        else if (viewPeriodDropdown.selectedItemIndex == 0 && dataTypeDropdown.selectedItemIndex == 1)
+        else if (dataTypeDropdown.selectedItemIndex == 0 && viewPeriodDropdown.selectedItemIndex == 1)
+        {
+            currentView = Views.StepsWeek;
+        }
+        else if (dataTypeDropdown.selectedItemIndex == 1 && viewPeriodDropdown.selectedItemIndex == 0)
         {
             currentView = Views.DistanceDay;
         }
-        else if (viewPeriodDropdown.selectedItemIndex == 1 && dataTypeDropdown.selectedItemIndex == 0)
-        {
-            currentView = Views.DistanceDay;
-        }
-        else if (viewPeriodDropdown.selectedItemIndex == 1 && dataTypeDropdown.selectedItemIndex == 1)
+        else if (dataTypeDropdown.selectedItemIndex == 1 && viewPeriodDropdown.selectedItemIndex == 1)
         {
             currentView = Views.DistanceWeek;
         }
@@ -97,7 +99,7 @@ public class StatisticsWindow : MonoBehaviour
         switch (currentView)
         {
             case Views.StepsDay:
-                LoadStepsday();
+                LoadStepsDay();
                 break;
 
             case Views.StepsWeek:
@@ -112,35 +114,105 @@ public class StatisticsWindow : MonoBehaviour
                 LoadDistanceWeek();
                 break;
         }
+
+        Debug.Log("[Statistics]", () => currentView);
     }
+
+
 
     #region views
 
-
-    private void LoadStepsday()
+    private void LoadStepsDay()
     {
-        List<string> xAxisPoints = new List<string>
-        {
+        dataOverPeriodChart.SetChartTitle("Steps over the day");
+        SetDayXAxis();
 
-        };
-
-        dataOverPeriodChart.SetXAxisPoints(xAxisPoints);
+        //load data here
     }
 
     private void LoadStepsWeek()
     {
+        dataOverPeriodChart.SetChartTitle("Steps over the week");
+        SetWeekXAxis();
 
+        //load data here
     }
 
     private void LoadDistanceDay()
     {
+        dataOverPeriodChart.SetChartTitle("Distance over the day");
+        SetDayXAxis();
 
+        //load data here
     }
 
     private void LoadDistanceWeek()
     {
+        dataOverPeriodChart.SetChartTitle("Distance over the week");
+        SetWeekXAxis();
 
+        //load data here
     }
+
+    #region helpers
+
+    private void SetDayXAxis()
+    {
+        List<string> xAxisPoints = new List<string>
+        {
+            "",
+            "",
+            "",
+            "",
+            "",
+            "6 am",//6
+            "",
+            "",
+            "",
+            "",
+            "",
+            "12 pm",//12
+            "",
+            "",
+            "",
+            "",
+            "",
+            "6 pm",//18
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",//24
+
+        };
+
+        dataOverPeriodChart.SetSingleAxisSplitNumber(14);
+        dataOverPeriodChart.SetSingleAxisPoints(xAxisPoints);
+
+        dataOverPeriodChart.RefreshGraph(true);
+    }
+
+    private void SetWeekXAxis()
+    {
+        List<string> xAxisPoints = new List<string>
+        {
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+            "Sun",
+
+        };
+
+        dataOverPeriodChart.SetSingleAxisPoints(xAxisPoints);
+
+        dataOverPeriodChart.RefreshGraph(true);
+    }
+
+    #endregion
 
 
     #endregion

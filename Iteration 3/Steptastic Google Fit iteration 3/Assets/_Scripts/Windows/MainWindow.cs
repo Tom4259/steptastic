@@ -407,7 +407,7 @@ public class MainWindow : MonoBehaviour
             }
         }
 
-        activityChart.SetXAxisPoints(xPoints);
+        activityChart.SetSingleAxisPoints(xPoints);
     }
 
     //plotting the steps data on the activity graph
