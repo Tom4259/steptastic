@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using LitJson;
 using Michsky.MUIP;
-using static UnityEditor.LightingExplorerTableColumn;
 using XCharts.Runtime;
 
 public class StatisticsWindow : MonoBehaviour

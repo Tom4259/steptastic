@@ -82,6 +82,8 @@ public class GoogleFitService : MonoBehaviour
     //https://steptastic-ad9d9.web.app/?code=4%2F0AfJohXlF9uJL5yPoEbD7LOZUhwzT5pIVfjN86bjd1kEWownIpAdUAcxrftkAo9Ky4op9Xg&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffitness.activity.read
     public void OnDeepLinkActivated(string url)
     {
+
+#if UNITY_ANDROID || UNITY_EDITOR
         //checks to see if all scopes have been enabled, show the user an error if they havent
         if (CanvasManager.instance.authenticateWindow.CheckScopes(url))
         {
@@ -100,7 +102,8 @@ public class GoogleFitService : MonoBehaviour
         else
         {
             CanvasManager.instance.authenticateWindow.ShowScopeError();
-        }        
+        }
+#endif
     }
 
     /// <summary>

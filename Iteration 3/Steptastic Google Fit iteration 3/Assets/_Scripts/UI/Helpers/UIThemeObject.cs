@@ -15,6 +15,7 @@ public class UIThemeObject : MonoBehaviour
 
     private TMP_Text text;
     private Image img;
+    private Camera cam;
 
 
     private bool isDark;
@@ -33,6 +34,10 @@ public class UIThemeObject : MonoBehaviour
         else if (TryGetComponent<Image>(out Image i))
         {
             img = i;
+        }
+        else if(TryGetComponent<Camera>(out Camera camera))
+        {
+            cam = camera;
         }
     }
 
@@ -61,6 +66,10 @@ public class UIThemeObject : MonoBehaviour
         else if (img != null)
         {
             img.color = isDark ? darkMode : lightMode;
+        }
+        else if(cam != null)
+        {
+            cam.backgroundColor = isDark ? darkMode : lightMode;
         }
     }
 }

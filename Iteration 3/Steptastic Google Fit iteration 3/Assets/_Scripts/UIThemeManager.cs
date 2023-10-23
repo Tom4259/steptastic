@@ -69,7 +69,6 @@ public class UIThemeManager : MonoBehaviour
     private void Start()
     {
         bool isDarkMode = IsDarkModeEnabled();
-        Debug.Log("Dark Mode is enabled: " + isDarkMode);
     }
 
     private void Update()

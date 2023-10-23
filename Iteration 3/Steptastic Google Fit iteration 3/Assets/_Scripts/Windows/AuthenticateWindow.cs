@@ -9,7 +9,8 @@ public class AuthenticateWindow : MonoBehaviour
     public WindowManager windowManager;
 
     [Space]
-    public ModalWindowManager scopeError;
+    public ModalWindowManager androidScopeError;
+    public ModalWindowManager IOSScopeManager;
 
     [Space]
     public int locationWindowIndex = 1;
@@ -59,9 +60,7 @@ public class AuthenticateWindow : MonoBehaviour
     {
         PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, authenticated);
 
-        //there is no current way to check the allowed scopes, might need to do try and except statements
-
-        UserAuthenticated();
+        CheckScopes();        
     }
 
 #endif
@@ -89,17 +88,29 @@ public class AuthenticateWindow : MonoBehaviour
 
 #elif UNITY_IOS
 
-    public bool CheckScopes(string _)
+    public async void CheckScopes()
     {
-        Debug.Log("Code this bit");
-        return false;
+        if (!await APIManager.HealthKit.Authorisation.CheckPermissions())
+        {
+            Debug.LogWarning("[CanvasManager] All or some permissions have not been enabled...");
+
+            ShowScopeError();
+        }
+        else
+        {
+            UserAuthenticated();
+        }
     }
 
 #endif
 
     public void ShowScopeError()
     {
-        scopeError.Open();
+#if UNITY_ANDROID || UNITY_EDITOR
+        androidScopeError.Open();
+#elif UNITY_IOS
+        IOSScopeManager.Open();
+#endif
     }
 
 #if UNITY_ANDROID || UNITY_EDITOR
