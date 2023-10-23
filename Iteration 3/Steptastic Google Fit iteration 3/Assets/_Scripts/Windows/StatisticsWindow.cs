@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using LitJson;
 using Michsky.MUIP;
 using XCharts.Runtime;
+using System;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class StatisticsWindow : MonoBehaviour
 {
@@ -127,7 +129,17 @@ public class StatisticsWindow : MonoBehaviour
         dataOverPeriodChart.SetChartTitle("Steps over the day");
         SetDayXAxis();
 
+
         //load data here
+        if(loadedStepsDay == null)
+        {
+            //make request here
+            GetDataDay(0);
+        }
+        else
+        {
+
+        }
     }
 
     private void LoadStepsWeek()
@@ -135,7 +147,17 @@ public class StatisticsWindow : MonoBehaviour
         dataOverPeriodChart.SetChartTitle("Steps over the week");
         SetWeekXAxis();
 
+
         //load data here
+        if (loadedStepsWeek == null)
+        {
+            //make request here
+            GetDataWeek(0);
+        }
+        else
+        {
+
+        }
     }
 
     private void LoadDistanceDay()
@@ -143,7 +165,17 @@ public class StatisticsWindow : MonoBehaviour
         dataOverPeriodChart.SetChartTitle("Distance over the day");
         SetDayXAxis();
 
+
         //load data here
+        if (loadedDistanceDay == null)
+        {
+            //make request here
+            GetDataDay(1);
+        }
+        else
+        {
+
+        }
     }
 
     private void LoadDistanceWeek()
@@ -151,8 +183,135 @@ public class StatisticsWindow : MonoBehaviour
         dataOverPeriodChart.SetChartTitle("Distance over the week");
         SetWeekXAxis();
 
+
         //load data here
+        if (loadedDistanceWeek == null)
+        {
+            //make request here
+            GetDataWeek(1);
+        }
+        else
+        {
+
+        }
     }
+
+    #region data requests, and saving to objects
+
+#if UNITY_ANDROID || UNITY_EDITOR
+
+    public async void GetDataDay(int dataType)
+    {
+        DateTime start = DateTime.Today;
+        DateTime end = DateTime.Now;
+
+
+        JsonData json;
+
+        APIManager.GoogleFit.ApiData apiData = APIManager.GoogleFit.GenerateAPIbody(start, end, 3600000);
+
+        if (dataType == 0) json = await APIManager.GoogleFit.GetStepsBetweenMillis(apiData);
+        else json = await APIManager.GoogleFit.GetDistanceBetweenMillis(apiData);
+
+
+
+        //Debug.Log(json.ToJson().ToString());
+
+        
+
+        List<double> dayValues = new List<double>();
+        float totalValue = 0;
+
+        for (int i = 0; i < json["bucket"].Count; i++)
+        {
+            JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
+
+            try
+            {
+                double item = double.Parse(stepData[0]["value"][0][(dataType == 0 ? "intVal" : "fpVal")].ToString());
+
+                totalValue += (float)item;
+                dayValues.Add(item);
+
+            }
+            catch (ArgumentOutOfRangeException) { dayValues.Add(0); }
+            catch (KeyNotFoundException) { dayValues.Add(0); }
+        }
+
+        Debug.Log("[Statistics]", () => totalValue);
+
+        SerieData serieData = new SerieData
+        {
+            data = dayValues
+        };
+
+        dataOverPeriodChart.SetSerieData(dayValues, 0);
+    }
+
+    public async void GetDataWeek(int dataType)
+    {
+        DateTime start = DateTime.Today.AddDays(- ((int)DateTime.Today.DayOfWeek - 1));
+        DateTime end = DateTime.Now;
+
+
+        JsonData json;
+
+        APIManager.GoogleFit.ApiData apiData = APIManager.GoogleFit.GenerateAPIbody(start, end);
+
+        if (dataType == 0) json = await APIManager.GoogleFit.GetStepsBetweenMillis(apiData);
+        else json = await APIManager.GoogleFit.GetDistanceBetweenMillis(apiData);
+
+
+
+        //Debug.Log(json.ToJson().ToString());
+
+
+
+        List<double> weekValues = new List<double>();
+        float totalValue = 0;
+
+        for (int i = 0; i < json["bucket"].Count; i++)
+        {
+            JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
+
+            try
+            {
+                double item = double.Parse(stepData[0]["value"][0][(dataType == 0 ? "intVal" : "fpVal")].ToString());
+                
+                totalValue += (float)item;
+                weekValues.Add(item);
+            }
+            catch (ArgumentOutOfRangeException) { weekValues.Add(0); }
+            catch (KeyNotFoundException) { weekValues.Add(0); }
+        }
+
+        Debug.Log("[Statistics]", () => totalValue);
+
+
+        SerieData serieData = new SerieData
+        {
+            data = weekValues
+        };
+
+        dataOverPeriodChart.SetSerieData(weekValues, 0);
+    }
+
+#elif UNITY_IOS
+
+    public async void GetDataDay()
+    {
+
+    }
+
+    public async void GetDataWeek()
+    {
+
+    }
+
+#endif
+
+
+    #endregion
 
     #region helpers
 
@@ -189,6 +348,7 @@ public class StatisticsWindow : MonoBehaviour
 
         dataOverPeriodChart.SetSingleAxisSplitNumber(14);
         dataOverPeriodChart.SetSingleAxisPoints(xAxisPoints);
+        dataOverPeriodChart.SetXAxisPoints(new List<string> ( new string[24] ));
 
         dataOverPeriodChart.RefreshGraph(true);
     }
@@ -208,12 +368,12 @@ public class StatisticsWindow : MonoBehaviour
         };
 
         dataOverPeriodChart.SetSingleAxisPoints(xAxisPoints);
-
+        dataOverPeriodChart.SetXAxisPoints(new List<string>(new string[7]));
         dataOverPeriodChart.RefreshGraph(true);
     }
 
     #endregion
 
 
-    #endregion
+#endregion
 }

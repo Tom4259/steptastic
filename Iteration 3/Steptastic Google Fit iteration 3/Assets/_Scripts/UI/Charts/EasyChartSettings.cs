@@ -46,6 +46,7 @@ public class EasyChartSettings : MonoBehaviour
 
     public void SetSerieData(SerieData data, int serieIndex)
     {
+        //chart.series[serieIndex].ClearData();
         chart.series[serieIndex].AddSerieData(data);
     }
 
@@ -60,7 +61,7 @@ public class EasyChartSettings : MonoBehaviour
     public void SetSerieData(List<double> data, List<bool> ignorePoints, int serieIndex)
     {
         if(data.Count != ignorePoints.Count)
-            Debug.LogWarning("[Charts] provided lists are not ther same length");
+            Debug.LogWarning("[Charts] provided lists are not the same length");
 
 
         for (int i = 0; i < data.Count; i++)
