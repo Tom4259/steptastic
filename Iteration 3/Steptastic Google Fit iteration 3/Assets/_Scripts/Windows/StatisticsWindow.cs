@@ -242,22 +242,29 @@ public class StatisticsWindow : MonoBehaviour
         {
             JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
 
+            double item = 0;
+
             try
             {
-                double item = double.Parse(stepData[0]["value"][0][(dataType == 0 ? "intVal" : "fpVal")].ToString());
+                item = double.Parse(stepData[0]["value"][0][(dataType == 0 ? "intVal" : "fpVal")].ToString());
 
                 totalValue += (float)item;
-                dayValues.Add(item);
-
             }
-            catch (ArgumentOutOfRangeException) { dayValues.Add(0); }
-            catch (KeyNotFoundException) { dayValues.Add(0); }
+            catch (ArgumentOutOfRangeException) { }
+            catch (KeyNotFoundException) { }
+
+            dayValues.Add(item);
+
+            //Debug.Log("[Statistics]", () => item);
         }
 
-        Debug.Log("[Statistics]", () => totalValue);
+        //Debug.Log("[Statistics]", () => totalValue);
+        Debug.Log("[Statistics]", () => dayValues.Count);
 
         dataOverPeriodChart.SetItemCornerRadius(dayRoundedCorners, 0);
         dataOverPeriodChart.SetSerieData(dayValues, 0);
+
+        //dataOverPeriodChart.RefreshGraph(true);
     }
 
     public async void GetDataWeek(int dataType)
@@ -286,21 +293,29 @@ public class StatisticsWindow : MonoBehaviour
         {
             JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
 
+            double item = 0;
+
             try
             {
-                double item = double.Parse(stepData[0]["value"][0][(dataType == 0 ? "intVal" : "fpVal")].ToString());
+                item = double.Parse(stepData[0]["value"][0][(dataType == 0 ? "intVal" : "fpVal")].ToString());
                 
                 totalValue += (float)item;
-                weekValues.Add(item);
             }
-            catch (ArgumentOutOfRangeException) { weekValues.Add(0); }
-            catch (KeyNotFoundException) { weekValues.Add(0); }
+            catch (ArgumentOutOfRangeException) { }
+            catch (KeyNotFoundException) { }
+
+            weekValues.Add(item);
+
+            //Debug.Log("[Statistics]", () => item);
         }
 
-        Debug.Log("[Statistics]", () => totalValue);
+        //Debug.Log("[Statistics]", () => totalValue);
+        Debug.Log("[Statistics]", () => weekValues.Count);
 
         dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
         dataOverPeriodChart.SetSerieData(weekValues, 0);
+
+        //dataOverPeriodChart.RefreshGraph(true);
     }
 
 #elif UNITY_IOS
@@ -355,9 +370,7 @@ public class StatisticsWindow : MonoBehaviour
 
         dataOverPeriodChart.SetSingleAxisSplitNumber(14);
         dataOverPeriodChart.SetSingleAxisPoints(xAxisPoints);
-        dataOverPeriodChart.SetXAxisPoints(new List<string>(new string[24]));
-
-        dataOverPeriodChart.RefreshGraph(true);
+        dataOverPeriodChart.SetXAxisPoints(new List<string>(new string[24]));        
     }
 
     private void SetWeekXAxis()
@@ -375,7 +388,6 @@ public class StatisticsWindow : MonoBehaviour
 
         dataOverPeriodChart.SetSingleAxisPoints(xAxisPoints);
         dataOverPeriodChart.SetXAxisPoints(new List<string>(new string[7]));
-        dataOverPeriodChart.RefreshGraph(true);
     }
 
     #endregion

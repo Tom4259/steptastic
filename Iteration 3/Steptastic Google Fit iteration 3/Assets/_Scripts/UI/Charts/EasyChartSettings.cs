@@ -57,25 +57,8 @@ public class EasyChartSettings : MonoBehaviour
 
 
 
-    public void SetSerieData(SerieData data, int serieIndex)
-    {
-        //clearing data list before inputting new data
-        for (int i = 0; i < chart.series[serieIndex].dataCount; i++)
-        {
-            chart.series[serieIndex].RemoveData(i);
-        }
-
-        chart.series[serieIndex].AddSerieData(data);
-    }
-
     public void SetSerieData(List<double> data, int serieIndex)
     {
-        //clearing data list before inputting new data
-        for (int i = 0; i < chart.series[serieIndex].dataCount; i++)
-        {
-            chart.series[serieIndex].RemoveData(i);
-        }
-
         for (int i = 0; i < data.Count; i++)
         {
             chart.series[serieIndex].UpdateData(i, 1, data[i]);
@@ -103,7 +86,10 @@ public class EasyChartSettings : MonoBehaviour
     }
 
 
-
+    public void AddSerieData(SerieData data, int serieIndex)
+    {
+        chart.series[serieIndex].AddSerieData(data);
+    }
 
     public void AddSerieData(double value, int serieIndex)
     {

@@ -36,5 +36,6 @@ public static class Channel
 	public static readonly int BEHealthKit = 23;
 	public static readonly int ChallengeInfo = 24;
 	public static readonly int Statistics = 25;
+	public static readonly int PlayerPrefsX = 26;
 }
 #endregion

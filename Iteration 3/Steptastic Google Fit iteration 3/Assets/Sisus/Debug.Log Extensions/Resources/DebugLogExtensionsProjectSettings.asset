@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useGlobalNamespace: 1
   stripAllCallsFromBuilds: 0
-  unlistedChannelsEnabledByDefault: 1
+  unlistedChannelsEnabledByDefault: 0
   channels:
   - id: tom
     color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
@@ -114,6 +114,10 @@ MonoBehaviour:
     colorText: 
   - id: Statistics
     color: {r: 0.7748072, g: 0.5738028, b: 0.49691874, a: 1}
+    enabledByDefault: 1
+    colorText: 
+  - id: PlayerPrefsX
+    color: {r: 0.16941082, g: 0.23339045, b: 0.254717, a: 1}
     enabledByDefault: 1
     colorText: 
   toggleView:
