@@ -17,6 +17,7 @@ public class EasyChartSettings : MonoBehaviour
     }
 
 
+
     public void SetChartTitle(string title)
     {
         chart.GetChartComponent<Title>().text = title;
@@ -28,15 +29,25 @@ public class EasyChartSettings : MonoBehaviour
     }
 
 
+
+
+
     public void SetSingleAxisPoints(List<string> points)
     {
+        chart.GetChartComponent<SingleAxis>().ClearData();
+        chart.GetChartComponent<XAxis>().ClearData();
+        chart.GetChartComponent<XAxis>().data = new List<string>(new string[points.Count]);
         chart.GetChartComponent<SingleAxis>().data = points;
     }
 
     public void SetXAxisPoints(List<string> points)
     {
+        chart.GetChartComponent<XAxis>().ClearData();
         chart.GetChartComponent<XAxis>().data = points;
     }
+
+
+
 
     public void SetSingleAxisSplitNumber(int splitNumber)
     {
@@ -44,14 +55,27 @@ public class EasyChartSettings : MonoBehaviour
     }
 
 
+
+
     public void SetSerieData(SerieData data, int serieIndex)
     {
-        //chart.series[serieIndex].ClearData();
+        //clearing data list before inputting new data
+        for (int i = 0; i < chart.series[serieIndex].dataCount; i++)
+        {
+            chart.series[serieIndex].RemoveData(i);
+        }
+
         chart.series[serieIndex].AddSerieData(data);
     }
 
     public void SetSerieData(List<double> data, int serieIndex)
     {
+        //clearing data list before inputting new data
+        for (int i = 0; i < chart.series[serieIndex].dataCount; i++)
+        {
+            chart.series[serieIndex].RemoveData(i);
+        }
+
         for (int i = 0; i < data.Count; i++)
         {
             chart.series[serieIndex].UpdateData(i, 1, data[i]);
@@ -77,6 +101,9 @@ public class EasyChartSettings : MonoBehaviour
             s.ignore = ignorePoints[i];
         }
     }
+
+
+
 
     public void AddSerieData(double value, int serieIndex)
     {
@@ -114,6 +141,18 @@ public class EasyChartSettings : MonoBehaviour
 
         chart.series[serieIndex].AddSerieData(d);
     }
+
+
+
+
+    public void SetItemCornerRadius(List<float> cornerRadius, int seriesIndex)
+    {
+        chart.series[seriesIndex].itemStyle.cornerRadius = cornerRadius.ToArray();
+    }
+
+
+
+
 
     public void AnimateGraph()
     {

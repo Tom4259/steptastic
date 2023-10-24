@@ -25,7 +25,23 @@ public class StatisticsWindow : MonoBehaviour
 
 
     [Space]
+    [Header("Activity over period chart")]
     public EasyChartSettings dataOverPeriodChart;
+    public List<float> dayRoundedCorners = new List<float>
+    {
+        8.36f,
+        0.72f,
+        0.86f,
+        0.81f
+    };
+
+    public List<float> weekRoundedCorners = new List<float>
+    {
+        20.5f,
+        22.27f,
+        0.86f,
+        0.81f
+    };
 
 
 
@@ -240,11 +256,7 @@ public class StatisticsWindow : MonoBehaviour
 
         Debug.Log("[Statistics]", () => totalValue);
 
-        SerieData serieData = new SerieData
-        {
-            data = dayValues
-        };
-
+        dataOverPeriodChart.SetItemCornerRadius(dayRoundedCorners, 0);
         dataOverPeriodChart.SetSerieData(dayValues, 0);
     }
 
@@ -287,12 +299,7 @@ public class StatisticsWindow : MonoBehaviour
 
         Debug.Log("[Statistics]", () => totalValue);
 
-
-        SerieData serieData = new SerieData
-        {
-            data = weekValues
-        };
-
+        dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
         dataOverPeriodChart.SetSerieData(weekValues, 0);
     }
 
@@ -348,7 +355,7 @@ public class StatisticsWindow : MonoBehaviour
 
         dataOverPeriodChart.SetSingleAxisSplitNumber(14);
         dataOverPeriodChart.SetSingleAxisPoints(xAxisPoints);
-        dataOverPeriodChart.SetXAxisPoints(new List<string> ( new string[24] ));
+        dataOverPeriodChart.SetXAxisPoints(new List<string>(new string[24]));
 
         dataOverPeriodChart.RefreshGraph(true);
     }
@@ -363,8 +370,7 @@ public class StatisticsWindow : MonoBehaviour
             "Thu",
             "Fri",
             "Sat",
-            "Sun",
-
+            "Sun"
         };
 
         dataOverPeriodChart.SetSingleAxisPoints(xAxisPoints);
