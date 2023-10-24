@@ -73,11 +73,11 @@ public class MainWindow : MonoBehaviour
 
         DateTime now = DateTime.Now;
 
-        string day = now.ToString("dddd");
-        string date = UsefulFunctions.AddOrdinal(int.Parse(now.ToString("M").Split(' ')[0]));
-        string month = now.ToString("M").Split(' ')[1];
-
-        todayDate.text = day + " " + date + " " + month;
+        //string day = now.ToString("dddd");
+        //string date = UsefulFunctions.AddOrdinal(int.Parse(now.ToString("M").Split(' ')[0]));
+        //string month = now.ToString("M").Split(' ')[1];
+        //
+        //todayDate.text = day + " " + date + " " + month;
 
         //shows the user their start and end Location
         //startLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName).Replace(",", ", ");

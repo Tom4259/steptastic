@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3825627152211096046}
   - component: {fileID: 305464576735168892}
   - component: {fileID: 866477831547237968}
-  - component: {fileID: 6204892883184094885}
   m_Layer: 5
   m_Name: map image
   m_TagString: Untagged
@@ -76,22 +75,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6204892883184094885
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1177092061899117211}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97bc2ebab6563400c95b036136d26ea6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Inverse: 0
-  m_MaskInteraction: 85
-  m_UseStencil: 1
-  m_RaycastFilter: 0
 --- !u!1 &1913068780089078016
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,7 +86,7 @@ GameObject:
   - component: {fileID: 950923693894909448}
   - component: {fileID: 5316014260448440196}
   - component: {fileID: 8195782149463105456}
-  - component: {fileID: 6969182108418870569}
+  - component: {fileID: 3570423605655680684}
   m_Layer: 5
   m_Name: Map image holder
   m_TagString: Untagged
@@ -169,7 +152,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 12
---- !u!114 &6969182108418870569
+--- !u!114 &3570423605655680684
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -178,14 +161,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1913068780089078016}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 385b7d1277b6c4007a84c065696e0f8c, type: 3}
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
-  m_DownSamplingRate: 0
-  m_Softness: 1
-  m_Alpha: 1
-  m_IgnoreParent: 0
-  m_PartOfParent: 0
-  m_IgnoreSelfGraphic: 0
-  m_IgnoreSelfStencil: 0
