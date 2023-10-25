@@ -518,8 +518,11 @@ namespace BeliefEngine.HealthKit
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(xmlString);
             Error error = new Error(xml.SelectSingleNode("error"));
-            Debug.LogError("[BEHealthKit] Error from HealthKit plugin: ERROR domain:" + error.domain + " code:" + error.code + " \"" + error.localizedDescription + "\"");
+            //Debug.LogError("[BEHealthKit] Error from HealthKit plugin: ERROR domain:" + error.domain + " code:" + error.code + " \"" + error.localizedDescription + "\"");
             BroadcastMessage("ErrorOccurred", error);
+
+            //commented out the debuglog error and changed to an exception, for try-except statements (made by tom)
+            throw new Exception("[BEHealthKit] Error from HealthKit plugin: ERROR domain:" + error.domain + " code:" + error.code + " \"" + error.localizedDescription + "\"");
         }
 
 

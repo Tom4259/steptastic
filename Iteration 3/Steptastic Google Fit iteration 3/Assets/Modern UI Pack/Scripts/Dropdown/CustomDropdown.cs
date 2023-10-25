@@ -365,5 +365,21 @@ namespace Michsky.MUIP
             listRect.sizeDelta = endPos;
             listCG.gameObject.SetActive(false);
         }
+
+
+        //my code
+        public void OpenDropdown()
+        {
+            isOn = false;
+
+            Animate();
+        }
+
+        public void CloseDropdown()
+        {
+            isOn = true;
+
+            Animate();
+        }
     }
 }

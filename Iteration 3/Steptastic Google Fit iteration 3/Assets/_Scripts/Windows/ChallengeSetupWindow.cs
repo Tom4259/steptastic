@@ -141,7 +141,7 @@ public class ChallengeSetupWindow : MonoBehaviour
     /// </summary>
     private IEnumerator UpdateDropdown(CustomDropdown d)
     {
-        yield return new WaitForSeconds(0.15f);
+        //yield return new WaitForSeconds(0.15f);
 
         if (d.items[0].itemName == "SELECT")
         {
@@ -151,6 +151,8 @@ public class ChallengeSetupWindow : MonoBehaviour
         d.RemoveItem("SELECT", true);
 
         CheckValidDropdownItems();
+
+        yield return new WaitForSeconds(0.15f);
     }
 
 

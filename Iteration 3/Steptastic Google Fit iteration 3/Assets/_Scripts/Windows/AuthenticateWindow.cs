@@ -34,7 +34,7 @@ public class AuthenticateWindow : MonoBehaviour
     /// <summary>
     /// opens the oauth2 screen for the user to login to their google account and authorize my app to access their data
     /// </summary>
-    public void AuthoriseService()
+    public async void AuthoriseService()
     {
         //add an editor token, so don't need to keep logging in to google account on emulator
 #if UNITY_EDITOR
@@ -53,14 +53,9 @@ public class AuthenticateWindow : MonoBehaviour
     }
 
 #elif UNITY_IOS
-        APIManager.HealthKit.Authorisation.Authorise(OnAuthorised);
-    }
+        bool isAuthorised = await APIManager.HealthKit.Authorisation.Authorise();
 
-    private void OnAuthorised(bool authenticated)
-    {
-        PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, authenticated);
-
-        CheckScopes();        
+        CheckScopes();
     }
 
 #endif

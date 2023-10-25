@@ -93,6 +93,13 @@ public class DebugCanvas : MonoBehaviour
     }
 
 
+    public void ResetApp()
+    {
+        PlayerPrefs.DeleteAll();
+        Application.Quit();
+    }
+
+
     #region start date
 
     private void LoadDate()

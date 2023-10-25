@@ -88,7 +88,7 @@ public class StatisticsWindow : MonoBehaviour
 
     public void CloseWindow()
     {
-        LeanTween.move(RT, startPosition, CanvasManager.windowAnimationTime);
+        LeanTween.move(RT, startPosition, CanvasManager.windowAnimationTime / 2);
     }
 
     public void UpdateUI()
@@ -320,14 +320,46 @@ public class StatisticsWindow : MonoBehaviour
 
 #elif UNITY_IOS
 
-    public async void GetDataDay()
+    public async void GetDataDay(int dataType)
     {
+        DateTime start = DateTime.Today;
+        DateTime end = DateTime.Now;
 
+        List<APIManager.HealthKit.QuantityData> data;
+
+
+        if(dataType == 0) data = await APIManager.HealthKit.GetStepsList(start, end);
+        else data = await APIManager.HealthKit.GetDistanceList(start, end);
+
+
+        List<APIManager.HealthKit.OrderedQuantityData> orderedData = APIManager.HealthKit.OrderQuantityList(data);
+
+
+        for (int i = 0; i < orderedData.Count; i++)
+        {
+            Debug.Log("[Statistics] DAY:   " + orderedData[i].timeOfData.ToString("g") + " value: " + orderedData[i].value);
+        }
     }
 
-    public async void GetDataWeek()
+    public async void GetDataWeek(int dataType)
     {
+        DateTime start = DateTime.Today.AddDays(-((int)DateTime.Today.DayOfWeek - 1));
+        DateTime end = DateTime.Now;
 
+        List<APIManager.HealthKit.QuantityData> data;
+
+
+        if (dataType == 0) data = await APIManager.HealthKit.GetStepsList(start, end);
+        else data = await APIManager.HealthKit.GetDistanceList(start, end);
+
+
+        List<APIManager.HealthKit.OrderedQuantityData> orderedData = APIManager.HealthKit.OrderQuantityList(data);
+
+
+        for (int i = 0; i < orderedData.Count; i++)
+        {
+            Debug.Log("[Statistics] WEEK:   " + orderedData[i].timeOfData.ToString("g") + " value: " + orderedData[i].value);
+        }
     }
 
 #endif

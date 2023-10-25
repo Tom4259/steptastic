@@ -5,18 +5,13 @@ using UnityEngine;
 
 public class testingScript : MonoBehaviour
 {
-    public void setStartDate()
+    public void Start()
     {
-        string s = GetComponent<TMPro.TMP_InputField>().text;
+        List<string> thelist = new List<string>(new string[10]);
 
-        DateTime d = Convert.ToDateTime(s);
-
-        Debug.Log("Set custom datew to: " + d.Day + " " + d.Month + " " + d.Year);
-
-        PlayerPrefsX.SetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, d);
-
-        PlayerPrefs.Save();
-
-        //CanvasManager.instance.mainScreen.StartMainWindow();
+        for (int i = 0; i < thelist.Count; i++)
+        {
+            Debug.Log(thelist[i]);
+        }
     }
 }

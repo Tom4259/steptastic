@@ -8,6 +8,7 @@ using LitJson;
 using System.Text;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using System.Linq;
 
 #if UNITY_IOS || UNITY_EDITOR
 using BeliefEngine.HealthKit;
@@ -363,18 +364,35 @@ public class APIManager : MonoBehaviour
 
 		public class Authorisation
 		{
-			public static void Authorise(UnityAction<bool> callback)
+			private static bool authorisationWindowCompleted = false;
+
+
+			public static async Task<bool> Authorise()
 			{
+				authorisationWindowCompleted = false;
+
 				//initialise healthkit here
 				Debug.Log("[HealthKitAPI] Authorising HealthKit");
 
 				HK.healthStore.Authorize(HK.dataTypes, delegate (bool success)
 				{
 					Debug.LogFormat("[HealthKitAPI] HealthKit authorisation: {0}", success);
+
+					authorisationWindowCompleted = true;
 				});
 
-				callback.Invoke(HK.healthStore.IsHealthDataAvailable());
+
+				while (!authorisationWindowCompleted)
+				{
+					//Debug.Log("[HealthKitAPI] Waiting for authorisation to finish...");
+
+					await Task.Delay(250);
+				}
+
+				return true;
 			}
+
+
 
 			//makes a sample request to check if the correct permissions were set
 			// returns true if the user is authenticated
@@ -389,15 +407,22 @@ public class APIManager : MonoBehaviour
 			} 
 		}
 
-		#region getting data
 
 		public class QuantityData
 		{
-			public DateTime startDate; 
+			public DateTime startDate;
 			public DateTime endDate;
 			public double value;
 		}
 
+		public class OrderedQuantityData
+		{
+			public DateTime timeOfData;
+			public double value;
+		}
+
+
+		#region getting data
 
 		#region values
 
@@ -564,72 +589,84 @@ public class APIManager : MonoBehaviour
 		#endregion
 
 		/// <summary>
-		/// Orders a list of quantity data
+		/// Orders a list of quantity data in hours
 		/// </summary>
 		/// <param name="unorderedData"></param>
-		/// <param name="splitIntoHours">The amount of hours to split each quantity data into in hours</param>
-		/// <returns></returns>
-		/*
-		public static List<QuantityData> OrganiseQuantityList(List<QuantityData> unorderedData, int splitIntoHours = 24)
+		/// <returns></returns>		
+		public static List<OrderedQuantityData> OrderQuantityList(List<QuantityData> unorderedData)
 		{
-			List<QuantityData> orderedList = new List<QuantityData>();
-
-			TimeSpan dataInterval = new TimeSpan(splitIntoHours, 0, 0);
-
+			List<OrderedQuantityData> sortedData = new List<OrderedQuantityData>();
 
 
 			for (int i = 0; i < unorderedData.Count; i++)
 			{
-				if(UsefulFunctions.da)
+				DateTime average = UsefulFunctions.AverageDateBetweenDateTimes(new List<DateTime> { unorderedData[i].startDate, unorderedData[i].endDate });
+
+				DateTime itemTime = new DateTime(average.Year, average.Month, average.Day, average.Hour, average.Minute, 0);
+
+
+
+				OrderedQuantityData item = new OrderedQuantityData
+				{
+					timeOfData = itemTime,
+					value = unorderedData[i].value
+				};
+
+				sortedData.Add(item);                
 			}
 
+			sortedData.Sort((x, y) => DateTime.Compare(x.timeOfData, y.timeOfData));
 
 
-			for (int i = 0; i < 24; i++)
+			List<OrderedQuantityData> cleanedData = new List<OrderedQuantityData>();
+
+
+			Debug.Log("[HealthKitAPI]", () => sortedData.Count);
+
+
+			for (int i = 0; i < sortedData.Count; i++)
 			{
-				try
+
+				OrderedQuantityData newItem = new OrderedQuantityData
 				{
-					double hourTotal = 0;
+					timeOfData = sortedData[i].timeOfData,
+					value = sortedData[i].value
+                };
 
-					QuantityData item = new QuantityData();
+                for (int z = 0; i < sortedData.Count; z++)
+				{
+					Debug.Log("[HealthKitAPI] i:" + i + " z:" + z);
 
-					for (int z = 0; z < unorderedData.Count; z++)
+					if (sortedData[i].timeOfData.Hour == sortedData[z].timeOfData.Hour)
 					{
-						DateTime averageDate = UsefulFunctions.AverageDateBetweenDateTimes(new List<DateTime>()
-						{
-							unorderedData[z].startDate,
-							unorderedData[z].endDate
-
-						});
-
-
-						if (averageDate.Hour == (i * splitIntoHours))
-						{
-							hourTotal += unorderedData[z].value;
-
-							item.startDate = unorderedData[z].startDate;
-							item.endDate = unorderedData[z].endDate;
-							
-						}
+						newItem.value += sortedData[z].value;
 					}
-
-
-					item.value = hourTotal;
-
-					orderedList.Add(hourTotal);
-
-
-					//Debug.Log("[ActivityGraphIOS] For hour " + i + ", user has done " + hourTotal);
 				}
-				catch (ArgumentOutOfRangeException)
-				{
-					//Debug.Log("[ActivityGraphIOS] For hour " + i + ", user has done 0 steps, (argumant out of range)");
 
-					orderedList.Add(0);
-				}
-			}
-		}
-		*/
+				cleanedData.Add(newItem);
+
+
+				/*
+                if (sortedData[i].timeOfData.Hour == sortedData[i + 1].timeOfData.Hour)
+                {
+                    OrderedQuantityData newItem = new OrderedQuantityData
+                    {
+                        timeOfData = sortedData[i].timeOfData,
+                        value = sortedData[i].value + sortedData[i + 1].value
+                    };
+
+                    cleanedData.Add(newItem);
+                }
+                else
+                {
+                    //add same item with no changes here
+                    cleanedData.Add(sortedData[i]);
+                }
+				*/
+            }
+
+			return cleanedData;
+		}		
 	}
 
 #endif

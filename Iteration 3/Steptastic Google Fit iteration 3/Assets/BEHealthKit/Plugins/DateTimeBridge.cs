@@ -25,7 +25,7 @@ public class DateTimeBridge : ScriptableObject {
 		TimeSpan span = date - DateTimeBridge.referenceDate;
 		double interval = span.TotalSeconds;
 		string dateString = Convert.ToString(interval);
-		Debug.Log("date string:" + dateString);
+		//Debug.Log("date string:" + dateString);
 		return dateString;
 	}
 	
