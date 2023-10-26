@@ -20,6 +20,9 @@ public class UIThemeChart : MonoBehaviour
     public Color lightTheme;
 
     [Space]
+    public int backgroundPixelsPerUnitMultiplier = 12;
+
+    [Space]
     public TextStyle darkText;
     public TextStyle lightText;
 
@@ -100,6 +103,9 @@ public class UIThemeChart : MonoBehaviour
         chart.GetChartComponent<YAxis>().axisLabel = newAxisLabel;
         chart.GetChartComponent<YAxis>().axisLine = newAxisLine;
         chart.GetChartComponent<YAxis>().axisTick = isDark ? darkTick : lightTick;
+
+
+        chart.GetChartComponent<Background>().pixelsPerUnitMultiplier = backgroundPixelsPerUnitMultiplier;
 
 
         chart.GetChartComponent<SingleAxis>().axisLabel.show = true;

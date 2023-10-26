@@ -97,7 +97,7 @@ public class MainWindow : MonoBehaviour
         AnimateScreen();
 
 
-		DebugCanvas.instance.Start();
+		DebugCanvas.instance.OnMainScreenOpen();
     }
 
 	//animates the screen

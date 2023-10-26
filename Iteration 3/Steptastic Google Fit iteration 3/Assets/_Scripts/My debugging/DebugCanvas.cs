@@ -44,8 +44,8 @@ public class DebugCanvas : MonoBehaviour
         }
 
         //if the build is a development build, then show the debug options
-        gameObject.SetActive(Debug.isDebugBuild);
-        logManager.gameObject.SetActive(Debug.isDebugBuild);
+        //gameObject.SetActive(Debug.isDebugBuild);
+        //logManager.gameObject.SetActive(Debug.isDebugBuild);        
 
 #if UNITY_ANDROID || UNITY_EDITOR
 
@@ -60,11 +60,40 @@ public class DebugCanvas : MonoBehaviour
         {
             androidOnlyObjects[i].SetActive(false);
         }
-
 #endif
     }
 
+
+    public void EnableDebugControls()
+    {
+        gameObject.SetActive(true); 
+        logManager.gameObject.SetActive(true);
+    }
+
+    public void DisableDebugControls()
+    {
+        gameObject.SetActive(false);
+        logManager.gameObject.SetActive(false);
+    }
+
+
+
+
     public void Start()
+    {
+#if UNITY_ANDROID || UNITY_EDITOR
+        ReloadTokens();
+#endif
+
+        LoadDate();
+        versionText.text = "V " + Application.version;
+
+        objectsToHide.SetActive(false);
+
+        DisableDebugControls();
+    }
+
+    public void OnMainScreenOpen()
     {
 #if UNITY_ANDROID || UNITY_EDITOR
         ReloadTokens();
