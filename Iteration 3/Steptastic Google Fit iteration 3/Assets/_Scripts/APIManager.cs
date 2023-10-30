@@ -50,9 +50,9 @@ public class APIManager : MonoBehaviour
 				durationMillis = timeGap
 			};
 
-			//Debug.Log("[GoogleFitAPI]", () => apiData.startTimeMillis);
-			//Debug.Log("[GoogleFitAPI]", () => apiData.endTimeMillis);
-			//Debug.Log("[GoogleFitAPI]", () => apiData.durationMillis);
+			Debug.Log("[GoogleFitAPI]", () => apiData.startTimeMillis);
+			Debug.Log("[GoogleFitAPI]", () => apiData.endTimeMillis);
+			Debug.Log("[GoogleFitAPI]", () => apiData.durationMillis);
 
 			return apiData;
 		}

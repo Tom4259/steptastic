@@ -68,6 +68,8 @@ public class DebugCanvas : MonoBehaviour
     {
         gameObject.SetActive(true); 
         logManager.gameObject.SetActive(true);
+
+        PlayerPrefsX.SetBool(PlayerPrefsLocations.Developer.developerControls, true);
     }
 
     public void DisableDebugControls()
@@ -90,7 +92,10 @@ public class DebugCanvas : MonoBehaviour
 
         objectsToHide.SetActive(false);
 
-        DisableDebugControls();
+        if(PlayerPrefsX.GetBool(PlayerPrefsLocations.Developer.developerControls, false))
+        {
+            DisableDebugControls();
+        }
     }
 
     public void OnMainScreenOpen()

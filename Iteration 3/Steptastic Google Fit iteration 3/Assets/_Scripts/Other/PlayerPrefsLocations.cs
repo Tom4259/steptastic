@@ -123,5 +123,7 @@ public class PlayerPrefsLocations : MonoBehaviour
             public static string clientID = "developer.keys.clientid";
             public static string clientSecret = "developer.keys.clientsecret";
         }
+
+        public static string developerControls = "developer.developercontrols";
     }
 }
