@@ -214,7 +214,7 @@ public class StatisticsWindow : MonoBehaviour
 
     #region data requests, and saving to objects
 
-#if UNITY_ANDROID || UNITY_EDITOR
+#if UNITY_ANDROID //|| UNITY_EDITOR
 
     public async void GetDataDay(int dataType)
     {
@@ -318,7 +318,7 @@ public class StatisticsWindow : MonoBehaviour
         //dataOverPeriodChart.RefreshGraph(true);
     }
 
-#elif UNITY_IOS
+#elif UNITY_IOS  
 
     public async void GetDataDay(int dataType)
     {
@@ -332,7 +332,7 @@ public class StatisticsWindow : MonoBehaviour
         else data = await APIManager.HealthKit.GetDistanceList(start, end);
 
 
-        List<APIManager.HealthKit.OrderedQuantityData> orderedData = APIManager.HealthKit.OrderQuantityList(data);
+        List<APIManager.HealthKit.OrderedQuantityData> orderedData = APIManager.HealthKit.OrderQuantityListHour(data);
 
 
         for (int i = 0; i < orderedData.Count; i++)
@@ -353,7 +353,7 @@ public class StatisticsWindow : MonoBehaviour
         else data = await APIManager.HealthKit.GetDistanceList(start, end);
 
 
-        List<APIManager.HealthKit.OrderedQuantityData> orderedData = APIManager.HealthKit.OrderQuantityList(data);
+        List<APIManager.HealthKit.OrderedQuantityData> orderedData = APIManager.HealthKit.OrderQuantityListDay(data);
 
 
         for (int i = 0; i < orderedData.Count; i++)

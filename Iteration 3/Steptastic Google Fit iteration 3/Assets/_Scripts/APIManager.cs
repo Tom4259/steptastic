@@ -589,11 +589,11 @@ public class APIManager : MonoBehaviour
 		#endregion
 
 		/// <summary>
-		/// Orders a list of quantity data in hours
+		/// Orders a list of quantity data in hours in the day
 		/// </summary>
 		/// <param name="unorderedData"></param>
 		/// <returns></returns>		
-		public static List<OrderedQuantityData> OrderQuantityList(List<QuantityData> unorderedData)
+		public static List<OrderedQuantityData> OrderQuantityListHour(List<QuantityData> unorderedData)
 		{
 			List<OrderedQuantityData> sortedData = new List<OrderedQuantityData>();
 
@@ -616,6 +616,86 @@ public class APIManager : MonoBehaviour
 			}
 
 			sortedData.Sort((x, y) => DateTime.Compare(x.timeOfData, y.timeOfData));
+			
+
+
+			List<OrderedQuantityData> cleanedData = new List<OrderedQuantityData>();
+
+
+			//Debug.Log("[HealthKitAPI]", () => sortedData.Count);
+
+
+			for (int i = 0; i < sortedData.Count; i++)
+			{
+
+				OrderedQuantityData newItem = new OrderedQuantityData
+				{
+					timeOfData = sortedData[i].timeOfData,
+					value = 0
+				};
+
+				for (int z = 0; z < sortedData.Count; z++)
+				{
+					//Debug.Log("[HealthKitAPI] i:" + i + " z:" + z);
+
+					//Debug.Log("[HealthKitAPI] " + sortedData[i].timeOfData.Hour + "   " + sortedData[z].timeOfData.Hour);
+
+					if (sortedData[i].timeOfData.Hour == sortedData[z].timeOfData.Hour)
+					{
+						newItem.value += sortedData[z].value;
+
+						//Debug.Log("[HealthKitAPI] Added to cleaned data");
+					}
+				}
+
+
+				try
+				{
+					cleanedData[sortedData[i].timeOfData.Hour].value += newItem.value;
+				}
+				catch(ArgumentOutOfRangeException)
+				{
+					cleanedData.Add(newItem);
+				}
+			}
+
+			for (int x = 0; x < sortedData.Count; x++)
+			{
+				Debug.Log("[HealthKitAPI] Total for hour" + cleanedData[x].timeOfData.ToString("g") + "  " + cleanedData[x].value);
+			}
+
+			return cleanedData;
+		}
+
+
+		/// <summary>
+		/// Orders a list of quantity data in days
+		/// </summary>
+		/// <param name="unorderedData"></param>
+		/// <returns></returns>		
+		public static List<OrderedQuantityData> OrderQuantityListDay(List<QuantityData> unorderedData)
+		{
+			List<OrderedQuantityData> sortedData = new List<OrderedQuantityData>();
+
+
+			for (int i = 0; i < unorderedData.Count; i++)
+			{
+				DateTime average = UsefulFunctions.AverageDateBetweenDateTimes(new List<DateTime> { unorderedData[i].startDate, unorderedData[i].endDate });
+
+				DateTime itemTime = new DateTime(average.Year, average.Month, average.Day, average.Hour, average.Minute, 0);
+
+
+
+				OrderedQuantityData item = new OrderedQuantityData
+				{
+					timeOfData = itemTime,
+					value = unorderedData[i].value
+				};
+
+				sortedData.Add(item);
+			}
+
+			sortedData.Sort((x, y) => DateTime.Compare(x.timeOfData, y.timeOfData));
 
 
 			List<OrderedQuantityData> cleanedData = new List<OrderedQuantityData>();
@@ -630,43 +710,24 @@ public class APIManager : MonoBehaviour
 				OrderedQuantityData newItem = new OrderedQuantityData
 				{
 					timeOfData = sortedData[i].timeOfData,
-					value = sortedData[i].value
-                };
+					value = 0
+				};
 
-                for (int z = 0; i < sortedData.Count; z++)
+				for (int z = 0; z < sortedData.Count; z++)
 				{
 					Debug.Log("[HealthKitAPI] i:" + i + " z:" + z);
 
-					if (sortedData[i].timeOfData.Hour == sortedData[z].timeOfData.Hour)
+					if (sortedData[i].timeOfData.Day == sortedData[z].timeOfData.Day)
 					{
 						newItem.value += sortedData[z].value;
 					}
 				}
 
 				cleanedData.Add(newItem);
-
-
-				/*
-                if (sortedData[i].timeOfData.Hour == sortedData[i + 1].timeOfData.Hour)
-                {
-                    OrderedQuantityData newItem = new OrderedQuantityData
-                    {
-                        timeOfData = sortedData[i].timeOfData,
-                        value = sortedData[i].value + sortedData[i + 1].value
-                    };
-
-                    cleanedData.Add(newItem);
-                }
-                else
-                {
-                    //add same item with no changes here
-                    cleanedData.Add(sortedData[i]);
-                }
-				*/
-            }
+			}
 
 			return cleanedData;
-		}		
+		}
 	}
 
 #endif
