@@ -337,9 +337,23 @@ public class StatisticsWindow : MonoBehaviour
 
         for (int i = 0; i < orderedData.Count; i++)
         {
-            Debug.Log("[Statistics] DAY:   " + orderedData[i].timeOfData.ToString("g") + " value: " + orderedData[i].value);
+            Debug.Log("[Statistics] DAY:   " + orderedData[i].timeOfData.ToString("t") + " value: " + orderedData[i].value);
         }
-    }
+
+
+        List<double> dataOverDay = new List<double>( new double[24]);
+
+
+        for (int i = 0; i < orderedData.Count; i++)
+        {
+            dataOverDay[orderedData[i].timeOfData.Hour] = orderedData[i].value;
+        }
+
+		for (int i = 0; i < orderedData.Count; i++)
+		{
+			Debug.Log("[Statistics]", () => dataOverDay[i]);
+		}
+	}
 
     public async void GetDataWeek(int dataType)
     {
@@ -358,7 +372,7 @@ public class StatisticsWindow : MonoBehaviour
 
         for (int i = 0; i < orderedData.Count; i++)
         {
-            Debug.Log("[Statistics] WEEK:   " + orderedData[i].timeOfData.ToString("g") + " value: " + orderedData[i].value);
+            Debug.Log("[Statistics] WEEK:   " + orderedData[i].timeOfData.ToString("d") + " value: " + orderedData[i].value);
         }
     }
 

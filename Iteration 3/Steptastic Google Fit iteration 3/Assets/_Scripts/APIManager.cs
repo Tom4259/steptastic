@@ -588,6 +588,7 @@ public class APIManager : MonoBehaviour
 
 		#endregion
 
+
 		/// <summary>
 		/// Orders a list of quantity data in hours in the day
 		/// </summary>
@@ -636,40 +637,28 @@ public class APIManager : MonoBehaviour
 
 				for (int z = 0; z < sortedData.Count; z++)
 				{
-					//Debug.Log("[HealthKitAPI] i:" + i + " z:" + z);
-
-					//Debug.Log("[HealthKitAPI] " + sortedData[i].timeOfData.Hour + "   " + sortedData[z].timeOfData.Hour);
 
 					if (sortedData[i].timeOfData.Hour == sortedData[z].timeOfData.Hour)
 					{
 						newItem.value += sortedData[z].value;
-
-						//Debug.Log("[HealthKitAPI] Added to cleaned data");
 					}
 				}
 
-
-				try
-				{
-					cleanedData[sortedData[i].timeOfData.Hour].value += newItem.value;
-				}
-				catch(ArgumentOutOfRangeException)
-				{
-					cleanedData.Add(newItem);
-				}
+				cleanedData.Add(newItem);
 			}
 
-			for (int x = 0; x < sortedData.Count; x++)
-			{
-				Debug.Log("[HealthKitAPI] Total for hour" + cleanedData[x].timeOfData.ToString("g") + "  " + cleanedData[x].value);
-			}
+			cleanedData = cleanedData
+				.GroupBy(item => item.timeOfData.Hour)
+				.Select(group => group.First())
+				.ToList();
+
 
 			return cleanedData;
 		}
 
 
 		/// <summary>
-		/// Orders a list of quantity data in days
+		/// Orders a list of quantity data in days. THIS DOESNT WORK FOR LISTS OF DATA OVER A THE MOUNTHS DAY COUNT
 		/// </summary>
 		/// <param name="unorderedData"></param>
 		/// <returns></returns>		
@@ -725,6 +714,12 @@ public class APIManager : MonoBehaviour
 
 				cleanedData.Add(newItem);
 			}
+
+			cleanedData = cleanedData
+				.GroupBy(item => item.timeOfData.Day)
+				.Select(group => group.First())
+				.ToList();
+
 
 			return cleanedData;
 		}
