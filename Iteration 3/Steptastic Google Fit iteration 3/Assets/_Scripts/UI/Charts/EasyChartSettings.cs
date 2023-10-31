@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XCharts.Runtime;
+using System.Threading.Tasks;
 
 
 [RequireComponent(typeof(BaseChart))]
@@ -57,12 +58,20 @@ public class EasyChartSettings : MonoBehaviour
 
 
 
-    public void SetSerieData(List<double> data, int serieIndex)
+    public void SetSerieData(List<double> data, int serieIndex, bool animate = false)
     {
+        ClearChart(serieIndex);
+
         for (int i = 0; i < data.Count; i++)
         {
             chart.series[serieIndex].UpdateData(i, 1, data[i]);
         }
+
+        if (!animate)
+        {
+			chart.AnimationEnable(false);
+            chart.RefreshAllComponent();
+		}
     }
 
     public void SetSerieData(List<double> data, List<bool> ignorePoints, int serieIndex)
@@ -131,16 +140,51 @@ public class EasyChartSettings : MonoBehaviour
 
 
 
+    public void ClearChart(int serieIndex)
+    {
+		for (int i = 0; i < chart.series[serieIndex].data.Count; i++)
+		{
+			chart.series[serieIndex].UpdateData(i, 1, 0);
+		}
+	}
+
+    public void ClearData(int seriesIndex)
+    {
+        chart.series[seriesIndex].data.Clear();
+    }
+
+
+
     public void SetItemCornerRadius(List<float> cornerRadius, int seriesIndex)
     {
         chart.series[seriesIndex].itemStyle.cornerRadius = cornerRadius.ToArray();
     }
 
 
+    public void SetXAxisNumbericFormatter(string formatter)
+    {
+        chart.GetChartComponent<XAxis>().axisLabel.numericFormatter = formatter;
+
+        chart.RefreshAllComponent();
+    }
+
+	public void SetYAxisNumbericFormatter(string formatter)
+	{
+		chart.GetChartComponent<YAxis>().axisLabel.numericFormatter = formatter;
+
+		chart.RefreshAllComponent();
+	}
+
+	public void SetSingleAxisNumbericFormatter(string formatter)
+	{
+		chart.GetChartComponent<SingleAxis>().axisLabel.numericFormatter = formatter;
+
+		chart.RefreshAllComponent();
+	}
 
 
 
-    public void AnimateGraph()
+	public void AnimateGraph()
     {
         chart.AnimationReset();
         chart.AnimationResume();

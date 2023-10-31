@@ -380,7 +380,7 @@ public class MainWindow : MonoBehaviour
     #endregion
 
     #region graphs
-
+    /*
     //loads and inputs data into the steps over the day graph
     private void LoadActivityGraph(JsonData stepsJson, JsonData distanceJson)
     {
@@ -477,14 +477,13 @@ public class MainWindow : MonoBehaviour
 
         activityChart.SetSerieData(distance, 1);
     }
-
+    */
     #endregion
 
 
 #endif
 
     #endregion
-
 
 
 
@@ -617,7 +616,7 @@ public class MainWindow : MonoBehaviour
     #endregion
 
     #region graphs
-
+    /*
     //loads and inputs data into the steps over the day graph
     private async Task LoadActivityGraph()
     {
@@ -752,6 +751,7 @@ public class MainWindow : MonoBehaviour
         activityChart.SetSerieData(stepsCountPerHour, 0);
         activityChart.SetSerieData(distanceCountPerHour, 1);
     }
+    */
 
     #endregion
 

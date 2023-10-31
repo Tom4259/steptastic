@@ -704,8 +704,6 @@ public class APIManager : MonoBehaviour
 
 				for (int z = 0; z < sortedData.Count; z++)
 				{
-					Debug.Log("[HealthKitAPI] i:" + i + " z:" + z);
-
 					if (sortedData[i].timeOfData.Day == sortedData[z].timeOfData.Day)
 					{
 						newItem.value += sortedData[z].value;

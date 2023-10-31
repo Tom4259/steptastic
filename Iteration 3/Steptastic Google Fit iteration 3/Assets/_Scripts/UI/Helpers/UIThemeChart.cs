@@ -82,7 +82,8 @@ public class UIThemeChart : MonoBehaviour
         AxisLabel newAxisLabel = new AxisLabel
         {
             textStyle = isDark ? darkText : lightText,
-            distance = 8
+            distance = 8,
+
         };
 
 
