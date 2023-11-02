@@ -29,21 +29,9 @@ public class StatisticsWindow : MonoBehaviour
 	[Space]
 	[Header("Activity over period chart")]
 	public EasyChartSettings dataOverPeriodChart;
-	public List<float> dayRoundedCorners = new List<float>
-	{
-		8.36f,
-		0.72f,
-		0.86f,
-		0.81f
-	};
+	public List<float> dayRoundedCorners;
 
-	public List<float> weekRoundedCorners = new List<float>
-	{
-		20.5f,
-		22.27f,
-		0.86f,
-		0.81f
-	};
+	public List<float> weekRoundedCorners;
 
 
 	[Space]
@@ -75,15 +63,6 @@ public class StatisticsWindow : MonoBehaviour
 	}
 
 	private Views currentView;
-
-
-
-#if UNITY_ANDROID || UNITY_EDITOR
-    private StatisticsItems.ANDROID statisticsItems = new StatisticsItems.ANDROID();
-#elif UNITY_IOS
-	private StatisticsItems.IOS statisticsItems = new StatisticsItems.IOS();
-#endif
-
 
 
 
@@ -263,7 +242,7 @@ public class StatisticsWindow : MonoBehaviour
 		}
 
 
-        statisticsItems.StatisticsGraph(json1, dataType);
+        StatisticsGraph(json1, dataType);
 
 		#endregion
 
@@ -341,7 +320,7 @@ public class StatisticsWindow : MonoBehaviour
 			dataOverPeriodChart.SetYAxisNumbericFormatter("0.## km");
 		}
 
-        statisticsItems.StatisticsGraph(json1, dataType);
+        StatisticsGraph(json1, dataType);
 
         #endregion
 
@@ -511,6 +490,50 @@ public class StatisticsWindow : MonoBehaviour
 	#endregion
 
 
+	#region statistics items
+
+
+#if UNITY_ANDROID || UNITY_EDITOR
+
+	public void StatisticsGraph(JsonData json, int dataType)
+        {
+            List<double> weekValues = new List<double>();
+            float totalValue = 0;
+
+            for (int i = 0; i < json["bucket"].Count; i++)
+            {
+                JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
+                double item = 0;
+
+                try
+                {
+                    item = double.Parse(stepData[0]["value"][0][(dataType == 0 ? "intVal" : "fpVal")].ToString());
+
+                    totalValue += (float)item;
+                }
+                catch (ArgumentOutOfRangeException) { }
+                catch (KeyNotFoundException) { }
+
+                weekValues.Add(item);
+
+                //Debug.Log("[Statistics]", () => item);
+            }
+
+            //Debug.Log("[Statistics]", () => totalValue);
+            Debug.Log("[Statistics]", () => weekValues.Count);
+
+            dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
+            dataOverPeriodChart.SetSerieData(weekValues, 0);
+        }
+
+#elif UNITY_IOS
+
+
+#endif
+
+	#endregion
+
+
 	#region helpers
 
     private void SetDayXAxis()
@@ -569,50 +592,5 @@ public class StatisticsWindow : MonoBehaviour
 	#endregion
 
 
-	#endregion
-
-
-
-
-    private class StatisticsItems : StatisticsWindow
-    {
-        public class ANDROID : StatisticsItems
-		{
-            public void StatisticsGraph(JsonData json, int dataType)
-            {
-                List<double> weekValues = new List<double>();
-                float totalValue = 0;
-
-                for (int i = 0; i < json["bucket"].Count; i++)
-                {
-                    JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
-                    double item = 0;
-
-                    try
-                    {
-                        item = double.Parse(stepData[0]["value"][0][(dataType == 0 ? "intVal" : "fpVal")].ToString());
-
-                        totalValue += (float)item;
-                    }
-                    catch (ArgumentOutOfRangeException) { }
-                    catch (KeyNotFoundException) { }
-
-                    weekValues.Add(item);
-
-                    //Debug.Log("[Statistics]", () => item);
-                }
-
-                //Debug.Log("[Statistics]", () => totalValue);
-                Debug.Log("[Statistics]", () => weekValues.Count);
-
-                dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
-                dataOverPeriodChart.SetSerieData(weekValues, 0);
-            }
-        }
-
-		public class IOS : StatisticsItems
-        {
-
-		}
-    }
+	#endregion    
 }
