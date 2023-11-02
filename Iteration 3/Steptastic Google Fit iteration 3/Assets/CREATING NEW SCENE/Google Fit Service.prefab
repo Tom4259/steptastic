@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5380334432792504268
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6137921474864237816}
+  - component: {fileID: 3205785307506636420}
+  m_Layer: 0
+  m_Name: Google Fit Service
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6137921474864237816
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5380334432792504268}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3205785307506636420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5380334432792504268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fcc34d95bc122344b6925ceadd09907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deeplinkURL: unitydl://Steptastic
+  useBelowCodes: 1
+  editorAuth: 4/0AfJohXnQq5NQHRUCGIYywd7f36u47XIzW3R9qqPJztlc-0ksanSHKb0q7WGDgamrnFkhqA
+  editorToken: ya29.a0AfB_byCb_z5Y_bORMohlZjxXoexLkS-W_5qKzQdQ94IdwMrUpDldf-sm9dYply9PZufujPkSW9wjnRaLM761WTOWOnLUIc4Yx6r2ZM1Kp1lyGuaAec2Wmr8Vuy4JDcwFuBV4WnVtDJl-VOJjkYEXdWisxCr9YlIF2tJlaCgYKAbUSARISFQGOcNnCqA4zwKDnWruHmkZjfIS3sg0171
+  editorRefresh: 1//03cmFZlj6MD7wCgYIARAAGAMSNwF-L9IrZJUd-ZQlttrP7rSYQPnca_yx2LfIuWcypGePQrtyGfcrAOJe7V93lftWMRuGod_KyCs
