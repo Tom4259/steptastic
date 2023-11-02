@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using LitJson;
 using Michsky.MUIP;
-using XCharts.Runtime;
 using System;
 using TMPro;
 
