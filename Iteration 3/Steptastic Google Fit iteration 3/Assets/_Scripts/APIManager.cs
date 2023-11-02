@@ -6,7 +6,6 @@ using UnityEngine.Events;
 using UnityEngine.Networking;
 using LitJson;
 using System.Text;
-using UnityEngine.UI;
 using System.Threading.Tasks;
 using System.Linq;
 
@@ -743,7 +742,7 @@ public class APIManager : MonoBehaviour
 
 			public int zoom;
 
-			public Image imageToSet;
+			public UnityEngine.UI.Image imageToSet;
 
 			public UnityAction callback = null;
 		}

@@ -2,7 +2,6 @@ using Michsky.MUIP;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using XCharts;
 using XCharts.Runtime;
 
