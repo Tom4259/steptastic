@@ -252,7 +252,7 @@ public class StatisticsWindow : MonoBehaviour
 
 
         startRequest = DateTime.Today.AddDays(-7);
-		endRequest = DateTime.Today.AddDays(-7).AddHours(23).AddMinutes(59);
+		endRequest = DateTime.Today.AddDays(-6);
 
         APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest);
 
@@ -295,20 +295,20 @@ public class StatisticsWindow : MonoBehaviour
 		#endregion
     }
 
-    public async void GetDataWeek(int dataType)
+	public async void GetDataWeek(int dataType)
 	{
-        DateTime startRequest = DateTime.Today.AddDays(-((int)DateTime.Today.DayOfWeek - 1));
-        DateTime endRequest = DateTime.Now;
+		DateTime startRequest = DateTime.Today.AddDays(-((int)DateTime.Today.DayOfWeek - 1));
+		DateTime endRequest = DateTime.Now;
 
-        JsonData json1;
-        JsonData json2;
+		JsonData json1;
+		JsonData json2;
 
-        APIManager.GoogleFit.ApiData APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest);
+		APIManager.GoogleFit.ApiData APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest);
 
 
 		#region graph
 
-        if (dataType == 0)
+		if (dataType == 0)
 		{
 			json1 = await APIManager.GoogleFit.GetStepsBetweenMillis(APIData);
 			dataOverPeriodChart.SetYAxisNumbericFormatter("###,###,###");
@@ -319,47 +319,47 @@ public class StatisticsWindow : MonoBehaviour
 			dataOverPeriodChart.SetYAxisNumbericFormatter("0.## km");
 		}
 
-        StatisticsGraph(json1, dataType);
+		StatisticsGraph(json1, dataType);
 
-        #endregion
-
-
-        #region this week vs last week
-
-        #region getting data and setting json1 to last week and json 2 to today
+		#endregion
 
 
-        startRequest = DateTime.Today.AddDays((int)DateTime.Today.DayOfWeek - 1);
-		endRequest = DateTime.Today.AddDays((int)DateTime.Today.DayOfWeek - 1).AddDays(7);;
+		#region this week vs last week
 
-        APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest, 604800000);
-
-        if (dataType == 0) json1 = await APIManager.GoogleFit.GetStepsBetweenMillis(APIData);
-        else json1 = await APIManager.GoogleFit.GetDistanceBetweenMillis(APIData);
+		#region getting data and setting json1 to last week and json 2 to today
 
 
+		startRequest = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek - 1);
+		endRequest = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek - 1).AddDays(7);
+
+		APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest, 604800000);
+
+		if (dataType == 0) json1 = await APIManager.GoogleFit.GetStepsBetweenMillis(APIData);
+		else json1 = await APIManager.GoogleFit.GetDistanceBetweenMillis(APIData);
 
 
-        startRequest = DateTime.Today.AddDays((int)DateTime.Today.DayOfWeek - 1);
-        endRequest = DateTime.Now;
-
-        APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest);
-
-        if (dataType == 0) json2 = await APIManager.GoogleFit.GetStepsBetweenMillis(APIData);
-        else json2 = await APIManager.GoogleFit.GetDistanceBetweenMillis(APIData);
 
 
-        #endregion
+		startRequest = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek - 1);
+		endRequest = DateTime.Now;
+
+		APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest);
+
+		if (dataType == 0) json2 = await APIManager.GoogleFit.GetStepsBetweenMillis(APIData);
+		else json2 = await APIManager.GoogleFit.GetDistanceBetweenMillis(APIData);
 
 
-        Debug.Log("[Statistics] 1week \n" + json1.ToJson());
-        Debug.Log("[Statistics] 2week \n" + json2.ToJson());
+		#endregion
 
-        double todayV = double.Parse(json2[0]
+
+		Debug.Log("[Statistics] 1week \n" + json1.ToJson());
+		Debug.Log("[Statistics] 2week \n" + json2.ToJson());
+
+		double todayV = double.Parse(json2["bucket"][0]
             ["dataset"][0]["point"][0]
             ["value"][(dataType == 0 ? "intVal" : "fpVal")].ToString());
 
-        double lastWeekV = double.Parse(json1[0]
+        double lastWeekV = double.Parse(json1["bucket"][0]
             ["dataset"][0]["point"][0]
             ["value"][(dataType == 0 ? "intVal" : "fpVal")].ToString());
 
@@ -377,13 +377,15 @@ public class StatisticsWindow : MonoBehaviour
 
 	public async void GetDataDay(int dataType)
 	{
-		#region graph
-
 		DateTime start = DateTime.Today;
 		DateTime end = DateTime.Now;
 
 
 		List<APIManager.HealthKit.QuantityData> data;
+
+
+		#region graph
+
 
 		if (dataType == 0)
 		{
@@ -423,7 +425,17 @@ public class StatisticsWindow : MonoBehaviour
 
 		#region this week vs last week
 
+		if (dataType == 0) thisWeekValue.text = (await APIManager.HealthKit.GetSteps(start, end)).ToString();
+		else thisWeekValue.text = (await APIManager.HealthKit.GetDistance(start, end)).ToString();
 
+		start = DateTime.Today.AddDays(-7);
+		end = DateTime.Today.AddDays(-6);
+		//end = DateTime.Today.AddDays(-7).AddHours(23).AddMinutes(59).AddSeconds(59).AddMilliseconds(1000);
+		Debug.Log(start.ToString("g"));
+		Debug.Log(end.ToString("g"));
+
+		if (dataType == 0) lastWeekValue.text = (await APIManager.HealthKit.GetSteps(start, end)).ToString();
+		else lastWeekValue.text = (await APIManager.HealthKit.GetDistance(start, end)).ToString();
 
 		#endregion
 	}
@@ -495,37 +507,38 @@ public class StatisticsWindow : MonoBehaviour
 #if UNITY_ANDROID || UNITY_EDITOR
 
 	public void StatisticsGraph(JsonData json, int dataType)
+    {
+        List<double> weekValues = new List<double>();
+        float totalValue = 0;
+
+        for (int i = 0; i < json["bucket"].Count; i++)
         {
-            List<double> weekValues = new List<double>();
-            float totalValue = 0;
+            JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
+            double item = 0;
 
-            for (int i = 0; i < json["bucket"].Count; i++)
+            try
             {
-                JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
-                double item = 0;
+                item = double.Parse(stepData[0]["value"][0][(dataType == 0 ? "intVal" : "fpVal")].ToString());
 
-                try
-                {
-                    item = double.Parse(stepData[0]["value"][0][(dataType == 0 ? "intVal" : "fpVal")].ToString());
-
-                    totalValue += (float)item;
-                }
-                catch (ArgumentOutOfRangeException) { }
-                catch (KeyNotFoundException) { }
-
-                weekValues.Add(item);
-
-                //Debug.Log("[Statistics]", () => item);
+                totalValue += (float)item;
             }
+            catch (ArgumentOutOfRangeException) { }
+            catch (KeyNotFoundException) { }
 
-            //Debug.Log("[Statistics]", () => totalValue);
-            Debug.Log("[Statistics]", () => weekValues.Count);
+            weekValues.Add(item);
 
-            dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
-            dataOverPeriodChart.SetSerieData(weekValues, 0);
+            //Debug.Log("[Statistics]", () => item);
         }
 
+        //Debug.Log("[Statistics]", () => totalValue);
+        Debug.Log("[Statistics]", () => weekValues.Count);
+
+        dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
+        dataOverPeriodChart.SetSerieData(weekValues, 0);
+    }
+
 #elif UNITY_IOS
+
 
 
 #endif
@@ -535,7 +548,7 @@ public class StatisticsWindow : MonoBehaviour
 
 	#region helpers
 
-    private void SetDayXAxis()
+	private void SetDayXAxis()
 	{
 		List<string> xAxisPoints = new List<string>
 		{
