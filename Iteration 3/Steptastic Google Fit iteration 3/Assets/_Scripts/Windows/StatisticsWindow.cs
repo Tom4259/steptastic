@@ -84,11 +84,6 @@ public class StatisticsWindow : MonoBehaviour
 		UpdateUI();
 	}
 
-	public void CloseWindow()
-	{
-		LeanTween.move(RT, startPosition, CanvasManager.windowAnimationTime / 2);
-	}
-
 	public void UpdateUI()
 	{
 		Debug.Log("[Statistics] Updating UI");

@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 
 public class MainWindow : MonoBehaviour
 {
+
+    public NavigationBar navigationBar;
+
+    [Space(10)]
     [Header("Home screen")]
     public GameObject homeScreen;
     public StatisticsWindow statisticsWindow;
@@ -157,7 +161,7 @@ public class MainWindow : MonoBehaviour
     {
         Debug.Log("[Statistics] Opening statistics window");
 
-        statisticsWindow.OpenWindow(dataType);
+        navigationBar.OpenWindow(1, () => statisticsWindow.OpenWindow(dataType));
     }
 
 

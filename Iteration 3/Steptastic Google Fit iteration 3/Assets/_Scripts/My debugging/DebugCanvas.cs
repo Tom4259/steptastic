@@ -80,7 +80,6 @@ public class DebugCanvas : MonoBehaviour
 
 
 
-
     public void Start()
     {
 #if UNITY_ANDROID || UNITY_EDITOR

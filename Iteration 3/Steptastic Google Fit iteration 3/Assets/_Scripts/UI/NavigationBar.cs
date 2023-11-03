@@ -1,18 +1,149 @@
+using Michsky.MUIP;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class NavigationBar : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Serializable]
+    public class ButtonConfig
     {
-        
+        public ButtonManager buttonObject;
+        public float width;
+        public int windowTarget;
     }
 
-    // Update is called once per frame
-    void Update()
+    public RectTransform mainWindow;
+
+    [Space]
+    public Image windowPointer;
+    public float animationTime = 0.3f;
+
+    [Space]
+    public ButtonConfig[] buttons;
+    public ButtonManager startingSelected;
+
+    [Space]
+    public Color selectedColour;
+    public Color deselectedColour;
+
+
+
+    private void Start()
     {
-        
+        //OpenWindow(startingSelected);
+    }
+
+
+    public void OpenWindow(ButtonManager btn)
+    {
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i].buttonObject == btn)
+            {
+                NavBarTransition(buttons[i]);
+
+                ChangeWindow(buttons[i].windowTarget);
+            }
+            else
+            {
+                if (buttons[i].buttonObject.normalText.color != deselectedColour)
+                {
+                    FadeColours(buttons[i], selectedColour, deselectedColour);
+                }
+            }
+        }
+    }
+
+    public void OpenWindow(int index)
+    {
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i].windowTarget == index)
+            {
+                NavBarTransition(buttons[i]);
+
+                ChangeWindow(buttons[i].windowTarget);
+            }
+            else
+            {
+                if (buttons[i].buttonObject.normalText.color != deselectedColour)
+                {
+                    FadeColours(buttons[i], selectedColour, deselectedColour);
+                }
+            }
+        }
+    }
+
+    public void OpenWindow(int index, UnityAction additionalAction)
+    {
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i].windowTarget == index)
+            {
+                NavBarTransition(buttons[i]);
+
+                ChangeWindow(buttons[i].windowTarget);
+            }
+            else
+            {
+                if (buttons[i].buttonObject.normalText.color != deselectedColour)
+                {
+                    FadeColours(buttons[i], selectedColour, deselectedColour);
+                }
+            }
+        }
+
+        additionalAction.Invoke();
+    }
+
+
+    #region nav bar changes
+
+    private void NavBarTransition(ButtonConfig config)
+    {
+        //setting window pointers size
+        LeanTween.value(gameObject, (float f) =>
+        {
+            windowPointer.rectTransform.sizeDelta = new Vector2(f, windowPointer.rectTransform.sizeDelta.y);
+        },
+        windowPointer.rectTransform.rect.width, config.width, animationTime);
+
+        //setting window pointer position
+        LeanTween.value(gameObject, (float f) =>
+        {
+            windowPointer.rectTransform.anchoredPosition = new Vector2(f, windowPointer.rectTransform.anchoredPosition.y);
+        },
+        windowPointer.rectTransform.anchoredPosition.x,
+        config.buttonObject.GetComponent<RectTransform>().anchoredPosition.x,
+        animationTime);
+
+
+        //setting button text colour
+        FadeColours(config, deselectedColour, selectedColour);
+    }
+
+    private void FadeColours(ButtonConfig config, Color start, Color end)
+    {
+        LeanTween.value(gameObject, (Color c) =>
+        {
+            config.buttonObject.normalText.color = c;
+        }, start, end, animationTime);
+    }
+
+    #endregion
+
+    private void ChangeWindow(int windowIndex)
+    {
+        float newPosition = (800 * -windowIndex);
+
+        LeanTween.value(gameObject, (float f) =>
+        {
+            mainWindow.anchoredPosition = new Vector2(f, mainWindow.anchoredPosition.y);
+        }, mainWindow.anchoredPosition.x, newPosition, animationTime);
     }
 }
