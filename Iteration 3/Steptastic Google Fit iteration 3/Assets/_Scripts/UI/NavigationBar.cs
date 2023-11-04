@@ -168,7 +168,7 @@ public class NavigationBar : MonoBehaviour
 
     public void OnSwipeRight()
     {
-        if (currentWindowIndex - 1 <= maximumIndex && CanvasManager.instance.isMainWindowOpen)
+        if (currentWindowIndex - 1 <= minimumIndex && CanvasManager.instance.isMainWindowOpen)
         {
             OpenWindow(currentWindowIndex - 1);
         }

@@ -120,7 +120,7 @@ public class DebugCanvas : MonoBehaviour
 
     public void RefreshMainWindow()
     {
-        CanvasManager.instance.mainScreen.StartMainWindow();
+        CanvasManager.instance.mainWindow.StartMainWindow();
 
         objectsToHide.SetActive(false);
     }

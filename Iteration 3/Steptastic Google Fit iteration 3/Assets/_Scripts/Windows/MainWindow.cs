@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using Michsky.MUIP;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using UnityEngine.Events;
 
 public class MainWindow : MonoBehaviour
 {
@@ -46,6 +47,9 @@ public class MainWindow : MonoBehaviour
     public Image mapImage;
 
 
+    public UnityAction onMainScreenLoaded;
+
+
     private void Start()
     {
         animationTime = CanvasManager.animationTime;
@@ -66,6 +70,7 @@ public class MainWindow : MonoBehaviour
         //shows the user their start and end Location
         //startLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName).Replace(",", ", ");
         //endLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName).Replace(",", ", ");
+        onMainScreenLoaded?.Invoke();
 
         ResetUIBlockText();
         //await GetMapImage();
@@ -76,6 +81,7 @@ public class MainWindow : MonoBehaviour
         CanvasManager.instance.loadingScreen.gameObject.SetActive(false);
 
         AnimateScreen();
+
 
 
 		DebugCanvas.instance.OnMainScreenOpen();

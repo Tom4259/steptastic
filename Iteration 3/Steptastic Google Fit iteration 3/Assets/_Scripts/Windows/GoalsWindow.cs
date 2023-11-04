@@ -20,6 +20,8 @@ public class GoalsWindow : MonoBehaviour
 
     private void Start()
     {
+        CanvasManager.instance.mainWindow.onMainScreenLoaded += LoadGoalsWindow;
+
         setGoalsWindow.SetActive(false);
 
         if(!PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.setGoals, false))
@@ -51,7 +53,7 @@ public class GoalsWindow : MonoBehaviour
         APIManager.GoogleFit.ApiData data = APIManager.GoogleFit.GenerateAPIbody(start, end);
         JsonData json = await APIManager.GoogleFit.GetStepsBetweenMillis(data);
 
-        //disect data here
+        //dissect data here
 
 
         for (int i = 0; i < json["bucket"].Count; i++)
@@ -76,7 +78,12 @@ public class GoalsWindow : MonoBehaviour
 
         for (int i = 0; i < daysProgressBars.Length; i++)
         {
-            daysProgressBars[i].percent = (stepsOverDays[i] / stepGoal) * 100;
+            //daysProgressBars[i].percent = (stepsOverDays[i] / stepGoal) * 100;
+
+            LeanTween.value(gameObject, (float f) =>
+            {
+
+            }, 0, (stepsOverDays[i] / stepGoal) * 100, 0.125f);
         }
 
 #elif UNITY_IOS

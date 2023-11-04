@@ -28,7 +28,7 @@ public class CanvasManager : MonoBehaviour
     public ChallengeSetupWindow challengeSetupWindow;
 
     [Space]
-    public MainWindow mainScreen;
+    public MainWindow mainWindow;
     public NavigationBar navigationBar;
     private Vector2 mainScreenStartLocation;
     public static float animationTime = 1.75f;
@@ -69,10 +69,10 @@ public class CanvasManager : MonoBehaviour
         mainScreenStartLocation = new Vector2(GetComponent<CanvasScaler>().referenceResolution.x, 0);
 
         setupWindows.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        mainScreen.GetComponent<RectTransform>().anchoredPosition = mainScreenStartLocation;
+        mainWindow.GetComponent<RectTransform>().anchoredPosition = mainScreenStartLocation;
 
         setupWindows.gameObject.SetActive(true);
-        mainScreen.gameObject.SetActive(false);
+        mainWindow.gameObject.SetActive(false);
     }
 
     private async void Start()
@@ -111,7 +111,7 @@ public class CanvasManager : MonoBehaviour
         isSetupWindowOpen = true;
 
         setupWindows.gameObject.SetActive(true);
-        mainScreen.gameObject.SetActive(false);
+        mainWindow.gameObject.SetActive(false);
         navigationBar.gameObject.SetActive(false);
 
         setupWindowmanager.OpenWindowByIndex(0);
@@ -147,19 +147,19 @@ public class CanvasManager : MonoBehaviour
     {
         isMainWindowOpen = true;
 
-        mainScreen.gameObject.SetActive(true);
+        mainWindow.gameObject.SetActive(true);
         navigationBar.gameObject.SetActive(true);
 
         if (animation)
         {
-            LeanTween.move(mainScreen.GetComponent<RectTransform>(), Vector2.zero, animationTime).setEaseInOutCubic();
+            LeanTween.move(mainWindow.GetComponent<RectTransform>(), Vector2.zero, animationTime).setEaseInOutCubic();
         }
         else
         {
-            mainScreen.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            mainWindow.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         }
 
-        mainScreen.StartMainWindow();
+        mainWindow.StartMainWindow();
     }
 
     public void ExitApp()

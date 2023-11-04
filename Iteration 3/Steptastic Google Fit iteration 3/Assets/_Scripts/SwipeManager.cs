@@ -27,6 +27,8 @@ public class SwipeManager : MonoBehaviour
 
     public UnityAction onSwipeLeft;
     public UnityAction onSwipeRight;
+    public UnityAction onSwipeDown;
+    public UnityAction onSwipeUp;
 
 
     private void Awake()
@@ -55,17 +57,34 @@ public class SwipeManager : MonoBehaviour
                 endPosition = Input.GetTouch(0).position;
                 
 
-                if ((DistanceOfSwipe(startPosition.x, endPosition.x) >= swipeThreshhold) && ValidSwipe(startPosition.x))
+                if(DistanceOfSwipe(startPosition.x, endPosition.x) > DistanceOfSwipe(startPosition.y, endPosition.y))
                 {
-                    if (endPosition.x < startPosition.x)
+                    if ((DistanceOfSwipe(startPosition.x, endPosition.x) >= swipeThreshhold))
                     {
-                        SwipeLeft();
-                    }
-                    else if (endPosition.x > startPosition.x)
-                    {
-                        SwipeRight();
+                        if (endPosition.x < startPosition.x)
+                        {
+                            SwipeLeft();
+                        }
+                        else if (endPosition.x > startPosition.x)
+                        {
+                            SwipeRight();
+                        }
                     }
                 }
+                else
+                {
+                    if ((DistanceOfSwipe(startPosition.y, endPosition.y) >= swipeThreshhold))
+                    {
+                        if (endPosition.y < startPosition.y)
+                        {
+                            SwipeDown();
+                        }
+                        else if (endPosition.y > startPosition.y)
+                        {
+                            SwipeUp();
+                        }
+                    }
+                }                
             }            
         }
     }
@@ -75,49 +94,24 @@ public class SwipeManager : MonoBehaviour
         return (end - start) > 0 ? (end - start) : ((end - start) * -1);
     }
 
-    private bool ValidSwipe(float start)
-    {
-        if(padding == paddingOptions.Ignored)
-        {
-            return true;
-        }
-        else if(padding == paddingOptions.Inside)
-        {
-            if(Screen.currentResolution.width - paddingDistance < start)
-            {
-                return true;
-            }
-
-            if(start < paddingDistance)
-            {
-                return true;
-            }
-        }
-        else if(padding == paddingOptions.Outside)
-        {
-            if (Screen.currentResolution.width - paddingDistance > start)
-            {
-                return true;
-            }
-
-            if (start > paddingDistance)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
 
     private void SwipeLeft()
     {
-        onSwipeLeft.Invoke();
+        onSwipeLeft?.Invoke();
     }
 
     private void SwipeRight()
     {
-        onSwipeRight.Invoke();
+        onSwipeRight?.Invoke();
+    }
+
+    private void SwipeDown()
+    {
+        onSwipeDown?.Invoke();
+    }
+
+    private void SwipeUp()
+    {
+        onSwipeUp?.Invoke();
     }
 }
