@@ -22,6 +22,7 @@ public class NavigationBar : MonoBehaviour
     [Space]
     public Image windowPointer;
     public float animationTime = 0.3f;
+    public float windowChangeMultiplier = 1.75f;
 
     [Space]
     public ButtonConfig[] buttons;
@@ -152,7 +153,7 @@ public class NavigationBar : MonoBehaviour
         LeanTween.value(gameObject, (float f) =>
         {
             mainWindow.anchoredPosition = new Vector2(f, mainWindow.anchoredPosition.y);
-        }, mainWindow.anchoredPosition.x, newPosition, animationTime);
+        }, mainWindow.anchoredPosition.x, newPosition, animationTime * windowChangeMultiplier);
     }
 
 

@@ -57,9 +57,6 @@ public class SwipeManager : MonoBehaviour
 
                 if ((DistanceOfSwipe(startPosition.x, endPosition.x) >= swipeThreshhold) && ValidSwipe(startPosition.x))
                 {
-                    Debug.Log(() => startPosition);
-                    Debug.Log(() => Screen.currentResolution);
-
                     if (endPosition.x < startPosition.x)
                     {
                         SwipeLeft();
