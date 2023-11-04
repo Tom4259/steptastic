@@ -35,6 +35,14 @@ public class CanvasManager : MonoBehaviour
     public static float fastWindowAnimationTime = 0.75f;
     public static float windowAnimationTime = 1.4f;
 
+
+
+    public bool isSetupWindowOpen = true;
+    public bool isMainWindowOpen = false;
+
+
+
+
     private void Awake()
     {
         //creates an instance so other scripts can access variables and methods
@@ -100,6 +108,8 @@ public class CanvasManager : MonoBehaviour
     //shows the setup page
     private void LoadSetup()
     {
+        isSetupWindowOpen = true;
+
         setupWindows.gameObject.SetActive(true);
         mainScreen.gameObject.SetActive(false);
         navigationBar.gameObject.SetActive(false);
@@ -123,6 +133,8 @@ public class CanvasManager : MonoBehaviour
     //closes the setup page
     private async void CloseSetupWindow()
     {
+        isSetupWindowOpen = false;
+
         LeanTween.move(setupWindows, -mainScreenStartLocation, animationTime).setEaseInOutCubic();
 
         await Task.Delay((int)(animationTime * 1000) + 2000);
@@ -133,6 +145,8 @@ public class CanvasManager : MonoBehaviour
     //opens the main window, animation is used for the sliding in effect
     private void OpenMainWindow(bool animation)
     {
+        isMainWindowOpen = true;
+
         mainScreen.gameObject.SetActive(true);
         navigationBar.gameObject.SetActive(true);
 

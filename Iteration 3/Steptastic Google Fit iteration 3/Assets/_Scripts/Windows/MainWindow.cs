@@ -45,25 +45,6 @@ public class MainWindow : MonoBehaviour
     public Image mapImage;
 
 
-
-    [Space(25)]
-    [Header("Goals screen")]
-    public GoalsWindow goalsScreen;
-
-
-
-
-
-    //putting these item in a different window
-    [Space(30)]
-    [Header("Challenge details")]
-    public TMP_Text startLocation;
-    public TMP_Text endLocation;
-
-    [Space]
-	[Header("Graphs")]
-	public EasyChartSettings activityChart;
-
     private void Start()
     {
         animationTime = CanvasManager.animationTime;

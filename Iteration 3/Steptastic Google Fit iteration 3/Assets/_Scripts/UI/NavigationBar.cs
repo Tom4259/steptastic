@@ -32,11 +32,17 @@ public class NavigationBar : MonoBehaviour
     public Color deselectedColour;
 
 
+    private int currentWindowIndex = 0;
+    private int minimumIndex = -1;
+    private int maximumIndex = 2;
+
 
     private void Start()
     {
-        //OpenWindow(startingSelected);
+        SwipeManager.instance.onSwipeLeft += OnSwipeLeft;
+        SwipeManager.instance.onSwipeRight += OnSwipeRight;
     }
+
 
 
     public void OpenWindow(ButtonManager btn)
@@ -139,11 +145,31 @@ public class NavigationBar : MonoBehaviour
 
     private void ChangeWindow(int windowIndex)
     {
+        currentWindowIndex = windowIndex;
+
         float newPosition = (800 * -windowIndex);
 
         LeanTween.value(gameObject, (float f) =>
         {
             mainWindow.anchoredPosition = new Vector2(f, mainWindow.anchoredPosition.y);
         }, mainWindow.anchoredPosition.x, newPosition, animationTime);
+    }
+
+
+
+    public void OnSwipeLeft()
+    {
+        if(currentWindowIndex + 1 <= maximumIndex && CanvasManager.instance.isMainWindowOpen)
+        {
+            OpenWindow(currentWindowIndex + 1);
+        }
+    }
+
+    public void OnSwipeRight()
+    {
+        if (currentWindowIndex - 1 <= maximumIndex && CanvasManager.instance.isMainWindowOpen)
+        {
+            OpenWindow(currentWindowIndex - 1);
+        }
     }
 }
