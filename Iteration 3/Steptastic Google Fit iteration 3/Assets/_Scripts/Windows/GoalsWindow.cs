@@ -9,8 +9,25 @@ using System;
 
 public class GoalsWindow : MonoBehaviour
 {
-    public ProgressBar[] daysProgressBars;
+    public GameObject setGoalsWindow;
 
+
+    [Space]
+    [Header("Step goals")]
+    public VerticalProgressBar[] daysProgressBars;
+
+
+
+    private void Start()
+    {
+        setGoalsWindow.SetActive(false);
+
+        if(!PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.setGoals, false))
+        {
+            //show window to set goals
+            setGoalsWindow.SetActive(true);
+        }
+    }
 
     public void LoadGoalsWindow()
     {
@@ -19,7 +36,7 @@ public class GoalsWindow : MonoBehaviour
 
     private async Task LoadWeekProgressBars()
     {
-        DateTime start = DateTime.Today.AddDays(-7);
+        DateTime start = DateTime.Today.AddDays(- ((int)DateTime.Today.DayOfWeek + 1));
         DateTime end = DateTime.Now;
 
         List<int> stepsOverDays = new List<int>();
@@ -59,7 +76,7 @@ public class GoalsWindow : MonoBehaviour
 
         for (int i = 0; i < daysProgressBars.Length; i++)
         {
-            daysProgressBars[i].currentPercent = (stepsOverDays[i] / stepGoal) * 100;
+            daysProgressBars[i].percent = (stepsOverDays[i] / stepGoal) * 100;
         }
 
 #elif UNITY_IOS

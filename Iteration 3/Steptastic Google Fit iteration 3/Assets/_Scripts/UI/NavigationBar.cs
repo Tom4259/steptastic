@@ -118,7 +118,7 @@ public class NavigationBar : MonoBehaviour
         {
             windowPointer.rectTransform.sizeDelta = new Vector2(f, windowPointer.rectTransform.sizeDelta.y);
         },
-        windowPointer.rectTransform.rect.width, config.width, animationTime).setEaseInOutCubic(); ;
+        windowPointer.rectTransform.rect.width, config.width, animationTime).setEaseInOutCubic();
 
         //setting window pointer position
         LeanTween.value(gameObject, (float f) =>
@@ -139,7 +139,7 @@ public class NavigationBar : MonoBehaviour
         LeanTween.value(gameObject, (Color c) =>
         {
             config.buttonObject.normalText.color = c;
-        }, start, end, animationTime).setEaseInOutCubic(); ;
+        }, start, end, animationTime).setEaseInOutCubic();
     }
 
     #endregion
@@ -153,7 +153,7 @@ public class NavigationBar : MonoBehaviour
         LeanTween.value(gameObject, (float f) =>
         {
             mainWindow.anchoredPosition = new Vector2(f, mainWindow.anchoredPosition.y);
-        }, mainWindow.anchoredPosition.x, newPosition, animationTime * windowChangeMultiplier).setEaseInOutCubic(); ;
+        }, mainWindow.anchoredPosition.x, newPosition, animationTime * windowChangeMultiplier).setEaseInOutCubic();
     }
 
 

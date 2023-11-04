@@ -101,6 +101,9 @@ public class PlayerPrefsLocations : MonoBehaviour
             /// takes the user straight to the main screen if it returns true
             /// </summary>
             public static string setup = "user.completedwindows.setup";
+
+
+            public static string setGoals = "user.completedwindows.setgoals";
         }
 
         public class Goals

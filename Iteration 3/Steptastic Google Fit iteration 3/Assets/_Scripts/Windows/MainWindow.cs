@@ -8,6 +8,7 @@ using API = APIManager.GoogleFit;
 using UnityEngine.UI;
 using Michsky.MUIP;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 public class MainWindow : MonoBehaviour
 {
@@ -58,24 +59,19 @@ public class MainWindow : MonoBehaviour
 
         DateTime now = DateTime.Now;
 
-        //string day = now.ToString("dddd");
-        //string date = UsefulFunctions.AddOrdinal(int.Parse(now.ToString("M").Split(' ')[0]));
-        //string month = now.ToString("M").Split(' ')[1];
-        //
-        //todayDate.text = day + " " + date + " " + month;
+        todayDate.text = now.ToString("dddd") + " "
+            + UsefulFunctions.AddOrdinal(int.Parse(now.ToString("dd"))) + " "
+            + now.ToString("MMMM");
 
         //shows the user their start and end Location
         //startLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName).Replace(",", ", ");
         //endLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName).Replace(",", ", ");
 
         ResetUIBlockText();
+        //await GetMapImage();
+        GetMapImage();
         await CalculateUserProgress();
-        await GetMapImage();
         await LoadUIBlocks();
-
-#if UNITY_IOS && !UNITY_EDITOR
-        //await LoadActivityGraph();
-#endif
 
         CanvasManager.instance.loadingScreen.gameObject.SetActive(false);
 
@@ -135,13 +131,11 @@ public class MainWindow : MonoBehaviour
 
     public void OpenChallengeInfoScreen()
     {
-        Debug.Log("[ChallengeInfo] Opening statistics window");
+        Debug.Log("[ChallengeInfo] Opening statistics window, yet to create a window for this");
     }
 
     public void OpenStatisticsScreen(int dataType)
     {
-        Debug.Log("[Statistics] Opening statistics window");
-
         navigationBar.OpenWindow(1, () => statisticsWindow.OpenWindow(dataType));
     }
 
@@ -151,7 +145,6 @@ public class MainWindow : MonoBehaviour
 
 
 #if UNITY_ANDROID || UNITY_EDITOR
-
 
     #region progress to target
 
@@ -364,108 +357,6 @@ public class MainWindow : MonoBehaviour
 
     #endregion
 
-    #region graphs
-    /*
-    //loads and inputs data into the steps over the day graph
-    private void LoadActivityGraph(JsonData stepsJson, JsonData distanceJson)
-    {
-        StepsData(stepsJson);
-        DistanceData(distanceJson);
-
-        //creating the x axis points
-        List<string> xPoints = new List<string>();
-        for (int i = 0; i < 24; i++)
-        {
-            //xPoints.Add(i.ToString() + ((i >= 12) ? " pm" : " am"));
-
-            if(i == 0)
-            {
-                xPoints.Add("12 am");
-            }
-            else if(i >= 12)
-            {
-                xPoints.Add((i - 12).ToString() + " pm");
-            }
-            else
-            {
-                xPoints.Add(i.ToString() + " am");
-            }
-        }
-
-        activityChart.SetSingleAxisPoints(xPoints);
-    }
-
-    //plotting the steps data on the activity graph
-    private void StepsData(JsonData json)
-    {
-        List<double> steps = new List<double>();
-
-        for (int i = 0; i < json["bucket"].Count; i++)
-        {
-            JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
-
-            double item = 0;
-
-            try
-            {
-                item = double.Parse(stepData[0]["value"][0]["intVal"].ToString());
-            }
-            catch (ArgumentOutOfRangeException) { }
-            catch (KeyNotFoundException) { }
-
-            steps.Add(item);
-        }
-
-        int remainder = 24 - steps.Count;
-
-        for (int i = 0; i < remainder; i++)
-        {
-            steps.Add(0);
-        }
-
-        //Debug.Log("[ActivityGraphAndroid]", () => steps.Count);
-
-        activityChart.SetSerieData(steps, 0);
-    }
-
-    //plotting the distance data on the activity graph
-    private void DistanceData(JsonData json)
-    {
-        List<double> distance = new List<double>();
-
-        for (int i = 0; i < json["bucket"].Count; i++)
-        {
-            JsonData stepData = json["bucket"][i]["dataset"][0]["point"];
-
-            double item = 0;
-
-            try
-            {
-                item = double.Parse(stepData[0]["value"][0]["fpVal"].ToString());
-            }
-            catch (ArgumentOutOfRangeException) { }
-            catch (KeyNotFoundException) { }
-
-            double distanceKM = Math.Round((item / 1000), 2);
-
-            distance.Add(distanceKM);
-        }
-
-        int remainder = 24 - distance.Count;
-
-        for (int i = 0; i < remainder; i++)
-        {
-            distance.Add(0);
-        }
-
-        Debug.Log("[ActivityGraphAndroid]", () => distance.Count);
-
-        activityChart.SetSerieData(distance, 1);
-    }
-    */
-    #endregion
-
-
 #endif
 
     #endregion
@@ -599,147 +490,6 @@ public class MainWindow : MonoBehaviour
     }
 
     #endregion
-
-    #region graphs
-    /*
-    //loads and inputs data into the steps over the day graph
-    private async Task LoadActivityGraph()
-    {
-        DateTime endOfDay = DateTime.Today.AddDays(1);
-        DateTime startOfDay = DateTime.Today;
-
-        //getting the data
-        List<APIManager.HealthKit.QuantityData> stepsQuantityData = await APIManager.HealthKit.GetStepsList(startOfDay, endOfDay);
-        List<APIManager.HealthKit.QuantityData> distanceQuantityData = await APIManager.HealthKit.GetDistanceList(startOfDay, endOfDay);
-
-
-        //Debug.Log("[ActivityGraphIOS]", () => stepsQuantityData.Count);
-
-        //for (int i = 0; i < stepsQuantityData.Count; i++)
-        //{
-        //    Debug.LogFormat("[ActivityGraphIOS] Item {0} is value {1} for start date of {2} and end date of {3}",
-        //        i, stepsQuantityData[i].value, stepsQuantityData[i].startDate, stepsQuantityData[i].endDate);
-        //}
-
-
-        #region steps count up
-
-        List<double> stepsCountPerHour = new List<double>();
-
-        for (int i = 0; i < 24; i++)
-        {
-            try
-            {
-                double hourTotal = 0;
-
-                for (int z = 0; z < stepsQuantityData.Count; z++)
-                {
-                    DateTime averageDate = UsefulFunctions.AverageDateBetweenDateTimes(new List<DateTime>()
-                    {
-                        stepsQuantityData[z].startDate,
-                        stepsQuantityData[z].endDate
-
-                    });
-
-
-                    if (averageDate.Hour == i)
-                    {
-                        hourTotal += stepsQuantityData[z].value;
-                    }
-                }
-
-                stepsCountPerHour.Add(hourTotal);
-
-
-                //Debug.Log("[ActivityGraphIOS] For hour " + i + ", user has done " + hourTotal);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                //Debug.Log("[ActivityGraphIOS] For hour " + i + ", user has done 0 steps, (argumant out of range)");
-
-                stepsCountPerHour.Add(0);
-            }
-        }
-
-        #endregion
-
-
-        #region distance count up
-
-        List<double> distanceCountPerHour = new List<double>();
-
-        for (int i = 0; i < 24; i++)
-        {
-            try
-            {
-                double hourTotal = 0;
-
-                for (int z = 0; z < distanceQuantityData.Count; z++)
-                {
-                    DateTime averageDate = UsefulFunctions.AverageDateBetweenDateTimes(new List<DateTime>()
-                    {
-                        distanceQuantityData[z].startDate,
-                        distanceQuantityData[z].endDate
-
-                    });
-
-                    double value = Math.Round(distanceQuantityData[z].value, 2);
-
-
-                    if (averageDate.Hour == i)
-                    {
-                        hourTotal += value;
-                    }
-                }
-
-                distanceCountPerHour.Add(hourTotal);
-
-
-                //Debug.Log("[ActivityGraphIOS] For hour " + i + ", user has done " + hourTotal);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                //Debug.Log("[ActivityGraphIOS] For hour " + i + ", user has made 0 distance, (argumant out of range)");
-
-                distanceCountPerHour.Add(0);
-            }
-        }
-
-        #endregion
-
-
-
-        //creating the x axis points
-        List<string> xPoints = new List<string>();
-        for (int i = 0; i < 24; i++)
-        {
-            //xPoints.Add(i.ToString() + ((i >= 12) ? " pm" : " am"));
-
-            if(i == 0)
-            {
-                xPoints.Add("12 am");
-            }
-            else if(i >= 12)
-            {
-                xPoints.Add((i - 12).ToString() + " pm");
-            }
-            else
-            {
-                xPoints.Add(i.ToString() + " am");
-            }
-        }
-
-        activityChart.SetXAxisPoints(xPoints);
-
-
-        //inputting the data into the chart
-        activityChart.SetSerieData(stepsCountPerHour, 0);
-        activityChart.SetSerieData(distanceCountPerHour, 1);
-    }
-    */
-
-    #endregion
-
 
 #endif
 
