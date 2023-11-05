@@ -18,7 +18,7 @@ public class GoalsWindow : MonoBehaviour
 
 
 
-    private void Start()
+    private void Awake()
     {
         CanvasManager.instance.mainWindow.onMainScreenLoaded += LoadGoalsWindow;
 
@@ -93,5 +93,12 @@ public class GoalsWindow : MonoBehaviour
         
 
 #endif
+    }
+
+
+
+    private void CalculateStreak(List<double> stepsOverWeek)
+    {
+
     }
 }

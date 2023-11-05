@@ -97,21 +97,29 @@ public class SwipeManager : MonoBehaviour
 
     private void SwipeLeft()
     {
+        Debug.Log("[SwipeManager] Swiped left");
+
         onSwipeLeft?.Invoke();
     }
 
     private void SwipeRight()
     {
+        Debug.Log("[SwipeManager] Swiped right");
+
         onSwipeRight?.Invoke();
     }
 
     private void SwipeDown()
     {
+        Debug.Log("[SwipeManager] Swiped down");
+
         onSwipeDown?.Invoke();
     }
 
     private void SwipeUp()
     {
+        Debug.Log("[SwipeManager] Swiped up");
+
         onSwipeUp?.Invoke();
     }
 }
