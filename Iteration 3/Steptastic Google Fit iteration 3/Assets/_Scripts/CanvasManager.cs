@@ -24,7 +24,7 @@ public class CanvasManager : MonoBehaviour
 
     [Space]
     public AuthenticateWindow authenticateWindow;
-    public RequestUserLocationWindow requestUserLocationWindow; //code in later
+    public RequestUserLocationWindow requestUserLocationWindow;
     public ChallengeSetupWindow challengeSetupWindow;
 
     [Space]

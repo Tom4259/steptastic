@@ -154,4 +154,10 @@ public class UsefulFunctions
                 return num + "th";
         }
     }
+
+
+    public static DateTime StartOfWeek()
+    {
+        return DateTime.Today.AddDays(-((int)DateTime.Today.DayOfWeek - 1));
+	}
 }

@@ -70,7 +70,7 @@ public class MainWindow : MonoBehaviour
         //shows the user their start and end Location
         //startLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName).Replace(",", ", ");
         //endLocation.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName).Replace(",", ", ");
-        onMainScreenLoaded?.Invoke();
+        
 
         ResetUIBlockText();
         //await GetMapImage();
@@ -82,6 +82,8 @@ public class MainWindow : MonoBehaviour
 
         AnimateScreen();
 
+
+		onMainScreenLoaded?.Invoke();
 
 
 		DebugCanvas.instance.OnMainScreenOpen();
@@ -97,9 +99,6 @@ public class MainWindow : MonoBehaviour
         {
             progressBar.percent = f;
         }, 0, percentage, animationTime).setEaseInOutCubic();
-
-
-		//activityChart.AnimateGraph();
 
 
 		int stepsToday = int.Parse(stepsTodayText.text);

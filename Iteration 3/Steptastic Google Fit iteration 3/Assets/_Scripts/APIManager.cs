@@ -397,12 +397,12 @@ public class APIManager : MonoBehaviour
 			// returns true if the user is authenticated
 			public static async Task<bool> CheckPermissions()
 			{
-				double stespOverYear = await GetSteps(DateTime.Now.AddMonths(-1), DateTime.Now);
+				double stepsOver3Months = await GetSteps(DateTime.Today.AddMonths(-3), DateTime.Now);
 
-				double distanceOverYear = await GetDistance(DateTime.Now.AddMonths(-1), DateTime.Now);
+				double distanceOver3Months = await GetDistance(DateTime.Today.AddMonths(-3), DateTime.Now);
 
 
-				return !(stespOverYear == 0 || distanceOverYear == 0);
+				return !(stepsOver3Months == 0 || distanceOver3Months == 0);
 			} 
 		}
 

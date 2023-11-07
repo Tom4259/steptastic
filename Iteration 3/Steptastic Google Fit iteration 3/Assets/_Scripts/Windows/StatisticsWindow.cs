@@ -40,12 +40,6 @@ public class StatisticsWindow : MonoBehaviour
 
 
 
-
-
-	private RectTransform RT;
-	private Vector2 startPosition;
-
-
 	private LoadedData loadedStepsDay = null;
 	private LoadedData loadedStepsWeek = null;
 
@@ -67,19 +61,14 @@ public class StatisticsWindow : MonoBehaviour
 
     private void Start()
 	{
-		RT = GetComponent<RectTransform>();
-		startPosition = new Vector2 (CanvasManager.instance.GetComponent<CanvasScaler>().referenceResolution.x, 0);
+		CanvasManager.instance.mainWindow.onMainScreenLoaded += UpdateUI;
 	}
 
 
 	public void OpenWindow(int dataType)
 	{
-		RT.anchoredPosition = startPosition;
-
 		dataTypeDropdown.SetDropdownIndex(dataType);
 		dataTypeDropdown.items[dataType].OnItemSelection.Invoke();
-
-		LeanTween.move(RT, Vector2.zero, CanvasManager.windowAnimationTime).setEaseInOutCubic();
 
 		UpdateUI();
 	}
@@ -292,7 +281,7 @@ public class StatisticsWindow : MonoBehaviour
 
 	public async void GetDataWeek(int dataType)
 	{
-		DateTime startRequest = DateTime.Today.AddDays(-((int)DateTime.Today.DayOfWeek - 1));
+		DateTime startRequest = UsefulFunctions.StartOfWeek();
 		DateTime endRequest = DateTime.Now;
 
 		JsonData json1;
@@ -324,8 +313,8 @@ public class StatisticsWindow : MonoBehaviour
 		#region getting data and setting json1 to last week and json 2 to today
 
 
-		startRequest = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek - 1);
-		endRequest = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek - 1).AddDays(7);
+		startRequest = UsefulFunctions.StartOfWeek();
+		endRequest = startRequest.AddDays(7);
 
 		APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest, 604800000);
 
@@ -335,7 +324,7 @@ public class StatisticsWindow : MonoBehaviour
 
 
 
-		startRequest = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek - 1);
+		startRequest = UsefulFunctions.StartOfWeek();
 		endRequest = DateTime.Now;
 
 		APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest);
@@ -424,8 +413,9 @@ public class StatisticsWindow : MonoBehaviour
 		else thisWeekValue.text = (await APIManager.HealthKit.GetDistance(start, end)).ToString();
 
 		start = DateTime.Today.AddDays(-7);
-		end = DateTime.Today.AddDays(-6);
+		end = start.AddHours(23).AddMinutes(59).AddSeconds(59).AddMilliseconds(1000);
 		//end = DateTime.Today.AddDays(-7).AddHours(23).AddMinutes(59).AddSeconds(59).AddMilliseconds(1000);
+
 		Debug.Log(start.ToString("g"));
 		Debug.Log(end.ToString("g"));
 
@@ -439,7 +429,7 @@ public class StatisticsWindow : MonoBehaviour
 	{
 		#region graph
 
-		DateTime start = DateTime.Today.AddDays(-((int)DateTime.Today.DayOfWeek - 1));
+		DateTime start = UsefulFunctions.StartOfWeek();
 		DateTime end = DateTime.Now;
 
 
