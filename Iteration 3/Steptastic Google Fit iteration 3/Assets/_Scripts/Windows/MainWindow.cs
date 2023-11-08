@@ -16,7 +16,18 @@ public class MainWindow : MonoBehaviour
 
     public NavigationBar navigationBar;
 
-    [Space(10)]
+    [Space(5)]
+	public GoalsWindow goalsWindow;
+
+	[Space(5)]
+	public StatisticsWindow statisticsWindow;
+
+	//[Space(5)]
+	//public SettingsWindow settingsWindow;
+
+
+
+	[Space(10)]
     [Header("Home screen")]
     public GameObject homeScreen;
     [Space(5)]
@@ -46,10 +57,8 @@ public class MainWindow : MonoBehaviour
     public Image mapImage;
 
 
-    [Space(20)]
-    public GoalsWindow goalsWindow;
-    public StatisticsWindow statisticsWindow;
-    //public SettingsWindow settingsWindow;
+
+    public UnityAction onMainScreenLoaded;
 
 
     private void Start()
@@ -85,17 +94,10 @@ public class MainWindow : MonoBehaviour
         AnimateScreen();
 
 
-        LoadOtherWindows();
+        onMainScreenLoaded?.Invoke();
 
 
 		DebugCanvas.instance.OnMainScreenOpen();
-    }
-
-
-    private void LoadOtherWindows()
-    {
-        statisticsWindow.UpdateUI();
-        goalsWindow.LoadGoalsWindow();
     }
 
 

@@ -8,6 +8,7 @@ using LitJson;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Threading;
 
 #if UNITY_IOS || UNITY_EDITOR
 using BeliefEngine.HealthKit;
@@ -361,6 +362,11 @@ public class APIManager : MonoBehaviour
 		static HealthKitService HK = HealthKitService.Instance;
 
 
+
+		private static SemaphoreSlim HKFree = new SemaphoreSlim(1, 1);
+
+
+
 		public class Authorisation
 		{
 			private static bool authorisationWindowCompleted = false;
@@ -428,6 +434,9 @@ public class APIManager : MonoBehaviour
 
 		public static async Task<double> GetSteps(DateTime startPoint, DateTime endPoint)
 		{
+			await HKFree.WaitAsync();
+
+
 			double totalSteps = 0;
 			bool done = false;
 
@@ -453,8 +462,11 @@ public class APIManager : MonoBehaviour
 
 			while (!done)
 			{
-				await Task.Delay(250);
+				await Task.Delay(100);
 			}
+
+
+			HKFree.Release();
 
 			return totalSteps;
 		}
@@ -462,6 +474,9 @@ public class APIManager : MonoBehaviour
 
 		public static async Task<double> GetDistance(DateTimeOffset startPoint, DateTimeOffset endPoint)
 		{
+			await HKFree.WaitAsync();
+
+
 			double totalDistance = 0;
 			bool done = false;
 
@@ -490,8 +505,10 @@ public class APIManager : MonoBehaviour
 
 			while (!done)
 			{
-				await Task.Delay(250);
+				await Task.Delay(100);
 			}
+
+			HKFree.Release();
 
 			return totalDistance;
 		}
@@ -502,6 +519,9 @@ public class APIManager : MonoBehaviour
 
 		public static async Task<List<QuantityData>> GetStepsList(DateTime startPoint, DateTime endPoint)
 		{
+			await HKFree.WaitAsync();
+
+
 			List<QuantityData> stepsList = new List<QuantityData>();
 			bool done = false;
 
@@ -527,7 +547,7 @@ public class APIManager : MonoBehaviour
 				}
 				else
 				{
-					Debug.LogWarning("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+					Debug.LogWarning("[HealthKitAPI] Samples count is " + samplesW.Count + " start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
 
 					done = true;
 				}
@@ -535,8 +555,10 @@ public class APIManager : MonoBehaviour
 
 			while (!done)
 			{
-				await Task.Delay(250);
+				await Task.Delay(100);
 			}
+
+			HKFree.Release();
 
 			return stepsList;
 		}
@@ -544,6 +566,9 @@ public class APIManager : MonoBehaviour
 
 		public static async Task<List<QuantityData>> GetDistanceList(DateTime startPoint, DateTime endPoint)
 		{
+			await HKFree.WaitAsync();
+
+
 			List<QuantityData> distanceList = new List<QuantityData>();
 			bool done = false;
 
@@ -579,6 +604,8 @@ public class APIManager : MonoBehaviour
 			{
 				await Task.Delay(250);
 			}
+
+			HKFree.Release();
 
 			return distanceList;
 		}

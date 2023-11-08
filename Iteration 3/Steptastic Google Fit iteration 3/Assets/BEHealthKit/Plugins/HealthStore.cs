@@ -639,14 +639,10 @@ namespace BeliefEngine.HealthKit
 				return;
 			}
 
-			Debug.Log("[BEHealthKit]", () => xmlString);
-			Debug.LogToFile(xmlString, Application.persistentDataPath + "/log.txt");
-			SaveLoad<string>.Save(xmlString, Application.persistentDataPath, "log.txt");
-
 			HealthData xml = new HealthData(xmlString);
 			if (xml == null)
 			{
-				Debug.LogError("[BEHealthKit] uncaught errror parsing health XML");
+				Debug.LogError("[BEHealthKit] Uncaught errror parsing health XML");
 				return;
 			}
 			string rootName = xml.RootName();

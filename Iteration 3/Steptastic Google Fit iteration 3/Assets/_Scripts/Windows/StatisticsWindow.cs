@@ -61,7 +61,15 @@ public class StatisticsWindow : MonoBehaviour
 
     private void Start()
 	{
-		//CanvasManager.instance.mainWindow.onMainScreenLoaded += UpdateUI;
+		CanvasManager.instance.mainWindow.onMainScreenLoaded += StartWindow;
+	}
+
+	public void StartWindow()
+	{
+		dataTypeDropdown.SetDropdownIndex(0);
+		dataTypeDropdown.items[0].OnItemSelection.Invoke();
+
+		UpdateUI();
 	}
 
 
