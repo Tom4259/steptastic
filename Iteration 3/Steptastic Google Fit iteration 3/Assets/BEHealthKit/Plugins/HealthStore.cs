@@ -639,6 +639,8 @@ namespace BeliefEngine.HealthKit
 				return;
 			}
 
+			Debug.Log("[BEHealthKit]", () => xmlString);
+
 			HealthData xml = new HealthData(xmlString);
 			if (xml == null)
 			{
