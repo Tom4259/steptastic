@@ -640,6 +640,7 @@ namespace BeliefEngine.HealthKit
 			}
 
 			Debug.Log("[BEHealthKit]", () => xmlString);
+			Debug.LogToFile(xmlString, Application.persistentDataPath + "/log.txt");
 
 			HealthData xml = new HealthData(xmlString);
 			if (xml == null)
