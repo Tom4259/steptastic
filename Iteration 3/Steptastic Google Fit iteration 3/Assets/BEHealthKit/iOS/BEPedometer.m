@@ -33,12 +33,7 @@
 - (void)queryPedometerDataFromDate:(NSDate *)start toDate:(NSDate *)end
 {
 	[self.pedometer queryPedometerDataFromDate:start toDate:end withHandler:^(CMPedometerData *pedometerData, NSError *error) {
-		// foo
-		if (error) {
-			NSLog(@"error: %@", error);
-			return;
-		}
-		NSString *xml = xml = [HealthData XMLFromPedometerData:pedometerData];
+		NSString *xml = xml = [HealthData XMLFromPedometerData:pedometerData error:error];
 		UnitySendMessage([[BEHealthKit sharedHealthKit].controllerName cStringUsingEncoding:NSUTF8StringEncoding], "ParseHealthXML", [xml cStringUsingEncoding:NSUTF8StringEncoding]);
 	}];
 }
@@ -46,11 +41,7 @@
 - (void)startPedometerUpdatesFromDate:(NSDate *)start
 {
 	[self.pedometer startPedometerUpdatesFromDate:start withHandler:^(CMPedometerData *pedometerData, NSError *error) {
-		if (error) {
-			NSLog(@"error: %@", error);
-			return;
-		}
-		NSString *xml = xml = [HealthData XMLFromPedometerData:pedometerData];
+		NSString *xml = xml = [HealthData XMLFromPedometerData:pedometerData error:error];
 		NSLog(@"update: (%@ -> %@) : %@", pedometerData.startDate, pedometerData.endDate, pedometerData.numberOfSteps);
 		UnitySendMessage([[BEHealthKit sharedHealthKit].controllerName cStringUsingEncoding:NSUTF8StringEncoding], "ParseHealthXML", [xml cStringUsingEncoding:NSUTF8StringEncoding]);
 	}];

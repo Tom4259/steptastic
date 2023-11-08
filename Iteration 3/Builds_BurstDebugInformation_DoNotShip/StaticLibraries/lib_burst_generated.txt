@@ -21,6 +21,7 @@ Library: /Users/tom/Developer/Unity/steptastic/Iteration 3/Steptastic Google Fit
 --assembly-defines=System;
 --assembly-defines=System.Numerics;
 --assembly-defines=System.Xml;
+--assembly-defines=System.Xml.Linq;
 --assembly-defines=Unity.2D.Animation.Runtime;
 --assembly-defines=Unity.Burst;
 --assembly-defines=Unity.Burst.Unsafe;

@@ -360,3 +360,20 @@ CGFloat R(FRange range) {
 }
 
 @end
+
+
+void _GenerateDummyData(char *dataTypesString)
+{
+	BEHealthKit *kit = [BEHealthKit sharedHealthKit];
+	NSArray *types = parseTransmission(dataTypesString);
+	NSArray *combined = [[[NSSet setWithArray:types[0]] setByAddingObjectsFromSet:[NSSet setWithArray:types[1]]] allObjects];
+	[kit authorizeHealthKitToRead:types[0] write:combined completion:^(bool success, NSError *error) {
+		if (!success) {
+			NSLog(@"Error authorizing healthkit:%@", error);
+			[kit errorOccurred:error];
+			return;
+		} else {
+			[kit generateDummyData];
+		}
+	}];
+}

@@ -11,8 +11,7 @@
 
 @implementation NSError (XML)
 
-
-- (NSString *)XMLString
+- (NSDictionary *)dictionary
 {
 	NSMutableDictionary *dict = [NSMutableDictionary dictionary];
 	dict[XMLDictionaryNodeNameKey] = @"error";
@@ -21,7 +20,12 @@
 	dict[@"domain"] = self.domain;
 	dict[@"userInfo"] = self.userInfo;
 	
-	return [dict XMLString];
+	return dict;
+}
+
+- (NSString *)XMLString
+{
+	return [[self dictionary] XMLString];
 }
 
 

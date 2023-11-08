@@ -61,7 +61,7 @@ public class StatisticsWindow : MonoBehaviour
 
     private void Start()
 	{
-		CanvasManager.instance.mainWindow.onMainScreenLoaded += UpdateUI;
+		//CanvasManager.instance.mainWindow.onMainScreenLoaded += UpdateUI;
 	}
 
 
@@ -75,7 +75,7 @@ public class StatisticsWindow : MonoBehaviour
 
 	public void UpdateUI()
 	{
-		Debug.Log("[Statistics] Updating UI");
+		//Debug.Log("[Statistics] Updating UI");
 
 		//updating the new view
 		if (dataTypeDropdown.selectedItemIndex == 0 && viewPeriodDropdown.selectedItemIndex == 0)
@@ -115,7 +115,7 @@ public class StatisticsWindow : MonoBehaviour
 				break;
 		}
 
-		Debug.Log("[Statistics]", () => currentView);
+		//Debug.Log("[Statistics]", () => currentView);
 	}
 
 
@@ -386,17 +386,13 @@ public class StatisticsWindow : MonoBehaviour
 		List<APIManager.HealthKit.OrderedQuantityData> orderedData = APIManager.HealthKit.OrderQuantityListHour(data);
 
 
-		for (int i = 0; i < orderedData.Count; i++)
-		{
-			Debug.Log("[Statistics] DAY:   " + orderedData[i].timeOfData.ToString("t") + " value: " + orderedData[i].value);
-		}
-
-
 		List<double> dayValues = new List<double>( new double[24]);
 
 
 		for (int i = 0; i < orderedData.Count; i++)
 		{
+			//Debug.Log("[Statistics] DAY:   " + orderedData[i].timeOfData.ToString("t") + " value: " + orderedData[i].value);
+
 			dayValues[orderedData[i].timeOfData.Hour - 1] = orderedData[i].value;
 		}
 
@@ -416,8 +412,8 @@ public class StatisticsWindow : MonoBehaviour
 		end = start.AddHours(23).AddMinutes(59).AddSeconds(59).AddMilliseconds(1000);
 		//end = DateTime.Today.AddDays(-7).AddHours(23).AddMinutes(59).AddSeconds(59).AddMilliseconds(1000);
 
-		Debug.Log(start.ToString("g"));
-		Debug.Log(end.ToString("g"));
+		//Debug.Log(start.ToString("g"));
+		//Debug.Log(end.ToString("g"));
 
 		if (dataType == 0) lastWeekValue.text = (await APIManager.HealthKit.GetSteps(start, end)).ToString();
 		else lastWeekValue.text = (await APIManager.HealthKit.GetDistance(start, end)).ToString();
@@ -450,17 +446,13 @@ public class StatisticsWindow : MonoBehaviour
 		List<APIManager.HealthKit.OrderedQuantityData> orderedData = APIManager.HealthKit.OrderQuantityListDay(data);
 
 
-		for (int i = 0; i < orderedData.Count; i++)
-		{
-			Debug.Log("[Statistics] WEEK:   " + orderedData[i].timeOfData.ToString("d") + " value: " + orderedData[i].value);
-		}
-
-
 		List<double> weekValues = new List<double>(new double[7]);
 
 
 		for (int i = 0; i < orderedData.Count; i++)
 		{
+			//Debug.Log("[Statistics] WEEK:   " + orderedData[i].timeOfData.ToString("d") + " value: " + orderedData[i].value);
+
 			weekValues[(int)orderedData[i].timeOfData.DayOfWeek - 1] = orderedData[i].value;
 		}
 
@@ -516,7 +508,7 @@ public class StatisticsWindow : MonoBehaviour
         }
 
         //Debug.Log("[Statistics]", () => totalValue);
-        Debug.Log("[Statistics]", () => weekValues.Count);
+        //Debug.Log("[Statistics]", () => weekValues.Count);
 
         dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
         dataOverPeriodChart.SetSerieData(weekValues, 0);

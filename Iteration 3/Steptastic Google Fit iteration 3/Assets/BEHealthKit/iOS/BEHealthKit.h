@@ -10,6 +10,11 @@
 #import <HealthKit/HealthKit.h>
 #import "BEPedometer.h"
 
+#define BEHK_ERROR_UNKNOWN_DATATYPE 2001
+#define BEHK_ERROR_HK_UNAVAILABLE 1001
+#define BEHK_ERROR_NO_DEFAULT_UNIT 1003
+#define BEHK_ERROR_TYPE_NOT_FOUND 1404
+#define BEHK_ERROR_FEATURE_UNAVAILABLE 1005
 
 /*! @brief Handles HealthKit requests from Unity.
  */
@@ -18,6 +23,7 @@
 @property HKHealthStore *healthStore; /*!< @brief The HKHealthStore object */
 @property NSString *controllerName;	/*!< @brief name of the GameObject to send messages to */
 @property (nonatomic, strong) BEPedometer *pedometer; /*!< @brief The BEPedometer object */
+@property (nonatomic, strong) NSDictionary *longRunningQueries;
 
 /*! @brief returns the shared BEHealthKit object */
 + (instancetype)sharedHealthKit;
@@ -36,33 +42,6 @@
  */
 - (void)authorizeHealthKitToRead:(NSArray *)readIdentifiers write:(NSArray *)writeIdentifiers completion:(void (^)(bool success, NSError *error))completion;
 
-/*! @brief					 read quantity, category or correlation samples.
-	@details				 Executes a query with -initWithSampleType:predicate:limit:sortDescriptors:resultsHandler:. Limit will be set to no limit, and they will be sorted by startDate, in ascending order.
-	@param sampleType		 the type of sample to read.
-	@param startDate		 the starting limit for the query.
-	@param endDate			 the end date.
-	@param resultsHandler	 Called when the query finishes executing. If unsuccessful, error contains information about what went wrong, otherwise it will be set to nil.
- */
-- (void)readSamples:(HKSampleType *)sampleType fromDate:(NSDate *)startDate toDate:(NSDate *)endDate resultsHandler:(void (^)(NSArray *results, NSError *error))resultsHandler;
-
-
-/*! @brief					read a characteristic.
-	@details				Characteristics are things that don't change over time, like blood type or birth date.
-	@param characteristic	The characteristic to read.
-	@param resultsHandler	Called when the query finishes executing. If unsuccessful, error contains information about what went wrong, otherwise it will be set to nil.
- */
-- (void)readCharacteristic:(HKCharacteristicType *)characteristic resultsHandler:(void (^)(id result, NSError *error))resultsHandler;
-
-
-/*! @brief					read workout samples
-	@details				...
-	@param activity		The activity type to read. See [HKWorkoutActivityType documentation](https://developer.apple.com/library/prerelease/ios/documentation/HealthKit/Reference/HealthKit_Constants/index.html#//apple_ref/c/tdef/HKWorkoutActivityType)
-	@param startDate		the starting limit for the query.
-	@param endDate			the end date.
-	@param resultsHandler	Called when the query finishes executing. If unsuccessful, error contains information about what went wrong, otherwise it will be set to nil.
- */
-- (void)readSamplesForWorkoutActivity:(HKWorkoutActivityType)activity fromDate:(NSDate *)startDate toDate:(NSDate *)endDate resultsHandler:(void (^)(NSArray *results, NSError *error))resultsHandler;
-
 
 /*! @brief			Sends an error back to Unity.
 	@details		Converts the error to XML (See NSError+XML.h), and calls ErrorOccurred() on the HealthStore GameObject.
@@ -78,9 +57,18 @@
  */
 - (HKUnit *)defaultUnitForSampleType:(HKSampleType *)sampleType;
 
-
-// ----------------------------------
-
-
+- (void)addLongRunningQuery:(HKQuery *)query forType:(HKSampleType *)sampleType;
 
 @end
+
+
+// hooks for external interface
+// ----------------------------
+void _InitializeNative(char *controllerName);
+void _Authorize(char *dataTypesString);
+int _AuthorizationStatusForType(char *dataTypeString);
+BOOL _IsHealthDataAvailable();
+
+// internal
+NSArray *parseTransmission(char *dataTypesString);
+

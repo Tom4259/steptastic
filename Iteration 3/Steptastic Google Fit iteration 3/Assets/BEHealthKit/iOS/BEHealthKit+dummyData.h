@@ -16,3 +16,5 @@
 - (void)generateDummyData;
 
 @end
+
+void _GenerateDummyData();

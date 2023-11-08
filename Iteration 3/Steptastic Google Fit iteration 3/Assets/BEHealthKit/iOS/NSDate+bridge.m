@@ -7,37 +7,29 @@
 //
 
 #import "NSDate+bridge.h"
+#import	"NSNumber+bridge.h"
 
 @implementation NSDate (conversion)
-
-+ (NSNumberFormatter *)bridgeFormatter
-{
-	static NSNumberFormatter *format = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		format = [[NSNumberFormatter alloc] init];
-		format.numberStyle = NSNumberFormatterDecimalStyle;
-	});
-	return format;
-}
-
 
 + (instancetype)dateFromToken:(NSNumber *)n
 {
 	NSDate *date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)[n doubleValue]];
+	// NSLog(@"date from token '%@' => %@", n, date);
 	return date;
 }
 
 + (instancetype)dateFromBridgeString:(char *)stamp
 {
-	NSNumber *n = [[self bridgeFormatter] numberFromString:[NSString stringWithCString:stamp encoding:NSUTF8StringEncoding]];
+	NSString *str = [NSString stringWithCString:stamp encoding:NSUTF8StringEncoding];
+	NSNumber *n = [[NSNumber bridgeFormatter] numberFromString:str];
+	// NSLog(@"reading bridge string '%s' => '%@' => %@", stamp, str, n);
 	return [self dateFromToken:n];
 }
 
-- (NSNumber *)bridgeToken
+- (NSString *)bridgeToken
 {
 	NSTimeInterval token = [self timeIntervalSince1970];
-	return @(token);
+	return [[NSNumber bridgeFormatter] stringFromNumber:@(token)];
 }
 
 @end

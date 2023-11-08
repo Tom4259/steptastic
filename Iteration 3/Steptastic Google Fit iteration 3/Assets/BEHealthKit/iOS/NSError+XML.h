@@ -12,6 +12,10 @@
  */
 @interface NSError (XML)
 
+/*! @brief 			dictionary representation for XML generation.
+ */
+- (NSDictionary *)dictionary;
+
 /*! @brief 			generate XML from an error.
  */
 - (NSString *)XMLString;

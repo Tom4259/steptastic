@@ -5,13 +5,12 @@ using UnityEngine;
 
 public class testingScript : MonoBehaviour
 {
-    public void Start()
+    public async void Start()
     {
-        List<string> thelist = new List<string>(new string[10]);
 
-        for (int i = 0; i < thelist.Count; i++)
-        {
-            Debug.Log(thelist[i]);
-        }
+        //Debug.Log("HERE!");
+        //List<APIManager.HealthKit.QuantityData> d = await APIManager.HealthKit.GetStepsList(DateTime.Today, DateTime.Now);
+
+        //Debug.Log(d.Count + " gegege");
     }
 }

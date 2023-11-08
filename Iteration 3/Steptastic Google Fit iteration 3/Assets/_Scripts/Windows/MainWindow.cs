@@ -19,7 +19,6 @@ public class MainWindow : MonoBehaviour
     [Space(10)]
     [Header("Home screen")]
     public GameObject homeScreen;
-    public StatisticsWindow statisticsWindow;
     [Space(5)]
     public TMP_Text todayDate;
 
@@ -29,25 +28,28 @@ public class MainWindow : MonoBehaviour
 	public CircleProgressBar progressBar;
 	private float animationTime = 1;
 
-    [Space(5)]
+
 	[Header("Smaller UI blocks")]
     [Header("Steps")]
 	public TMP_Text stepsTodayText;
 	//public TMP_Text stepsGoalText;
 	public ImageFillController stepsGoalProgressBar;
 
-    [Space(2)]
+
     [Header("Distance")]
     public TMP_Text distanceTodayText;
     //public TMP_Text distanceGoalText;
     public ImageFillController distanceGoalProgressBar;
 
-    [Space(5)]
+
     [Header("Map visualisation")]
     public Image mapImage;
 
 
-    public UnityAction onMainScreenLoaded;
+    [Space(20)]
+    public GoalsWindow goalsWindow;
+    public StatisticsWindow statisticsWindow;
+    //public SettingsWindow settingsWindow;
 
 
     private void Start()
@@ -83,11 +85,19 @@ public class MainWindow : MonoBehaviour
         AnimateScreen();
 
 
-		onMainScreenLoaded?.Invoke();
+        LoadOtherWindows();
 
 
 		DebugCanvas.instance.OnMainScreenOpen();
     }
+
+
+    private void LoadOtherWindows()
+    {
+        statisticsWindow.UpdateUI();
+        goalsWindow.LoadGoalsWindow();
+    }
+
 
 	//animates the screen
 	private void AnimateScreen()

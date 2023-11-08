@@ -431,7 +431,7 @@ public class APIManager : MonoBehaviour
 			double totalSteps = 0;
 			bool done = false;
 
-			HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW)
+			HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
 			{
 				if (samplesW.Count > 0)
 				{
@@ -453,7 +453,7 @@ public class APIManager : MonoBehaviour
 
 			while (!done)
 			{
-				await Task.Delay(500);
+				await Task.Delay(250);
 			}
 
 			return totalSteps;
@@ -465,7 +465,7 @@ public class APIManager : MonoBehaviour
 			double totalDistance = 0;
 			bool done = false;
 
-			HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW)
+			HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
 			{
 				if (samplesW.Count > 0)
 				{
@@ -490,7 +490,7 @@ public class APIManager : MonoBehaviour
 
 			while (!done)
 			{
-				await Task.Delay(500);
+				await Task.Delay(250);
 			}
 
 			return totalDistance;
@@ -505,7 +505,7 @@ public class APIManager : MonoBehaviour
 			List<QuantityData> stepsList = new List<QuantityData>();
 			bool done = false;
 
-			HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW)
+			HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
 			{
 				if (samplesW.Count > 0)
 				{
@@ -535,7 +535,7 @@ public class APIManager : MonoBehaviour
 
 			while (!done)
 			{
-				await Task.Delay(500);
+				await Task.Delay(250);
 			}
 
 			return stepsList;
@@ -547,7 +547,7 @@ public class APIManager : MonoBehaviour
 			List<QuantityData> distanceList = new List<QuantityData>();
 			bool done = false;
 
-			HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW)
+			HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
 			{
 				if (samplesW.Count > 0)
 				{
@@ -577,7 +577,7 @@ public class APIManager : MonoBehaviour
 
 			while (!done)
 			{
-				await Task.Delay(500);
+				await Task.Delay(250);
 			}
 
 			return distanceList;

@@ -108,9 +108,19 @@ public class DebugCanvas : MonoBehaviour
 
         objectsToHide.SetActive(false);
     }
-    
 
-    public void DevLogin()
+
+
+
+	private void Update()
+	{
+        //Debug.Log(CanvasManager.instance.mainWindow.goalsWindow.isActiveAndEnabled);
+	}
+
+
+
+
+	public void DevLogin()
     {
         CanvasManager.instance.authenticateWindow.UserAuthenticated();
 

@@ -30,6 +30,7 @@
 //
 
 #import "XMLDictionary.h"
+#import "NSNumber+bridge.h"
 
 
 #import <Availability.h>
@@ -149,7 +150,11 @@
     }
     else
     {
-        return [NSString stringWithFormat:@"<%1$@>%2$@</%1$@>", nodeName, [[node description] XMLEncodedString]];
+		NSString *desc = [node description];
+		if ([node isKindOfClass:[NSNumber class]]) {
+			desc = [[NSNumber bridgeFormatter] stringFromNumber:node];
+		}
+		return [NSString stringWithFormat:@"<%1$@>%2$@</%1$@>", nodeName, [desc XMLEncodedString]];
     }
 }
 

@@ -15,6 +15,6 @@
 
 + (instancetype)dateFromBridgeString:(char *)stamp;	/*!< @brief create an NSDate from a timestamp */
 + (instancetype)dateFromToken:(NSNumber *)n; /*!< @brief create an NSDate from a token (UNIX timestamp) */
-- (NSNumber *)bridgeToken; /*!< @brief create a timestamp */
+- (NSString *)bridgeToken; /*!< @brief create a timestamp */
 
 @end
