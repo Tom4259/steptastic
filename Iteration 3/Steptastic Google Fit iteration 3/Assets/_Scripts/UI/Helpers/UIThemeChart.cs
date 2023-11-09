@@ -89,7 +89,6 @@ public class UIThemeChart : MonoBehaviour
 			textStyle = isDark ? darkText : lightText,
 			distance = 8,
 			numericFormatter = XAxisNumericFormatter
-
 		};
 
 		AxisLabel newYAxisLabel = new AxisLabel
@@ -97,7 +96,6 @@ public class UIThemeChart : MonoBehaviour
 			textStyle = isDark ? darkText : lightText,
 			distance = 8,
 			numericFormatter = YAxisNumericFormatter
-
 		};
 
 		AxisLabel newSingleAxisLabel = new AxisLabel()
@@ -105,7 +103,6 @@ public class UIThemeChart : MonoBehaviour
 			textStyle = isDark ? darkText : lightText,
 			distance = 8,
 			numericFormatter = singleAxisNumericFormatter
-
 		};
 
 
