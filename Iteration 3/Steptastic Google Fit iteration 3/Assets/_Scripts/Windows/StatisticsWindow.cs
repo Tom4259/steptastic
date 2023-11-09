@@ -205,7 +205,7 @@ public class StatisticsWindow : MonoBehaviour
 
 	#region data requests, and saving to objects
 
-#if UNITY_ANDROID || UNITY_EDITOR
+#if UNITY_ANDROID// || UNITY_EDITOR
 
 	public async void GetDataDay(int dataType)
 	{
@@ -393,7 +393,6 @@ public class StatisticsWindow : MonoBehaviour
 
 		List<APIManager.HealthKit.OrderedQuantityData> orderedData = APIManager.HealthKit.OrderQuantityListHour(data);
 
-
 		List<double> dayValues = new List<double>( new double[24]);
 
 
@@ -401,7 +400,7 @@ public class StatisticsWindow : MonoBehaviour
 		{
 			//Debug.Log("[Statistics] DAY:   " + orderedData[i].timeOfData.ToString("t") + " value: " + orderedData[i].value);
 
-			dayValues[orderedData[i].timeOfData.Hour - 1] = orderedData[i].value;
+			dayValues[orderedData[i].timeOfData.Hour] = orderedData[i].value;
 		}
 
 
@@ -537,7 +536,7 @@ public class StatisticsWindow : MonoBehaviour
 	{
 		List<string> xAxisPoints = new List<string>
 		{
-			"",
+			"12 am",
 			"",
 			"",
 			"",
@@ -560,7 +559,7 @@ public class StatisticsWindow : MonoBehaviour
 			"",
 			"",
 			"",
-			"",//24
+			"12 am",//24
 
 		};
 
