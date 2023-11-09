@@ -34,8 +34,8 @@ public class NavigationBar : MonoBehaviour
 
 
     private int currentWindowIndex = 0;
-    private int minimumIndex = -1;
-    private int maximumIndex = 2;
+    private int minimumIndex = 0;
+    private int maximumIndex = 1;
 
 
     private void Start()

@@ -113,7 +113,7 @@ public class PlayerPrefsLocations : MonoBehaviour
             public static string weeklyStepGoal = "user.goals.weeklystepgoal";
 
 
-            public static string dailyDistanceGoal = "user.goals.dailydistamcegoal";
+            public static string dailyDistanceGoal = "user.goals.dailydistancegoal";
 
             public static string weeklyDistanceGoal = "user.goals.weeklydistancegoal";
         }

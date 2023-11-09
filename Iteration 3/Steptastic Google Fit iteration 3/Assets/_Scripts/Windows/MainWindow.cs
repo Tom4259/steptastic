@@ -16,14 +16,9 @@ public class MainWindow : MonoBehaviour
 
     public NavigationBar navigationBar;
 
-    [Space(5)]
-	public GoalsWindow goalsWindow;
 
 	[Space(5)]
 	public StatisticsWindow statisticsWindow;
-
-	[Space(5)]
-	public SettingsWindow settingsWindow;
 
 
 
@@ -106,6 +101,13 @@ public class MainWindow : MonoBehaviour
 	{
         float percentage = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted);
 
+        int stepsToday = int.Parse(stepsTodayText.text);
+        float distanceToday = float.Parse(distanceTodayText.text);
+
+        int stepGoal = UserGoals.GetDailyStepGoal();
+        float distanceGoal = UserGoals.GetDailyDistanceGoal();
+
+
         //animating the main challenge progress bar
         LeanTween.value(gameObject, (float f) =>
         {
@@ -113,8 +115,7 @@ public class MainWindow : MonoBehaviour
         }, 0, percentage, animationTime).setEaseInOutCubic();
 
 
-		int stepsToday = int.Parse(stepsTodayText.text);
-		float distanceToday = float.Parse(distanceTodayText.text);
+		
 
 		//animating the steps UI block
 		LeanTween.value(gameObject, (float f) =>
@@ -131,9 +132,6 @@ public class MainWindow : MonoBehaviour
 
 
         //animating the small UI object goal progress bars
-        int stepGoal = PlayerPrefsX.GetInt(PlayerPrefsLocations.User.Goals.dailyStepGoal, 10000);
-        float distanceGoal = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Goals.dailyDistanceGoal, 8);
-
         LeanTween.value(gameObject, (float f) =>
         {
             stepsGoalProgressBar.percent = f / stepGoal;
