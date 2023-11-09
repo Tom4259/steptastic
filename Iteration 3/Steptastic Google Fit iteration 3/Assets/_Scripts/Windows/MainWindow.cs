@@ -22,8 +22,8 @@ public class MainWindow : MonoBehaviour
 	[Space(5)]
 	public StatisticsWindow statisticsWindow;
 
-	//[Space(5)]
-	//public SettingsWindow settingsWindow;
+	[Space(5)]
+	public SettingsWindow settingsWindow;
 
 
 

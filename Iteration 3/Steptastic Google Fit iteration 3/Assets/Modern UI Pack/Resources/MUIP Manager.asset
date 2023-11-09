@@ -51,10 +51,10 @@ MonoBehaviour:
   notificationIconColor: {r: 1, g: 1, b: 1, a: 1}
   progressBarLabelFont: {fileID: 11400000, guid: 34f31f73768d6bc4e8c9ab875f736818, type: 2}
   progressBarLabelFontSize: 25
-  progressBarColor: {r: 0.9960785, g: 0.64705884, b: 0.2901961, a: 1}
-  progressBarBackgroundColor: {r: 0.9960785, g: 0.64705884, b: 0.2901961, a: 0.2}
-  progressBarLoopBackgroundColor: {r: 0.9960785, g: 0.64705884, b: 0.2901961, a: 1}
-  progressBarLabelColor: {r: 0.9960785, g: 0.64705884, b: 0.2901961, a: 1}
+  progressBarColor: {r: 0.21568628, g: 0.76862746, b: 0.9019608, a: 1}
+  progressBarBackgroundColor: {r: 0.21568628, g: 0.76862746, b: 0.9019608, a: 0.09019608}
+  progressBarLoopBackgroundColor: {r: 0.21568628, g: 0.76862746, b: 0.9019608, a: 1}
+  progressBarLabelColor: {r: 0.21568628, g: 0.76862746, b: 0.9019608, a: 1}
   scrollbarColor: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
   scrollbarBackgroundColor: {r: 1, g: 1, b: 1, a: 0.09803922}
   sliderLabelFont: {fileID: 11400000, guid: 34f31f73768d6bc4e8c9ab875f736818, type: 2}
@@ -64,8 +64,8 @@ MonoBehaviour:
   sliderLabelColor: {r: 1, g: 1, b: 1, a: 1}
   sliderPopupLabelColor: {r: 0.37254903, g: 0.40784314, b: 0.4509804, a: 1}
   sliderHandleColor: {r: 1, g: 1, b: 1, a: 1}
-  switchBorderColor: {r: 0, g: 0.5294118, b: 1, a: 1}
-  switchBackgroundColor: {r: 0.21568629, g: 0.7686275, b: 0.90196085, a: 1}
+  switchBorderColor: {r: 0.87843144, g: 0.87843144, b: 0.87843144, a: 1}
+  switchBackgroundColor: {r: 0, g: 0.5294118, b: 0.9960785, a: 1}
   switchHandleOnColor: {r: 1, g: 1, b: 1, a: 1}
   switchHandleOffColor: {r: 1, g: 1, b: 1, a: 1}
   toggleFont: {fileID: 11400000, guid: 34f31f73768d6bc4e8c9ab875f736818, type: 2}

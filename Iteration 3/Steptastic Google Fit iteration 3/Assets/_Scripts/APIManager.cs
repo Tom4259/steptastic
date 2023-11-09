@@ -440,33 +440,38 @@ public class APIManager : MonoBehaviour
 			double totalSteps = 0;
 			bool done = false;
 
-			HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
+			try
 			{
-				if (samplesW.Count > 0)
-				{
-					foreach (QuantitySample sample in samplesW)
-					{
-						//Debug.Log(String.Format("[HealthKitAPI] {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
-						totalSteps += sample.quantity.doubleValue;
-					}
+                HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
+                {
+                    if (samplesW.Count > 0)
+                    {
+                        foreach (QuantitySample sample in samplesW)
+                        {
+                            //Debug.Log(String.Format("[HealthKitAPI] {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                            totalSteps += sample.quantity.doubleValue;
+                        }
 
-					done = true;
-				}
-				else
-				{
-					Debug.LogWarning("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                        done = true;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
 
-					done = true;
-				}
-			});
+                        done = true;
+                    }
+                });
 
-			while (!done)
+                while (!done)
+                {
+                    await Task.Delay(100);
+                }
+            }
+			finally
 			{
-				await Task.Delay(100);
-			}
-
-
-			HKFree.Release();
+                HKFree.Release();
+            }
+			
 
 			return totalSteps;
 		}
@@ -480,35 +485,41 @@ public class APIManager : MonoBehaviour
 			double totalDistance = 0;
 			bool done = false;
 
-			HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
+			try
 			{
-				if (samplesW.Count > 0)
-				{
-					foreach (QuantitySample sample in samplesW)
-					{
-						//Debug.Log(String.Format("[HealthKitAPI] {0} from {1}{3} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate, sample.quantity.unit));
-						totalDistance += sample.quantity.doubleValue;
-					}
+                HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
+                {
+                    if (samplesW.Count > 0)
+                    {
+                        foreach (QuantitySample sample in samplesW)
+                        {
+                            //Debug.Log(String.Format("[HealthKitAPI] {0} from {1}{3} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate, sample.quantity.unit));
+                            totalDistance += sample.quantity.doubleValue;
+                        }
 
-					//can set units in playerprefs to the value unit
+                        //can set units in playerprefs to the value unit
 
-					done = true;
-				}
-				else
-				{
-					Debug.LogWarning("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                        done = true;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
 
-					done = true;
-				}
-			});
+                        done = true;
+                    }
+                });
 
 
-			while (!done)
+                while (!done)
+                {
+                    await Task.Delay(100);
+                }
+            }
+			finally
 			{
-				await Task.Delay(100);
-			}
-
-			HKFree.Release();
+                HKFree.Release();
+            }
+			
 
 			return totalDistance;
 		}
@@ -525,40 +536,46 @@ public class APIManager : MonoBehaviour
 			List<QuantityData> stepsList = new List<QuantityData>();
 			bool done = false;
 
-			HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
+			try
 			{
-				if (samplesW.Count > 0)
-				{
-					foreach (QuantitySample sample in samplesW)
-					{
-						//Debug.Log(String.Format("[HealthKitAPI] {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
+                {
+                    if (samplesW.Count > 0)
+                    {
+                        foreach (QuantitySample sample in samplesW)
+                        {
+                            //Debug.Log(String.Format("[HealthKitAPI] {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
 
-						QuantityData item = new QuantityData()
-						{
-							startDate = sample.startDate.DateTime,
-							endDate = sample.endDate.DateTime,
-							value = sample.quantity.doubleValue
-						};
+                            QuantityData item = new QuantityData()
+                            {
+                                startDate = sample.startDate.DateTime,
+                                endDate = sample.endDate.DateTime,
+                                value = sample.quantity.doubleValue
+                            };
 
-						stepsList.Add(item);
-					}
+                            stepsList.Add(item);
+                        }
 
-					done = true;
-				}
-				else
-				{
-					Debug.LogWarning("[HealthKitAPI] Samples count is " + samplesW.Count + " start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                        done = true;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[HealthKitAPI] Samples count is " + samplesW.Count + " start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
 
-					done = true;
-				}
-			});
+                        done = true;
+                    }
+                });
 
-			while (!done)
+                while (!done)
+                {
+                    await Task.Delay(100);
+                }
+            }
+			finally
 			{
-				await Task.Delay(100);
-			}
-
-			HKFree.Release();
+                HKFree.Release();
+            }
+			
 
 			return stepsList;
 		}
@@ -572,40 +589,46 @@ public class APIManager : MonoBehaviour
 			List<QuantityData> distanceList = new List<QuantityData>();
 			bool done = false;
 
-			HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
+			try
 			{
-				if (samplesW.Count > 0)
-				{
-					foreach (QuantitySample sample in samplesW)
-					{
-						//Debug.Log(String.Format("[HealthKitAPI] {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
+                HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
+                {
+                    if (samplesW.Count > 0)
+                    {
+                        foreach (QuantitySample sample in samplesW)
+                        {
+                            //Debug.Log(String.Format("[HealthKitAPI] {0} from {1} to {2}", sample.quantity.doubleValue, sample.startDate, sample.endDate));
 
-						QuantityData item = new QuantityData()
-						{
-							startDate = sample.startDate.DateTime,
-							endDate = sample.endDate.DateTime,
-							value = sample.quantity.doubleValue
-						};
+                            QuantityData item = new QuantityData()
+                            {
+                                startDate = sample.startDate.DateTime,
+                                endDate = sample.endDate.DateTime,
+                                value = sample.quantity.doubleValue
+                            };
 
-						distanceList.Add(item);
-					}
+                            distanceList.Add(item);
+                        }
 
-					done = true;
-				}
-				else
-				{
-					Debug.LogWarning("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
+                        done = true;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[HealthKitAPI] samples count is " + samplesW.Count + " Start date is " + startPoint.ToString("G") + " end date is " + endPoint.ToString("G"));
 
-					done = true;
-				}
-			});
+                        done = true;
+                    }
+                });
 
-			while (!done)
+                while (!done)
+                {
+                    await Task.Delay(250);
+                }
+            }
+			finally
 			{
-				await Task.Delay(250);
-			}
-
-			HKFree.Release();
+                HKFree.Release();
+            }
+			
 
 			return distanceList;
 		}

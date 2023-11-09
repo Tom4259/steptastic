@@ -6,9 +6,6 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class CircleProgressBar : MonoBehaviour
 {
-    public Color barColour;
-
-    [Space]
     [Range(0f, 100f)]
     public float percent;
     public int decimalPlaces = 2;
@@ -23,7 +20,6 @@ public class CircleProgressBar : MonoBehaviour
     private void Update()
     {
         fillImage.fillAmount = percent / 100;
-        fillImage.color = barColour;
 
         float angle = percent / 360;
         endCapHolder.rotation = Quaternion.Euler(0, 0, -(angle * 1294.964f));

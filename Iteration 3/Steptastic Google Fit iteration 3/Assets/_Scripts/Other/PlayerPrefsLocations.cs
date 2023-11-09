@@ -117,6 +117,12 @@ public class PlayerPrefsLocations : MonoBehaviour
 
             public static string weeklyDistanceGoal = "user.goals.weeklydistancegoal";
         }
+
+
+        public class Preferences
+        {
+            public static string unitsMetric = "user.preferences.units";
+        }
     }
 
     public class Developer
