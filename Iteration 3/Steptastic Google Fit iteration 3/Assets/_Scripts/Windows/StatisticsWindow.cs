@@ -4,10 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
-using static APIManager.GoogleFit;
-using static UnityEditor.LightingExplorerTableColumn;
 
 public class StatisticsWindow : MonoBehaviour
 {
