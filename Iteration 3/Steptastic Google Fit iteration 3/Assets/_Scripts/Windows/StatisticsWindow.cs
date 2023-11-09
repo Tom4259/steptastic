@@ -205,7 +205,7 @@ public class StatisticsWindow : MonoBehaviour
 
 	#region data requests, and saving to objects
 
-#if UNITY_ANDROID// || UNITY_EDITOR
+#if UNITY_ANDROID || UNITY_EDITOR
 
 	public async void GetDataDay(int dataType)
 	{
@@ -485,7 +485,7 @@ public class StatisticsWindow : MonoBehaviour
 	#endregion
 
 
-	#region statistics items
+	#region statistic items helpers
 
 
 #if UNITY_ANDROID || UNITY_EDITOR
@@ -563,9 +563,11 @@ public class StatisticsWindow : MonoBehaviour
 
 		};
 
-		dataOverPeriodChart.SetSingleAxisSplitNumber(14);
-		dataOverPeriodChart.SetSingleAxisPoints(xAxisPoints);
-		dataOverPeriodChart.SetXAxisPoints(new List<string>(new string[24]));        
+		//dataOverPeriodChart.SetSingleAxisSplitNumber(14);
+		//dataOverPeriodChart.SetSingleAxisPoints(xAxisPoints);
+		//dataOverPeriodChart.SetXAxisPoints(new List<string>(new string[24]));        
+		dataOverPeriodChart.SetXAxisSplitNumber(14);
+		dataOverPeriodChart.SetXAxisPoints(xAxisPoints);
 	}
 
 	private void SetWeekXAxis()
@@ -581,8 +583,9 @@ public class StatisticsWindow : MonoBehaviour
 			"Sun"
 		};
 
-		dataOverPeriodChart.SetSingleAxisPoints(xAxisPoints);
-		dataOverPeriodChart.SetXAxisPoints(new List<string>(new string[7]));
+		//dataOverPeriodChart.SetSingleAxisPoints(xAxisPoints);
+		//dataOverPeriodChart.SetXAxisPoints(new List<string>(new string[7]));
+		dataOverPeriodChart.SetXAxisPoints(xAxisPoints);
 	}
 
 	#endregion

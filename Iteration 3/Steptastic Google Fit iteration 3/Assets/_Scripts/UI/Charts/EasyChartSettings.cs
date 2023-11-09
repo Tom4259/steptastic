@@ -55,6 +55,11 @@ public class EasyChartSettings : MonoBehaviour
         chart.GetChartComponent<SingleAxis>().splitNumber = splitNumber;
     }
 
+    public void SetXAxisSplitNumber(int splitNumber)
+    {
+        chart.GetChartComponent<XAxis>().splitNumber = splitNumber;
+    }
+
 
 
 
