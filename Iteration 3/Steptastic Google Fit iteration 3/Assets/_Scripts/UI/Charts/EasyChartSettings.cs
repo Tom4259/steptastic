@@ -18,8 +18,10 @@ public class EasyChartSettings : MonoBehaviour
     }
 
 
+	#region title
 
-    public void SetChartTitle(string title)
+
+	public void SetChartTitle(string title)
     {
         chart.GetChartComponent<Title>().text = title;
     }
@@ -30,10 +32,12 @@ public class EasyChartSettings : MonoBehaviour
     }
 
 
+	#endregion
+
+	#region axis points
 
 
-
-    public void SetSingleAxisPoints(List<string> points)
+	public void SetSingleAxisPoints(List<string> points)
     {
         chart.GetChartComponent<SingleAxis>().ClearData();
         chart.GetChartComponent<XAxis>().ClearData();
@@ -48,9 +52,12 @@ public class EasyChartSettings : MonoBehaviour
     }
 
 
+	#endregion
+
+	#region split number
 
 
-    public void SetSingleAxisSplitNumber(int splitNumber)
+	public void SetSingleAxisSplitNumber(int splitNumber)
     {
         chart.GetChartComponent<SingleAxis>().splitNumber = splitNumber;
     }
@@ -61,9 +68,12 @@ public class EasyChartSettings : MonoBehaviour
     }
 
 
+	#endregion
+
+	#region setting, adding and clearing chart
 
 
-    public void SetSerieData(List<double> data, int serieIndex, bool animate = false)
+	public void SetSerieData(List<double> data, int serieIndex, bool animate = false)
     {
         ClearChart(serieIndex);
 
@@ -159,33 +169,68 @@ public class EasyChartSettings : MonoBehaviour
     }
 
 
+	#endregion
 
-    public void SetItemCornerRadius(List<float> cornerRadius, int seriesIndex)
+	#region corner radius
+
+
+	public void SetItemCornerRadius(List<float> cornerRadius, int seriesIndex)
     {
         chart.series[seriesIndex].itemStyle.cornerRadius = cornerRadius.ToArray();
     }
 
 
-    public void SetXAxisNumbericFormatter(string formatter)
+	#endregion
+
+	#region numeric formatter
+
+
+	public void SetXAxisNumbericFormatter(string formatter)
     {
-        chart.GetChartComponent<XAxis>().axisLabel.numericFormatter = formatter;
+        try
+        {
+            GetComponent<UIThemeChart>().XAxisNumericFormatter = formatter;
+        }
+        catch (NullReferenceException)
+        {
+			chart.GetChartComponent<XAxis>().axisLabel.numericFormatter = formatter;
+		}
 
         chart.RefreshAllComponent();
     }
 
 	public void SetYAxisNumbericFormatter(string formatter)
 	{
-		chart.GetChartComponent<YAxis>().axisLabel.numericFormatter = formatter;
+		try
+		{
+			GetComponent<UIThemeChart>().YAxisNumericFormatter = formatter;
+		}
+		catch (NullReferenceException)
+		{
+			chart.GetChartComponent<YAxis>().axisLabel.numericFormatter = formatter;
+		}
 
 		chart.RefreshAllComponent();
 	}
+
 
 	public void SetSingleAxisNumbericFormatter(string formatter)
 	{
-		chart.GetChartComponent<SingleAxis>().axisLabel.numericFormatter = formatter;
+		try
+		{
+			GetComponent<UIThemeChart>().singleAxisNumericFormatter = formatter;
+		}
+		catch (NullReferenceException)
+		{
+			chart.GetChartComponent<SingleAxis>().axisLabel.numericFormatter = formatter;
+		}
 
 		chart.RefreshAllComponent();
 	}
+
+
+	#endregion
+
 
 
 

@@ -155,6 +155,11 @@ public class UsefulFunctions
         }
     }
 
+    public static string ThousandToK(int num)
+    {
+		return((double)num / 1000).ToString("0.#k");
+	}
+
 
     public static DateTime StartOfWeek()
     {

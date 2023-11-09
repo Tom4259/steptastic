@@ -464,8 +464,6 @@ public class StatisticsWindow : MonoBehaviour
 		}
 
 
-
-		dataOverPeriodChart.SetYAxisNumbericFormatter("");
 		dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
 		dataOverPeriodChart.SetSerieData(weekValues, 0);
 
