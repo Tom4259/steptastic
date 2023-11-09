@@ -90,9 +90,9 @@ public class UIThemeChart : MonoBehaviour
         chart.GetChartComponent<Title>().subLabelStyle.textStyle = isDark ? darkText : lightText;
 
 
-        chart.GetChartComponent<SingleAxis>().axisLabel = newAxisLabel;
-        chart.GetChartComponent<SingleAxis>().axisLine = newAxisLine;
-        chart.GetChartComponent<SingleAxis>().axisTick = isDark ? darkTick : lightTick;
+        //chart.GetChartComponent<SingleAxis>().axisLabel = newAxisLabel;
+        //chart.GetChartComponent<SingleAxis>().axisLine = newAxisLine;
+        //chart.GetChartComponent<SingleAxis>().axisTick = isDark ? darkTick : lightTick;
 
 
         chart.GetChartComponent<XAxis>().axisLabel = newAxisLabel;
@@ -108,9 +108,9 @@ public class UIThemeChart : MonoBehaviour
         chart.GetChartComponent<Background>().pixelsPerUnitMultiplier = backgroundPixelsPerUnitMultiplier;
 
 
-        chart.GetChartComponent<SingleAxis>().axisLabel.show = true;
-        chart.GetChartComponent<SingleAxis>().axisLine.show = true;
-        chart.GetChartComponent<SingleAxis>().axisTick.show = true;
+        //chart.GetChartComponent<SingleAxis>().axisLabel.show = true;
+        //chart.GetChartComponent<SingleAxis>().axisLine.show = true;
+        //chart.GetChartComponent<SingleAxis>().axisTick.show = true;
 
         chart.GetChartComponent<XAxis>().axisLabel.show = true;
         chart.GetChartComponent<XAxis>().axisLine.show = true;
