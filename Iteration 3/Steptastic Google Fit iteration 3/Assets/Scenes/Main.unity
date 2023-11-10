@@ -19866,8 +19866,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 454.38208, y: -85}
-  m_SizeDelta: {x: 123.118, y: 50}
+  m_AnchoredPosition: {x: 502.5, y: -85}
+  m_SizeDelta: {x: 75, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1054705964
 MonoBehaviour:
@@ -19930,14 +19930,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 37.2
+  m_fontSize: 35
   m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 35
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -20483,8 +20483,8 @@ RectTransform:
   - {fileID: 1819841715}
   - {fileID: 942526897}
   - {fileID: 506615051}
-  - {fileID: 1596603255}
   - {fileID: 760756277}
+  - {fileID: 1596603255}
   m_Father: {fileID: 471102977}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -35468,8 +35468,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -12.5, y: 40}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 27.028711, y: 40}
+  m_SizeDelta: {x: 279.0553, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1655731031
 MonoBehaviour:
@@ -35505,7 +35505,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '{datatype} today'
+  m_text: Steps today
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 34f31f73768d6bc4e8c9ab875f736818, type: 2}
   m_sharedMaterial: {fileID: 317060087158601320, guid: 34f31f73768d6bc4e8c9ab875f736818, type: 2}
@@ -35535,9 +35535,9 @@ MonoBehaviour:
   m_fontSize: 22
   m_fontSizeBase: 22
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 22
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
@@ -48049,10 +48049,9 @@ MonoBehaviour:
   - 0
   goalObject:
     icon: {fileID: 1594622150}
-    titleText: '{{dataType}} today'
-    percentText: {fileID: 1054705965}
     dailyGoalTitle: {fileID: 1655731032}
     dailyGoalProgress: {fileID: 1055842165}
+    percentText: {fileID: 1054705965}
     dailyGoalMaxText: {fileID: 1789023097}
   stepsIcon: {fileID: 21300000, guid: 200df2d3c2442664bbd9cb1d53b236ef, type: 3}
   stepsColour: {r: 0.06666667, g: 0.67058825, b: 0.20392159, a: 1}
