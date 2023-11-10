@@ -19,6 +19,7 @@ public class StatisticsWindow : MonoBehaviour
 		public double valueThisWeek;
 		public double valueLastWeek;
 
+		public double value;
         public Sprite icon;
 		public Color parentColour;
         public string dailyGoalTitle;
@@ -328,6 +329,8 @@ public class StatisticsWindow : MonoBehaviour
 
 		double value = await statisticsController.LoadGoals(dataType, APIData);
 
+		saveInto.value = value;
+
 		if (dataType == DataTypes.Steps)
 		{
 			goalObject.icon.sprite = stepsIcon;
@@ -349,7 +352,7 @@ public class StatisticsWindow : MonoBehaviour
 				goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyStepGoal();
 				goalObject.dailyGoalProgress.decimals = 0;
 
-                goalObject.dailyGoalProgress.ChangeValue((float)value);
+                goalObject.dailyGoalProgress.ChangeValue((float)saveInto.value);
             };
         }
 		else
@@ -373,7 +376,7 @@ public class StatisticsWindow : MonoBehaviour
                 goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyDistanceGoal();
                 goalObject.dailyGoalProgress.decimals = 2;
 
-                goalObject.dailyGoalProgress.ChangeValue((float)value);
+                goalObject.dailyGoalProgress.ChangeValue((float)saveInto.value);
             };
         }        
 
@@ -449,8 +452,9 @@ public class StatisticsWindow : MonoBehaviour
 
 	private async void ConsistantDataWithDateRange(DataTypes dataType, LoadedData saveInto)
 	{
-
 		double value = await statisticsController.LoadGoals(dataType);
+
+		saveInto.value = value;
 
 		if (dataType == DataTypes.Steps)
 		{
@@ -473,7 +477,7 @@ public class StatisticsWindow : MonoBehaviour
                 goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyDistanceGoal();
                 goalObject.dailyGoalProgress.decimals = 2;
 
-                goalObject.dailyGoalProgress.ChangeValue((float)value);
+                goalObject.dailyGoalProgress.ChangeValue((float)saveInto.value);
             };
         }
 		else
@@ -497,7 +501,7 @@ public class StatisticsWindow : MonoBehaviour
                 goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyDistanceGoal();
                 goalObject.dailyGoalProgress.decimals = 2;
 
-                goalObject.dailyGoalProgress.ChangeValue((float)value);
+                goalObject.dailyGoalProgress.ChangeValue((float)saveInto.value);
             };
         }
 
@@ -529,6 +533,7 @@ public class StatisticsWindow : MonoBehaviour
         goalObject.dailyGoalTitle.text = savedData.dailyGoalMaxText;
         goalObject.percentText.text = savedData.percentText;
         goalObject.dailyGoalMaxText.text = savedData.dailyGoalMaxText;
+		savedData.goalActions.Invoke();
     }
 
 
