@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using static APIManager;
-using static UnityEditor.LightingExplorerTableColumn;
 
 public class StatisticsWindow : MonoBehaviour
 {
