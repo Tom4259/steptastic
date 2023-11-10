@@ -151,7 +151,7 @@ public class MainWindow : MonoBehaviour
 
     public void OpenStatisticsScreen(int dataType)
     {
-        navigationBar.OpenWindow(1, () => statisticsWindow.OpenWindow(dataType));
+        navigationBar.OpenWindow(1, () => statisticsWindow.OpenWindow((StatisticsWindow.DataTypes)dataType));
     }
 
 

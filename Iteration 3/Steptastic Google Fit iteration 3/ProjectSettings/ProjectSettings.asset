@@ -136,7 +136,7 @@ PlayerSettings:
   vulkanEnableLateAcquireNextImage: 0
   vulkanEnableCommandBufferRecycling: 1
   loadStoreDebugModeEnabled: 0
-  bundleVersion: 3.0.24
+  bundleVersion: 3.0.25
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -168,7 +168,7 @@ PlayerSettings:
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
-  AndroidBundleVersionCode: 79
+  AndroidBundleVersionCode: 81
   AndroidMinSdkVersion: 26
   AndroidTargetSdkVersion: 34
   AndroidPreferredInstallLocation: 1
@@ -262,7 +262,7 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: D:/Unity - before moved to c drive/keystore.keystore
+  AndroidKeystoreName: C:/Users/tomre/Documents/Unity/keystore.keystore
   AndroidKeyaliasName: steptastic
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidBuildApkPerCpuArchitecture: 0

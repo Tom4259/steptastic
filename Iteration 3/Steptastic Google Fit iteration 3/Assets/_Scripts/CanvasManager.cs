@@ -95,7 +95,7 @@ public class CanvasManager : MonoBehaviour
 #endif
             }
 
-            CloseSetupWindow();
+            CloseSetupWindow(false);
 
             OpenMainWindow(false);
         }
@@ -126,16 +126,23 @@ public class CanvasManager : MonoBehaviour
 
         PlayerPrefsX.SetBool(PlayerPrefsLocations.User.CompletedWindows.setup, true);
 
-        CloseSetupWindow();
+        CloseSetupWindow(true);
         OpenMainWindow(true);
     }
 
     //closes the setup page
-    private async void CloseSetupWindow()
+    private async void CloseSetupWindow(bool animation)
     {
         isSetupWindowOpen = false;
 
-        LeanTween.move(setupWindows, -mainScreenStartLocation, animationTime).setEaseInOutCubic();
+        if (animation)
+        {
+            LeanTween.move(setupWindows, -mainScreenStartLocation, animationTime).setEaseInOutCubic();
+        }
+        else
+        {
+            setupWindows.anchoredPosition = -mainScreenStartLocation;
+        }
 
         await Task.Delay((int)(animationTime * 1000) + 2000);
 

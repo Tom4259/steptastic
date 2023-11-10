@@ -5,21 +5,28 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using static APIManager;
+using static UnityEditor.LightingExplorerTableColumn;
 
 public class StatisticsWindow : MonoBehaviour
 {
 	private class LoadedData
 	{
-		public string chartName;
-
 		public List<double> chartData;
+		public UnityAction chartActions;
 
+		public double valueThisWeek;
+		public double valueLastWeek;
 
-		public int stepsToday;
-		public int todayLastWeek;
-	}
+        public Sprite icon;
+		public Color parentColour;
+        public string dailyGoalTitle;
+        public string percentText;
+        public string dailyGoalMaxText;
+        public UnityAction goalActions;
+    }
 
 
 	[Serializable]
@@ -27,14 +34,30 @@ public class StatisticsWindow : MonoBehaviour
 	{
 		public Image icon;
 		public string titleText;
-		public TMP_Text percentText;
 		public TMP_Text dailyGoalTitle;
 		public ProgressBar dailyGoalProgress;
+		public TMP_Text percentText;
 		public TMP_Text dailyGoalMaxText;
 	}
 
+    private enum Views
+    {
+        StepsDay,
+        StepsWeek,
+        DistanceDay,
+        DistanceWeek,
+    }
 
-	public CustomDropdown dataTypeDropdown;
+
+	public enum DataTypes
+	{
+		Steps = 0,
+		Distance = 1
+	}
+
+
+
+    public CustomDropdown dataTypeDropdown;
 	public CustomDropdown viewPeriodDropdown;
 
 
@@ -67,15 +90,7 @@ public class StatisticsWindow : MonoBehaviour
 
 	private LoadedData loadedDistanceDay = null;
 	private LoadedData loadedDistanceWeek = null;
-
-
-	private enum Views
-	{
-		StepsDay, 
-		StepsWeek,
-		DistanceDay,
-		DistanceWeek,
-	}
+	
 
 	private Views currentView;
 
@@ -108,10 +123,10 @@ public class StatisticsWindow : MonoBehaviour
 	}
 
 
-	public void OpenWindow(int dataType)
+	public void OpenWindow(DataTypes dataType)
 	{
-		dataTypeDropdown.SetDropdownIndex(dataType);
-		dataTypeDropdown.items[dataType].OnItemSelection.Invoke();
+		dataTypeDropdown.SetDropdownIndex((int)dataType);
+		dataTypeDropdown.items[(int)dataType].OnItemSelection.Invoke();
 
 		UpdateUI();
 	}
@@ -149,13 +164,17 @@ public class StatisticsWindow : MonoBehaviour
 				
 				if (loadedStepsDay == null)
 				{
-					//make request here
-					GetDataDay(0);
+                    loadedStepsDay = new LoadedData();
+
+                    //make request here
+                    GetDataDay(DataTypes.Steps, loadedStepsDay);
 				}
 				else//load data here
 				{
+					Debug.Log("[Statistics] Loading saved data");
 
-				}
+                    LoadSavedData(loadedStepsDay);
+                }
 
 				break;
 
@@ -167,13 +186,17 @@ public class StatisticsWindow : MonoBehaviour
 
 				if (loadedStepsWeek == null)
 				{
-					//make request here
-					GetDataWeek(0);
+					loadedStepsWeek = new LoadedData();
+
+                    //make request here
+                    GetDataWeek(DataTypes.Steps, loadedStepsWeek);
 				}
 				else//load data here
 				{
+                    Debug.Log("[Statistics] Loading saved data");
 
-				}
+                    LoadSavedData(loadedStepsWeek);
+                }
 
 				break;
 
@@ -185,13 +208,17 @@ public class StatisticsWindow : MonoBehaviour
 
 				if (loadedDistanceDay == null)
 				{
-					//make request here
-					GetDataDay(1);
+                    loadedDistanceDay = new LoadedData();
+
+                    //make request here
+                    GetDataDay(DataTypes.Distance, loadedDistanceDay);
 				}
 				else//load data here
 				{
+                    Debug.Log("[Statistics] Loading saved data");
 
-				}
+                    LoadSavedData(loadedDistanceDay);
+                }
 
 				break;
 
@@ -203,13 +230,17 @@ public class StatisticsWindow : MonoBehaviour
 				
 				if (loadedDistanceWeek == null)
 				{
-					//make request here
-					GetDataWeek(1);
+                    loadedDistanceWeek = new LoadedData();
+
+                    //make request here
+                    GetDataWeek(DataTypes.Distance, loadedDistanceWeek);
 				}
 				else//load data here
 				{
+                    Debug.Log("[Statistics] Loading saved data");
 
-				}
+                    LoadSavedData(loadedDistanceWeek);
+                }
 
 				break;
 		}
@@ -217,74 +248,111 @@ public class StatisticsWindow : MonoBehaviour
 
 
 
-	#region getting data
+    #region getting data
 
 #if UNITY_ANDROID || UNITY_EDITOR
 
-	private async void GetDataDay(int dataType)
+
+    private async void GetDataDay(DataTypes dataType, LoadedData saveInto)
 	{
 		DateTime startRequest = DateTime.Today;
 		DateTime endRequest = DateTime.Now;
-		APIManager.GoogleFit.ApiData APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest, 3600000);
+		GoogleFit.ApiData APIData = GoogleFit.GenerateAPIbody(startRequest, endRequest, 3600000);
 
-		dataOverPeriodChart.SetSerieData(await statisticsController.LoadGraph(dataType, APIData), 0);
-		dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == 0 ? "###,###,###" : "0.## km");
+
+		List<double> chartData = await statisticsController.LoadGraph(dataType, APIData);
+
+        dataOverPeriodChart.SetSerieData(chartData, 0);
+		dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
 		dataOverPeriodChart.SetItemCornerRadius(dayRoundedCorners, 0);
 
 
-		ConsistantDataWithDateRange(dataType);
+		ConsistantDataWithDateRange(dataType, saveInto);
 
 
 		Tuple<double, double> todayVsLastWeekToday = await statisticsController.LoadTodayVsLastWeekToday(dataType);
 
 		thisWeekValue.text = todayVsLastWeekToday.Item1.ToString();
 		lastWeekValue.text = todayVsLastWeekToday.Item2.ToString();
-	}
 
 
-	private async void GetDataWeek(int dataType)
+		saveInto.chartData = chartData;
+		saveInto.chartActions += () =>
+		{
+			dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
+			dataOverPeriodChart.SetItemCornerRadius(dayRoundedCorners, 0);
+		};
+		saveInto.valueThisWeek = todayVsLastWeekToday.Item1;
+		saveInto.valueLastWeek = todayVsLastWeekToday.Item2;
+    }
+
+	private async void GetDataWeek(DataTypes dataType, LoadedData saveInto)
 	{
-		DateTime startRequest = UsefulFunctions.StartOfWeek();
+        DateTime startRequest = UsefulFunctions.StartOfWeek();
 		DateTime endRequest = DateTime.Now;
-		APIManager.GoogleFit.ApiData APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest);
+		GoogleFit.ApiData APIData = GoogleFit.GenerateAPIbody(startRequest, endRequest);
 
-		dataOverPeriodChart.SetSerieData(await statisticsController.LoadGraph(dataType, APIData), 0);
-		dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == 0 ? "###,###,###" : "0.## km");
+
+		List<double> chartData = await statisticsController.LoadGraph(dataType, APIData);
+
+        dataOverPeriodChart.SetSerieData(chartData, 0);
+		dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
 		dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
 
 
-		ConsistantDataWithDateRange(dataType);
+        ConsistantDataWithDateRange(dataType, saveInto);
 
 
-		Tuple<double, double> thisWeekVsLastWeek = await statisticsController.LoadThisWeekVsLastWeek(dataType);
+        Tuple<double, double> thisWeekVsLastWeek = await statisticsController.LoadThisWeekVsLastWeek(dataType);
 
 		thisWeekValue.text = thisWeekVsLastWeek.Item1.ToString();
 		lastWeekValue.text = thisWeekVsLastWeek.Item2.ToString();
-	}
+
+
+        saveInto.chartData = chartData;
+        saveInto.chartActions += () =>
+        {
+            dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
+            dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
+        };
+        saveInto.valueThisWeek = thisWeekVsLastWeek.Item1;
+        saveInto.valueLastWeek = thisWeekVsLastWeek.Item2;
+    }
 
 
 	//for loading data that doesn't change depending on the view period dropdown
-	private async void ConsistantDataWithDateRange(int dataType)
+	private async void ConsistantDataWithDateRange(DataTypes dataType, LoadedData saveInto)
 	{
 		DateTime start = DateTime.Today;
 		DateTime end = DateTime.Now;
-		APIManager.GoogleFit.ApiData APIData = APIManager.GoogleFit.GenerateAPIbody(start, end);
+		GoogleFit.ApiData APIData = GoogleFit.GenerateAPIbody(start, end);
 
 		double value = await statisticsController.LoadGoals(dataType, APIData);
 
-		if (dataType == 0)
+		if (dataType == DataTypes.Steps)
 		{
 			goalObject.icon.sprite = stepsIcon;
 			goalObject.icon.transform.parent.GetComponent<Image>().color = stepsColour;
-			goalObject.dailyGoalTitle.text = goalObject.titleText.Replace("{{dataType}}", "Steps");
 
+			goalObject.percentText.text = Math.Round((value / UserGoals.GetDailyStepGoal()) * 100, 1).ToString() + "%";
+			
+			goalObject.dailyGoalTitle.text = goalObject.titleText.Replace("{{dataType}}", "Steps");
 			goalObject.dailyGoalProgress.valueLimit = UserGoals.GetDailyStepGoal();
 			goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyStepGoal();
 			goalObject.dailyGoalProgress.decimals = 0;
+
 			goalObject.dailyGoalMaxText.text = UserGoals.GetDailyStepGoal().ToString();
 
-			goalObject.percentText.text = Math.Round((value / UserGoals.GetDailyStepGoal()) * 100, 1).ToString() + "%";
-		}
+
+			saveInto.goalActions += () =>
+			{
+				goalObject.dailyGoalProgress.valueLimit = UserGoals.GetDailyStepGoal();
+				goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyStepGoal();
+				goalObject.dailyGoalProgress.decimals = 0;
+
+                goalObject.dailyGoalProgress.ChangeValue((float)value);
+            };
+        }
 		else
 		{
 			goalObject.icon.sprite = distanceicon;
@@ -298,21 +366,42 @@ public class StatisticsWindow : MonoBehaviour
 			goalObject.dailyGoalMaxText.text = UserGoals.GetDailyDistanceGoal().ToString() + " km";
 
 			goalObject.percentText.text = Math.Round((value / UserGoals.GetDailyDistanceGoal()) * 100, 1).ToString() + "%";
-		}
 
-		goalObject.dailyGoalProgress.ChangeValue((float) value);
-	}
+
+            saveInto.goalActions += () =>
+            {
+                goalObject.dailyGoalProgress.valueLimit = UserGoals.GetDailyDistanceGoal();
+                goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyDistanceGoal();
+                goalObject.dailyGoalProgress.decimals = 2;
+
+                goalObject.dailyGoalProgress.ChangeValue((float)value);
+            };
+        }        
+
+        goalObject.dailyGoalProgress.ChangeValue((float) value);
+
+
+        saveInto.icon = goalObject.icon.sprite;
+        saveInto.parentColour = goalObject.icon.transform.parent.GetComponent<Image>().color;
+        saveInto.percentText = goalObject.percentText.text;
+        saveInto.dailyGoalTitle = goalObject.dailyGoalTitle.text;
+        saveInto.dailyGoalMaxText = goalObject.dailyGoalMaxText.text;
+    }
+
 
 #elif UNITY_IOS
 
-	private async void GetDataDay(int dataType)
+
+	private async void GetDataDay(DataTypes dataType, LoadedData saveInto)
 	{
-		dataOverPeriodChart.SetSerieData(await statisticsController.LoadGraph(dataType, true), 0);
-		dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == 0 ? "###,###,###" : "0.## km");
+		List<double> chartData = await statisticsController.LoadGraph(dataType, true);
+
+        dataOverPeriodChart.SetSerieData(chartData, 0);
+		dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
 		dataOverPeriodChart.SetItemCornerRadius(dayRoundedCorners, 0);
 
 
-		ConsistantDataWithDateRange(dataType);
+		ConsistantDataWithDateRange(dataType, saveInto);
 
 
 		Tuple<double, double> todayVsLastWeekToday = await statisticsController.LoadTodayVsLastWeekToday(dataType);
@@ -320,30 +409,51 @@ public class StatisticsWindow : MonoBehaviour
 		thisWeekValue.text = todayVsLastWeekToday.Item1.ToString();
 		lastWeekValue.text = todayVsLastWeekToday.Item2.ToString();
 
-	}
 
-	private async void GetDataWeek(int dataType)
+        saveInto.chartData = chartData;
+        saveInto.chartActions += () =>
+        {
+            dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
+            dataOverPeriodChart.SetItemCornerRadius(dayRoundedCorners, 0);
+        };
+        saveInto.valueThisWeek = todayVsLastWeekToday.Item1;
+        saveInto.valueLastWeek = todayVsLastWeekToday.Item2;
+    }
+
+	private async void GetDataWeek(DataTypes dataType, LoadedData saveInto)
 	{
-		dataOverPeriodChart.SetSerieData(await statisticsController.LoadGraph(dataType, false), 0);
-		dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == 0 ? "###,###,###" : "0.## km");
+        List<double> chartData = await statisticsController.LoadGraph(dataType, false);
+
+        dataOverPeriodChart.SetSerieData(chartData, 0);
+		dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
 		dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
 
 
-		ConsistantDataWithDateRange(dataType);
+		ConsistantDataWithDateRange(dataType, saveInto);
 
 
 		Tuple<double, double> thisWeekVsLastWeek = await statisticsController.LoadThisWeekVsLastWeek(dataType);
 
 		thisWeekValue.text = thisWeekVsLastWeek.Item1.ToString();
 		lastWeekValue.text = thisWeekVsLastWeek.Item2.ToString();
-	}
 
-	private async void ConsistantDataWithDateRange(int dataType)
+
+        saveInto.chartData = chartData;
+        saveInto.chartActions += () =>
+        {
+            dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
+            dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
+        };
+        saveInto.valueThisWeek = thisWeekVsLastWeek.Item1;
+        saveInto.valueLastWeek = thisWeekVsLastWeek.Item2;
+    }
+
+	private async void ConsistantDataWithDateRange(DataTypes dataType, LoadedData saveInto)
 	{
 
 		double value = await statisticsController.LoadGoals(dataType);
 
-		if (dataType == 0)
+		if (dataType == DataTypes.Steps)
 		{
 			goalObject.icon.sprite = stepsIcon;
 			goalObject.icon.transform.parent.GetComponent<Image>().color = stepsColour;
@@ -356,7 +466,17 @@ public class StatisticsWindow : MonoBehaviour
 			goalObject.dailyGoalMaxText.text = UserGoals.GetDailyStepGoal().ToString();
 
 			goalObject.percentText.text = Math.Round((value / UserGoals.GetDailyStepGoal()) * 100, 1).ToString() + "%";
-		}
+
+
+            saveInto.goalActions += () =>
+            {
+                goalObject.dailyGoalProgress.valueLimit = UserGoals.GetDailyDistanceGoal();
+                goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyDistanceGoal();
+                goalObject.dailyGoalProgress.decimals = 2;
+
+                goalObject.dailyGoalProgress.ChangeValue((float)value);
+            };
+        }
 		else
 		{
 			goalObject.icon.sprite = distanceicon;
@@ -370,34 +490,64 @@ public class StatisticsWindow : MonoBehaviour
 			goalObject.dailyGoalMaxText.text = UserGoals.GetDailyDistanceGoal().ToString() + " km";
 
 			goalObject.percentText.text = Math.Round((value / UserGoals.GetDailyDistanceGoal()) * 100, 1).ToString() + "%";
-		}
+
+
+            saveInto.goalActions += () =>
+            {
+                goalObject.dailyGoalProgress.valueLimit = UserGoals.GetDailyDistanceGoal();
+                goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyDistanceGoal();
+                goalObject.dailyGoalProgress.decimals = 2;
+
+                goalObject.dailyGoalProgress.ChangeValue((float)value);
+            };
+        }
 
 		goalObject.dailyGoalProgress.ChangeValue((float) value);
-	}
+
+
+        saveInto.icon = goalObject.icon.sprite;
+        saveInto.parentColour = goalObject.icon.transform.parent.GetComponent<Image>().color;
+        saveInto.percentText = goalObject.percentText.text;
+        saveInto.dailyGoalTitle = goalObject.dailyGoalTitle.text;
+        saveInto.dailyGoalMaxText = goalObject.dailyGoalMaxText.text;
+    }
 
 #endif
 
-	#endregion
+    #endregion
 
 
-	#region Android statistics
+    private void LoadSavedData(LoadedData savedData)
+    {
+        dataOverPeriodChart.SetSerieData(savedData.chartData, 0);
+        savedData.chartActions.Invoke();
 
-	public class AndroidStatistics
+        thisWeekValue.text = savedData.valueThisWeek.ToString();
+        lastWeekValue.text = savedData.valueLastWeek.ToString();
+
+        goalObject.icon.sprite = savedData.icon;
+        goalObject.icon.transform.parent.GetComponent<Image>().color = savedData.parentColour;
+        goalObject.dailyGoalTitle.text = savedData.dailyGoalMaxText;
+        goalObject.percentText.text = savedData.percentText;
+        goalObject.dailyGoalMaxText.text = savedData.dailyGoalMaxText;
+    }
+
+
+    #region Android statistics
+
+#if UNITY_ANDROID || UNITY_EDITOR
+
+    public class AndroidStatistics
 	{
-		public async Task<List<double>> LoadGraph(int dataType, APIManager.GoogleFit.ApiData APIData)
+		public async Task<List<double>> LoadGraph(DataTypes dataType, GoogleFit.ApiData APIData)
 		{
 			JsonData json;
 
-			if (dataType == 0)
-			{
-				json = await APIManager.GoogleFit.GetStepsBetweenMillis(APIData);
-			}
-			else
-			{
-				json = await APIManager.GoogleFit.GetDistanceBetweenMillis(APIData);
-			}
+			if (dataType == DataTypes.Steps) json = await GoogleFit.GetStepsBetweenMillis(APIData);
+			else json = await GoogleFit.GetDistanceBetweenMillis(APIData);
 
-			List<double> weekValues = new List<double>();
+
+            List<double> weekValues = new List<double>();
 			float totalValue = 0;
 
 			for (int i = 0; i < json["bucket"].Count; i++)
@@ -407,9 +557,14 @@ public class StatisticsWindow : MonoBehaviour
 
 				try
 				{
-					item = double.Parse(stepData[0]["value"][0][(dataType == 0 ? "intVal" : "fpVal")].ToString());
+					item = double.Parse(stepData[0]["value"][0][(dataType == DataTypes.Steps ? "intVal" : "fpVal")].ToString());
 
-					totalValue += (float)item;
+                    if (dataType == DataTypes.Distance)
+                    {
+                        item = Math.Round((float)(item / 1000), 2);
+                    }
+
+                    totalValue += (float)item;
 				}
 				catch (ArgumentOutOfRangeException) { }
 				catch (KeyNotFoundException) { }
@@ -421,139 +576,156 @@ public class StatisticsWindow : MonoBehaviour
 		}
 
 
-		public async Task<double> LoadGoals(int dataType, APIManager.GoogleFit.ApiData APIData)
+		public async Task<double> LoadGoals(DataTypes dataType, GoogleFit.ApiData APIData)
 		{
-			JsonData json =  await APIManager.GoogleFit.GetStepsBetweenMillis(APIData);
+			JsonData json;
 
-			Debug.Log("statistics goals:: " + json["bucket"][0]["dataset"][0]["point"][0]["value"][0][(dataType == 0 ? "intVal" : "fpval")].ToString());
+			if(dataType == DataTypes.Steps) json = await GoogleFit.GetStepsBetweenMillis(APIData);
+			else json = await GoogleFit.GetDistanceBetweenMillis(APIData);
 
-			double value = double.Parse(json["bucket"][0]["dataset"][0]["point"][0]["value"][0][(dataType == 0 ? "intVal" : "fpval")].ToString());
+            Debug.Log(json.ToJson());
 
-			return value;
+			double value = double.Parse(json["bucket"][0]["dataset"][0]["point"][0]["value"][0][(dataType == DataTypes.Steps ? "intVal" : "fpVal")].ToString());
+
+
+            if (dataType == DataTypes.Distance)
+            {
+                value = Math.Round((float)(value / 1000), 2);
+            }
+
+            return value;
 		}
 
 
-		public async Task<Tuple<double, double>> LoadTodayVsLastWeekToday(int dataType)
+		public async Task<Tuple<double, double>> LoadTodayVsLastWeekToday(DataTypes dataType)
 		{
 			DateTime startRequest = DateTime.Today;
 			DateTime endRequest = DateTime.Now;
-			APIManager.GoogleFit.ApiData APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest);
+			GoogleFit.ApiData APIData = GoogleFit.GenerateAPIbody(startRequest, endRequest);
 
 
 			JsonData today;
 
 
-			if (dataType == 0) today = await APIManager.GoogleFit.GetStepsBetweenMillis(APIData);
-			else today = await APIManager.GoogleFit.GetDistanceBetweenMillis(APIData);
+			if (dataType == DataTypes.Steps) today = await GoogleFit.GetStepsBetweenMillis(APIData);
+			else today = await GoogleFit.GetDistanceBetweenMillis(APIData);
 
 
 
 			startRequest = DateTime.Today.AddDays(-7);
 			endRequest = DateTime.Today.AddDays(-6);
-			APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest);
+			APIData = GoogleFit.GenerateAPIbody(startRequest, endRequest);
 
 
 			JsonData lastWeekToday;
 
 
-			if (dataType == 0) lastWeekToday = await APIManager.GoogleFit.GetStepsBetweenMillis(APIData);
-			else lastWeekToday = await APIManager.GoogleFit.GetDistanceBetweenMillis(APIData);
+			if (dataType == DataTypes.Steps) lastWeekToday = await GoogleFit.GetStepsBetweenMillis(APIData);
+			else lastWeekToday = await GoogleFit.GetDistanceBetweenMillis(APIData);
 
 
-			Debug.Log("[Statistics] today \n" + today.ToJson());
-			Debug.Log("[Statistics] last wk today \n" + lastWeekToday.ToJson());
 
-			double todayV = double.Parse(today[0]
+			double todayV = double.Parse(today["bucket"][0]
 				["dataset"][0]["point"][0]
-				["value"][(dataType == 0 ? "intVal" : "fpVal")].ToString());
+				["value"][0][(dataType == DataTypes.Steps ? "intVal" : "fpVal")].ToString());
 
-			double lastWeekV = double.Parse(lastWeekToday[0]
+			double lastWeekV = double.Parse(lastWeekToday["bucket"][0]
 				["dataset"][0]["point"][0]
-				["value"][(dataType == 0 ? "intVal" : "fpVal")].ToString());
+				["value"][0][(dataType == DataTypes.Steps ? "intVal" : "fpVal")].ToString());
 
-			Debug.Log("[Statistics]", () => todayV);
-			Debug.Log("[Statistics]", () => lastWeekV);
+
+			if(dataType == DataTypes.Distance)
+			{
+				todayV = Math.Round((float)(todayV / 1000), 2);
+                lastWeekV = Math.Round((float)(lastWeekV / 1000), 2);
+			}
 
 
 			return new Tuple<double, double>(todayV, lastWeekV);
 		}
 
-		public async Task<Tuple<double, double>> LoadThisWeekVsLastWeek(int dataType)
+		public async Task<Tuple<double, double>> LoadThisWeekVsLastWeek(DataTypes dataType)
 		{
 			DateTime startRequest = UsefulFunctions.StartOfWeek();
 			DateTime endRequest = DateTime.Now;
-			APIManager.GoogleFit.ApiData APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest);
+			GoogleFit.ApiData APIData = GoogleFit.GenerateAPIbody(startRequest, endRequest, 604800000);
 
 
 			JsonData thisWeek;
 
 
-			if (dataType == 0) thisWeek = await APIManager.GoogleFit.GetStepsBetweenMillis(APIData);
-			else thisWeek = await APIManager.GoogleFit.GetDistanceBetweenMillis(APIData);
+			if (dataType == DataTypes.Steps) thisWeek = await GoogleFit.GetStepsBetweenMillis(APIData);
+			else thisWeek = await GoogleFit.GetDistanceBetweenMillis(APIData);
 
 
 			startRequest = UsefulFunctions.StartOfWeek().AddDays(-7);
 			endRequest = startRequest.AddDays(7);
-			APIData = APIManager.GoogleFit.GenerateAPIbody(startRequest, endRequest, 604800000);
+			APIData = GoogleFit.GenerateAPIbody(startRequest, endRequest, 604800000);
 
 
 			JsonData lastWeek;
 
 
-			if (dataType == 0) lastWeek = await APIManager.GoogleFit.GetStepsBetweenMillis(APIData);
-			else lastWeek = await APIManager.GoogleFit.GetDistanceBetweenMillis(APIData);
+			if (dataType == DataTypes.Steps) lastWeek = await GoogleFit.GetStepsBetweenMillis(APIData);
+			else lastWeek = await GoogleFit.GetDistanceBetweenMillis(APIData);
 
-
-			Debug.Log("[Statistics] thisWeek \n" + thisWeek.ToJson());
-			Debug.Log("[Statistics] lastWeek \n" + lastWeek.ToJson());
 
 			double todayV = double.Parse(thisWeek["bucket"][0]
 			["dataset"][0]["point"][0]
-				["value"][(dataType == 0 ? "intVal" : "fpVal")].ToString());
+				["value"][0][(dataType == DataTypes.Steps ? "intVal" : "fpVal")].ToString());
 
 			double lastWeekV = double.Parse(lastWeek["bucket"][0]
 			["dataset"][0]["point"][0]
-				["value"][(dataType == 0 ? "intVal" : "fpVal")].ToString());
+				["value"][0][(dataType == DataTypes.Steps ? "intVal" : "fpVal")].ToString());
 
 
-			return new Tuple<double, double>(todayV, lastWeekV);
+            if (dataType == DataTypes.Distance)
+            {
+                todayV = Math.Round((float)(todayV / 1000), 2);
+                lastWeekV = Math.Round((float)(lastWeekV / 1000), 2);
+            }
+
+
+            return new Tuple<double, double>(todayV, lastWeekV);
 		}
 	}
+
+#endif
 
 	#endregion
 
 
 	#region iOS statistics
 
+#if UNITY_IOS || UNITY_EDITOR
+
 	public class iOSStatistics
 	{
-		public async Task<List<double>> LoadGraph(int dataType, bool isDayData)
+		public async Task<List<double>> LoadGraph(DataTypes dataType, bool isDayData)
 		{
 			if (isDayData)
 			{
 				DateTime start = DateTime.Today;
 				DateTime end = DateTime.Now;
 
-				List<APIManager.HealthKit.QuantityData> data;
+				List<HealthKit.QuantityData> data;
 
-				if (dataType == 0)
+				if (dataType == DataTypes.Steps)
 				{
-					data = await APIManager.HealthKit.GetStepsList(start, end);
+					data = await HealthKit.GetStepsList(start, end);
 				}
 				else
 				{
-					data = await APIManager.HealthKit.GetDistanceList(start, end);
+					data = await HealthKit.GetDistanceList(start, end);
 				}
 
-				List<APIManager.HealthKit.OrderedQuantityData> orderedData = APIManager.HealthKit.OrderQuantityListHour(data);
+				List<HealthKit.OrderedQuantityData> orderedData = HealthKit.OrderQuantityListHour(data);
 
 				List<double> dayValues = new List<double>(new double[24]);
 
 
 				for (int i = 0; i < orderedData.Count; i++)
 				{
-					//Debug.Log("[Statistics] DAY:   " + orderedData[i].timeOfData.ToString("t") + " value: " + orderedData[i].value);
-
 					dayValues[orderedData[i].timeOfData.Hour] = orderedData[i].value;
 				}
 
@@ -567,26 +739,24 @@ public class StatisticsWindow : MonoBehaviour
 				DateTime start = UsefulFunctions.StartOfWeek();
 				DateTime end = DateTime.Now;
 
-				List<APIManager.HealthKit.QuantityData> data;
+				List<HealthKit.QuantityData> data;
 
-				if (dataType == 0)
+				if (dataType == DataTypes.Steps)
 				{
-					data = await APIManager.HealthKit.GetStepsList(start, end);
+					data = await HealthKit.GetStepsList(start, end);
 				}
 				else
 				{
-					data = await APIManager.HealthKit.GetDistanceList(start, end);
+					data = await HealthKit.GetDistanceList(start, end);
 				}
 
-				List<APIManager.HealthKit.OrderedQuantityData> orderedData = APIManager.HealthKit.OrderQuantityListDay(data);
+				List<HealthKit.OrderedQuantityData> orderedData = HealthKit.OrderQuantityListDay(data);
 
 				List<double> weekValues = new List<double>(new double[7]);
 
 
 				for (int i = 0; i < orderedData.Count; i++)
 				{
-					//Debug.Log("[Statistics] WEEK:   " + orderedData[i].timeOfData.ToString("d") + " value: " + orderedData[i].value);
-
 					weekValues[(int)orderedData[i].timeOfData.DayOfWeek - 1] = orderedData[i].value;
 				}
 
@@ -596,36 +766,30 @@ public class StatisticsWindow : MonoBehaviour
 		}
 
 
-		public async Task<double> LoadGoals(int dataType)
+		public async Task<double> LoadGoals(DataTypes dataType)
 		{
 			DateTime start = DateTime.Today;
 			DateTime end = DateTime.Now;
 
-			if(dataType == 0)
-			{
-				return await APIManager.HealthKit.GetSteps(start, end);
-			}
-			else
-			{
-				return await APIManager.HealthKit.GetDistance(start, end);
-			}            
+			if(dataType == DataTypes.Steps) return await HealthKit.GetSteps(start, end);
+			else return await HealthKit.GetDistance(start, end);
 		}
 
 
-		public async Task<Tuple<double, double>> LoadTodayVsLastWeekToday(int dataType)
+		public async Task<Tuple<double, double>> LoadTodayVsLastWeekToday(DataTypes dataType)
 		{
 			DateTime start = DateTime.Today;
 			DateTime end = DateTime.Now;
 
 			double today;
 
-			if (dataType == 0)
+			if (dataType == DataTypes.Steps)
 			{
-				today = await APIManager.HealthKit.GetSteps(start, end);
+				today = await HealthKit.GetSteps(start, end);
 			}
 			else
 			{
-				today = await APIManager.HealthKit.GetDistance(start, end);
+				today = await HealthKit.GetDistance(start, end);
 			}
 
 
@@ -634,34 +798,24 @@ public class StatisticsWindow : MonoBehaviour
 
 			double lastWeekToday;
 
-			if (dataType == 0)
-			{
-				lastWeekToday = await APIManager.HealthKit.GetSteps(start, end);
-			}
-			else
-			{
-				lastWeekToday = await APIManager.HealthKit.GetDistance(start, end);
-			}
 
-			return new Tuple<double, double>(today, lastWeekToday);
+			if (dataType == DataTypes.Steps) lastWeekToday = await HealthKit.GetSteps(start, end);
+            else lastWeekToday = await HealthKit.GetDistance(start, end);
+
+
+            return new Tuple<double, double>(today, lastWeekToday);
 		}
 
-		public async Task<Tuple<double, double>> LoadThisWeekVsLastWeek(int dataType)
+		public async Task<Tuple<double, double>> LoadThisWeekVsLastWeek(DataTypes dataType)
 		{
 			DateTime start = UsefulFunctions.StartOfWeek();
 			DateTime end = DateTime.Now;
 
 			double thisWeek;
 
-			if (dataType == 0)
-			{
-				thisWeek = await APIManager.HealthKit.GetSteps(start, end);
-			}
-			else
-			{
-				thisWeek = await APIManager.HealthKit.GetDistance(start, end);
-			}
-
+			if (dataType == DataTypes.Steps) thisWeek = await HealthKit.GetSteps(start, end);
+			else thisWeek = await HealthKit.GetDistance(start, end);
+           
 
 			start = UsefulFunctions.StartOfWeek().AddDays(-7);
 			end = start.AddDays(7);
@@ -669,21 +823,18 @@ public class StatisticsWindow : MonoBehaviour
 
 			double lastWeek;
 
-			if (dataType == 0)
-			{
-				lastWeek = await APIManager.HealthKit.GetSteps(start, end);
-			}
-			else
-			{
-				lastWeek = await APIManager.HealthKit.GetDistance(start, end);
-			}
+
+			if (dataType == DataTypes.Steps) lastWeek = await HealthKit.GetSteps(start, end);
+			else lastWeek = await HealthKit.GetDistance(start, end);
+
 
 			return new Tuple<double, double>(thisWeek, lastWeek);
 		}        
 	}
 
+#endif
 
-	#endregion
+#endregion
 
 
 	#region helpers
