@@ -15,6 +15,9 @@ public class AuthenticateWindow : MonoBehaviour
     [Space]
     public int locationWindowIndex = 1;
 
+    [Space]
+    public CustomInputField nameInput;
+
     [Space(30)]
     public ButtonManager continueButton;
 
@@ -121,6 +124,11 @@ public class AuthenticateWindow : MonoBehaviour
     //called when everything about authentication has been completed
     public void UserAuthenticated()
     {
+        if(nameInput.inputText.text != "")
+        {
+            PlayerPrefsX.SetString(PlayerPrefsLocations.User.Account.Details.name, nameInput.inputText.text);
+        }
+
         PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Account.authenticated, true);
 
         continueButton.onClick.Invoke();

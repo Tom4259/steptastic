@@ -8,7 +8,6 @@ using API = APIManager.GoogleFit;
 using UnityEngine.UI;
 using Michsky.MUIP;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using UnityEngine.Events;
 
 public class MainWindow : MonoBehaviour
@@ -26,6 +25,7 @@ public class MainWindow : MonoBehaviour
     [Header("Home screen")]
     public GameObject homeScreen;
     [Space(5)]
+    public TMP_Text hiThereText;
     public TMP_Text todayDate;
 
 
@@ -66,6 +66,8 @@ public class MainWindow : MonoBehaviour
     public async void StartMainWindow()
 	{
 		CanvasManager.instance.loadingScreen.gameObject.SetActive(true);
+
+        hiThereText.text = "Hi " + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Account.Details.name, "there") + "!";
 
         DateTime now = DateTime.Now;
 

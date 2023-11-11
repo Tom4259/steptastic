@@ -45,6 +45,11 @@ public class PlayerPrefsLocations : MonoBehaviour
                 /// </summary>
                 public static string expiresIn = "user.account.codes.expiresin";
             }
+
+            public class Details
+            {
+                public static string name = "user.account.details.name";
+            }
         }
 
 
