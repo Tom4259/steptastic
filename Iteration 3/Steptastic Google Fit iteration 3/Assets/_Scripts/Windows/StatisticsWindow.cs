@@ -14,7 +14,6 @@ public class StatisticsWindow : MonoBehaviour
 	private class LoadedData
 	{
 		public List<double> chartData;
-		public UnityAction chartActions;
 
 		public double valueThisWeek;
 		public double valueLastWeek;
@@ -29,6 +28,10 @@ public class StatisticsWindow : MonoBehaviour
 
 		public float progressBarMaxValue;
 		public int progressBarDecimals;
+
+
+
+		public UnityAction additionalActions;
 	}
 
 
@@ -36,11 +39,11 @@ public class StatisticsWindow : MonoBehaviour
 	public class GoalItem
 	{
 		public Image icon;
-		//public string titleText;
-		public TMP_Text dailyGoalTitle;
-		public ProgressBar dailyGoalProgress;
+		public TMP_Text goalTitle;
+		public ProgressBar goalProgressbar;
+		public Image progressBarBackground;
 		public TMP_Text percentText;
-		public TMP_Text dailyGoalMaxText;
+		public TMP_Text goalMaxText;
 	}
 
 	private enum Views
@@ -83,7 +86,7 @@ public class StatisticsWindow : MonoBehaviour
 	public GoalItem goalObject;
 	public Sprite stepsIcon;
 	public Color stepsColour;
-	public Sprite distanceicon;
+	public Sprite distanceIcon;
 	public Color distanceColour;
 
 
@@ -140,10 +143,8 @@ public class StatisticsWindow : MonoBehaviour
 		UpdateUI();
 	}
 
-	public void UpdateUI()
+	public async void UpdateUI()
 	{
-		//Debug.Log("[Statistics] Updating UI");
-
 		//updating the new view
 		if (dataTypeDropdown.selectedItemIndex == 0 && viewPeriodDropdown.selectedItemIndex == 0)
 		{
@@ -166,39 +167,31 @@ public class StatisticsWindow : MonoBehaviour
 		switch (currentView)
 		{
 			case Views.StepsDay:
-
-				dataOverPeriodChart.SetChartTitle("Steps over the day");
-				SetDayXAxis();
-
 				
 				if (loadedStepsDay == null)
 				{
 					loadedStepsDay = new LoadedData();
 
 					//make request here
-					GetDataDay(DataTypes.Steps, loadedStepsDay);
+					await GetDataDay(DataTypes.Steps, loadedStepsDay);
 				}
 				else//load data here
 				{
 					Debug.Log("[Statistics] Loading saved data");
 
 					LoadSavedData(loadedStepsDay);
-				}
+				}                
 
-				break;
+                break;
 
 			case Views.StepsWeek:
-
-				dataOverPeriodChart.SetChartTitle("Steps over the week");
-				SetWeekXAxis();
-
 
 				if (loadedStepsWeek == null)
 				{
 					loadedStepsWeek = new LoadedData();
 
 					//make request here
-					GetDataWeek(DataTypes.Steps, loadedStepsWeek);
+					await GetDataWeek(DataTypes.Steps, loadedStepsWeek);
 				}
 				else//load data here
 				{
@@ -207,20 +200,16 @@ public class StatisticsWindow : MonoBehaviour
 					LoadSavedData(loadedStepsWeek);
 				}
 
-				break;
+                break;
 
 			case Views.DistanceDay:
-
-				dataOverPeriodChart.SetChartTitle("Distance over the day");
-				SetDayXAxis();
-
 
 				if (loadedDistanceDay == null)
 				{
 					loadedDistanceDay = new LoadedData();
 
 					//make request here
-					GetDataDay(DataTypes.Distance, loadedDistanceDay);
+					await GetDataDay(DataTypes.Distance, loadedDistanceDay);
 				}
 				else//load data here
 				{
@@ -229,20 +218,16 @@ public class StatisticsWindow : MonoBehaviour
 					LoadSavedData(loadedDistanceDay);
 				}
 
-				break;
+                break;
 
 			case Views.DistanceWeek:
-
-				dataOverPeriodChart.SetChartTitle("Distance over the week");
-				SetWeekXAxis();
-
 				
 				if (loadedDistanceWeek == null)
 				{
 					loadedDistanceWeek = new LoadedData();
 
 					//make request here
-					GetDataWeek(DataTypes.Distance, loadedDistanceWeek);
+					await GetDataWeek(DataTypes.Distance, loadedDistanceWeek);
 				}
 				else//load data here
 				{
@@ -251,18 +236,20 @@ public class StatisticsWindow : MonoBehaviour
 					LoadSavedData(loadedDistanceWeek);
 				}
 
-				break;
+                break;
 		}
-	}
+
+        FormatData(currentView);
+    }
 
 
 
-	#region getting data
+	#region getting/loading data
 
 #if UNITY_ANDROID || UNITY_EDITOR
 
 
-	private async void GetDataDay(DataTypes dataType, LoadedData saveInto)
+	private async Task GetDataDay(DataTypes dataType, LoadedData saveInto)
 	{
 		DateTime startRequest = DateTime.Today;
 		DateTime endRequest = DateTime.Now;
@@ -271,7 +258,10 @@ public class StatisticsWindow : MonoBehaviour
 
 		List<double> chartData = await statisticsController.LoadGraph(dataType, APIData);
 
-		dataOverPeriodChart.SetSerieData(chartData, 0);
+        dataOverPeriodChart.SetChartTitle(dataType == DataTypes.Steps ? "Steps over the day" : "Distance over the day");
+        SetDayXAxis();
+
+        dataOverPeriodChart.SetSerieData(chartData, 0);
 		dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
 		dataOverPeriodChart.SetItemCornerRadius(dayRoundedCorners, 0);
 
@@ -286,16 +276,19 @@ public class StatisticsWindow : MonoBehaviour
 
 
 		saveInto.chartData = chartData;
-		saveInto.chartActions += () =>
+		saveInto.additionalActions += () =>
 		{
-			dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
+            dataOverPeriodChart.SetChartTitle(dataType == DataTypes.Steps ? "Steps over the day" : "Distance over the day");
+            SetDayXAxis();
+
+            dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
 			dataOverPeriodChart.SetItemCornerRadius(dayRoundedCorners, 0);
 		};
 		saveInto.valueThisWeek = todayVsLastWeekToday.Item1;
 		saveInto.valueLastWeek = todayVsLastWeekToday.Item2;
 	}
 
-	private async void GetDataWeek(DataTypes dataType, LoadedData saveInto)
+	private async Task GetDataWeek(DataTypes dataType, LoadedData saveInto)
 	{
 		DateTime startRequest = UsefulFunctions.StartOfWeek();
 		DateTime endRequest = DateTime.Now;
@@ -304,7 +297,10 @@ public class StatisticsWindow : MonoBehaviour
 
 		List<double> chartData = await statisticsController.LoadGraph(dataType, APIData);
 
-		dataOverPeriodChart.SetSerieData(chartData, 0);
+        dataOverPeriodChart.SetChartTitle(dataType == DataTypes.Steps ? "Steps over the week" : "Distance over the week");
+		SetWeekXAxis();
+
+        dataOverPeriodChart.SetSerieData(chartData, 0);
 		dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
 		dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
 
@@ -319,9 +315,12 @@ public class StatisticsWindow : MonoBehaviour
 
 
 		saveInto.chartData = chartData;
-		saveInto.chartActions += () =>
+		saveInto.additionalActions += () =>
 		{
-			dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
+            dataOverPeriodChart.SetChartTitle(dataType == DataTypes.Steps ? "Steps over the week" : "Distance over the week");
+            SetWeekXAxis();
+
+            dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
 			dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
 		};
 		saveInto.valueThisWeek = thisWeekVsLastWeek.Item1;
@@ -329,28 +328,31 @@ public class StatisticsWindow : MonoBehaviour
 	}
 
 
-
 	private async void GetAndSaveGoals(DataTypes dataType, DataPeriods dataPeriod, LoadedData saveInto)
 	{
 		DateTime start;
 		DateTime end;
+		GoogleFit.ApiData APIData;
 
-		if(dataPeriod == DataPeriods.Day)
+
+        if (dataPeriod == DataPeriods.Day)
 		{
 			start = DateTime.Today;
 			end = DateTime.Now;
-		}
+
+            APIData = GoogleFit.GenerateAPIbody(start, end);
+        }
 		else if(dataPeriod == DataPeriods.Week)
 		{
 			start = UsefulFunctions.StartOfWeek();
 			end = DateTime.Now;
-		}
+
+            APIData = GoogleFit.GenerateAPIbody(start, end, 604800000);
+        }
 		else
 		{
 			throw new NotImplementedException();
 		}
-
-		GoogleFit.ApiData APIData = GoogleFit.GenerateAPIbody(start, end);
 
 		double value = await statisticsController.LoadGoals(dataType, APIData);
 
@@ -365,33 +367,53 @@ public class StatisticsWindow : MonoBehaviour
 
 				goalObject.percentText.text = Math.Round((value / UserGoals.GetDailyStepGoal()) * 100, 1).ToString() + "%";
 
-				goalObject.dailyGoalTitle.text = "Steps made today";
-				goalObject.dailyGoalProgress.valueLimit = UserGoals.GetDailyStepGoal();
-				goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyStepGoal();
-				goalObject.dailyGoalProgress.decimals = 0;
+				goalObject.goalTitle.text = "Steps made today";
+				goalObject.goalProgressbar.valueLimit = UserGoals.GetDailyStepGoal();
+				goalObject.goalProgressbar.maxValue = UserGoals.GetDailyStepGoal();
+				goalObject.goalProgressbar.decimals = 0;
+				goalObject.goalProgressbar.loadingBar.color = stepsColour;
+				goalObject.progressBarBackground.color = new Color(stepsColour.r, g: stepsColour.g, stepsColour.b, 0.07843138f);
 
-				goalObject.dailyGoalMaxText.text = UserGoals.GetDailyStepGoal().ToString();
+				goalObject.goalMaxText.text = UserGoals.GetDailyStepGoal().ToString();
 
 
-				saveInto.progressBarMaxValue = UserGoals.GetDailyStepGoal();
+				saveInto.additionalActions += () =>
+				{
+					goalObject.goalProgressbar.loadingBar.color = stepsColour;
+					goalObject.progressBarBackground.color = new Color(stepsColour.r,
+						stepsColour.g,
+						stepsColour.b,
+						0.07843138f);
+				};
+
+                saveInto.progressBarMaxValue = UserGoals.GetDailyStepGoal();
 				saveInto.progressBarDecimals = 0;
 			}
 			else
 			{
-				goalObject.icon.sprite = distanceicon;
+				goalObject.icon.sprite = distanceIcon;
 				goalObject.icon.transform.parent.GetComponent<Image>().color = distanceColour;
-				goalObject.dailyGoalTitle.text = "Distance covered today";
+				goalObject.goalTitle.text = "Distance covered today";
 
-				goalObject.dailyGoalProgress.valueLimit = UserGoals.GetDailyDistanceGoal();
-				goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyDistanceGoal();
-				goalObject.dailyGoalProgress.decimals = 2;
+				goalObject.goalProgressbar.valueLimit = UserGoals.GetDailyDistanceGoal();
+				goalObject.goalProgressbar.maxValue = UserGoals.GetDailyDistanceGoal();
+				goalObject.goalProgressbar.decimals = 2;
+                goalObject.goalProgressbar.loadingBar.color = distanceColour;
+                goalObject.progressBarBackground.color = new Color(distanceColour.r, g: distanceColour.g, distanceColour.b, 0.07843138f);
 
-				goalObject.dailyGoalMaxText.text = UserGoals.GetDailyDistanceGoal().ToString() + " km";
+                goalObject.goalMaxText.text = UserGoals.GetDailyDistanceGoal().ToString();
 
 				goalObject.percentText.text = Math.Round((value / UserGoals.GetDailyDistanceGoal()) * 100, 1).ToString() + "%";
 
-
-				saveInto.progressBarMaxValue = UserGoals.GetDailyDistanceGoal();
+                saveInto.additionalActions += () =>
+                {
+                    goalObject.goalProgressbar.loadingBar.color = distanceColour;
+                    goalObject.progressBarBackground.color = new Color(distanceColour.r,
+                        distanceColour.g,
+                        distanceColour.b,
+                        0.07843138f);
+                };
+                saveInto.progressBarMaxValue = UserGoals.GetDailyDistanceGoal();
 				saveInto.progressBarDecimals = 2;
 			}
 		}
@@ -404,54 +426,76 @@ public class StatisticsWindow : MonoBehaviour
 
 				goalObject.percentText.text = Math.Round((value / UserGoals.GetWeeklyStepGoal()) * 100, 1).ToString() + "%";
 
-				goalObject.dailyGoalTitle.text = "Steps made this week";
-				goalObject.dailyGoalProgress.valueLimit = UserGoals.GetWeeklyStepGoal();
-				goalObject.dailyGoalProgress.maxValue = UserGoals.GetWeeklyStepGoal();
-				goalObject.dailyGoalProgress.decimals = 0;
+				goalObject.goalTitle.text = "Steps made this week";
+				goalObject.goalProgressbar.valueLimit = UserGoals.GetWeeklyStepGoal();
+				goalObject.goalProgressbar.maxValue = UserGoals.GetWeeklyStepGoal();
+				goalObject.goalProgressbar.decimals = 0;
+                goalObject.goalProgressbar.loadingBar.color = stepsColour;
+                goalObject.progressBarBackground.color = new Color(stepsColour.r, g: stepsColour.g, stepsColour.b, 0.07843138f);
 
-				goalObject.dailyGoalMaxText.text = UserGoals.GetWeeklyStepGoal().ToString();
+                goalObject.goalMaxText.text = UserGoals.GetWeeklyStepGoal().ToString();
 
 
+				saveInto.additionalActions += () =>
+				{
+					goalObject.goalProgressbar.loadingBar.color = stepsColour;
+					goalObject.progressBarBackground.color = new Color(stepsColour.r,
+						stepsColour.g,
+						stepsColour.b,
+						0.07843138f);
+				};
 				saveInto.progressBarMaxValue = UserGoals.GetWeeklyStepGoal();
 				saveInto.progressBarDecimals = 0;
 			}
 			else
 			{
-				goalObject.icon.sprite = distanceicon;
+				goalObject.icon.sprite = distanceIcon;
 				goalObject.icon.transform.parent.GetComponent<Image>().color = distanceColour;
-				goalObject.dailyGoalTitle.text = "Distance covered this week";
+				goalObject.goalTitle.text = "Distance covered this week";
 
-				goalObject.dailyGoalProgress.valueLimit = UserGoals.GetWeeklyDistanceGoal();
-				goalObject.dailyGoalProgress.maxValue = UserGoals.GetWeeklyDistanceGoal();
-				goalObject.dailyGoalProgress.decimals = 2;
+				goalObject.goalProgressbar.valueLimit = UserGoals.GetWeeklyDistanceGoal();
+				goalObject.goalProgressbar.maxValue = UserGoals.GetWeeklyDistanceGoal();
+				goalObject.goalProgressbar.decimals = 2;
+                goalObject.goalProgressbar.loadingBar.color = distanceColour;
+                goalObject.progressBarBackground.color = new Color(distanceColour.r, g: distanceColour.g, distanceColour.b, 0.07843138f);
 
-				goalObject.dailyGoalMaxText.text = UserGoals.GetWeeklyDistanceGoal().ToString() + " km";
+                goalObject.goalMaxText.text = UserGoals.GetWeeklyDistanceGoal().ToString();
 
 				goalObject.percentText.text = Math.Round((value / UserGoals.GetWeeklyDistanceGoal()) * 100, 1).ToString() + "%";
 
-
-				saveInto.progressBarMaxValue = UserGoals.GetWeeklyDistanceGoal();
+                saveInto.additionalActions += () =>
+                {
+                    goalObject.goalProgressbar.loadingBar.color = distanceColour;
+                    goalObject.progressBarBackground.color = new Color(distanceColour.r,
+                        distanceColour.g,
+                        distanceColour.b,
+                        0.07843138f);
+                };
+                saveInto.progressBarMaxValue = UserGoals.GetWeeklyDistanceGoal();
 				saveInto.progressBarDecimals = 2;
 			}
 		}
 
-		goalObject.dailyGoalProgress.ChangeValue((float) value);
+		goalObject.goalProgressbar.ChangeValue((float) value);
 
 
 		saveInto.icon = goalObject.icon.sprite;
 		saveInto.parentColour = goalObject.icon.transform.parent.GetComponent<Image>().color;
 		saveInto.percentText = goalObject.percentText.text;
-		saveInto.goalTitle = goalObject.dailyGoalTitle.text;
-		saveInto.dailyGoalMaxText = goalObject.dailyGoalMaxText.text;
+		saveInto.goalTitle = goalObject.goalTitle.text;
+		saveInto.dailyGoalMaxText = goalObject.goalMaxText.text;
 	}
 
 
 #elif UNITY_IOS
 
 
-	private async void GetDataDay(DataTypes dataType, LoadedData saveInto)
+	private async Task GetDataDay(DataTypes dataType, LoadedData saveInto)
 	{
 		List<double> chartData = await statisticsController.LoadGraph(dataType, true);
+
+		dataOverPeriodChart.SetChartTitle(dataType == DataTypes.Steps ? "Steps over the day" : "Distance over the day");
+        SetDayXAxis();
 
 		dataOverPeriodChart.SetSerieData(chartData, 0);
 		dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
@@ -468,8 +512,11 @@ public class StatisticsWindow : MonoBehaviour
 
 
 		saveInto.chartData = chartData;
-		saveInto.chartActions += () =>
+		saveInto.additionalActions += () =>
 		{
+			dataOverPeriodChart.SetChartTitle(dataType == DataTypes.Steps ? "Steps over the day" : "Distance over the day");
+			SetDayXAxis();
+
 			dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
 			dataOverPeriodChart.SetItemCornerRadius(dayRoundedCorners, 0);
 		};
@@ -477,9 +524,12 @@ public class StatisticsWindow : MonoBehaviour
 		saveInto.valueLastWeek = todayVsLastWeekToday.Item2;
 	}
 
-	private async void GetDataWeek(DataTypes dataType, LoadedData saveInto)
+	private async Task GetDataWeek(DataTypes dataType, LoadedData saveInto)
 	{
 		List<double> chartData = await statisticsController.LoadGraph(dataType, false);
+
+		dataOverPeriodChart.SetChartTitle(dataType == DataTypes.Steps ? "Steps over the week" : "Distance over the week");
+		SetWeekXAxis();
 
 		dataOverPeriodChart.SetSerieData(chartData, 0);
 		dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
@@ -496,8 +546,11 @@ public class StatisticsWindow : MonoBehaviour
 
 
 		saveInto.chartData = chartData;
-		saveInto.chartActions += () =>
+		saveInto.additionalActions += () =>
 		{
+			dataOverPeriodChart.SetChartTitle(dataType == DataTypes.Steps ? "Steps over the week" : "Distance over the week");
+			SetWeekXAxis();
+
 			dataOverPeriodChart.SetYAxisNumbericFormatter(dataType == DataTypes.Steps ? "###,###,###" : "0.## km");
 			dataOverPeriodChart.SetItemCornerRadius(weekRoundedCorners, 0);
 		};
@@ -518,36 +571,54 @@ public class StatisticsWindow : MonoBehaviour
 			{
 				goalObject.icon.sprite = stepsIcon;
 				goalObject.icon.transform.parent.GetComponent<Image>().color = stepsColour;
-				goalObject.dailyGoalTitle.text = "Steps made today";
+				goalObject.goalTitle.text = "Steps made today";
 
-				goalObject.dailyGoalProgress.valueLimit = UserGoals.GetDailyStepGoal();
-				goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyStepGoal();
-				goalObject.dailyGoalProgress.decimals = 0;
+				goalObject.goalProgressbar.valueLimit = UserGoals.GetDailyStepGoal();
+				goalObject.goalProgressbar.maxValue = UserGoals.GetDailyStepGoal();
+				goalObject.goalProgressbar.decimals = 0;
+                goalObject.goalProgressbar.loadingBar.color = stepsColour;
+                goalObject.progressBarBackground.color = new Color(stepsColour.r, g: stepsColour.g, stepsColour.b, 0.07843138f);
 
-				goalObject.dailyGoalMaxText.text = UserGoals.GetDailyStepGoal().ToString();
+                goalObject.goalMaxText.text = UserGoals.GetDailyStepGoal().ToString();
 
 				goalObject.percentText.text = Math.Round((value / UserGoals.GetDailyStepGoal()) * 100, 1).ToString() + "%";
 
-
-				saveInto.progressBarMaxValue = UserGoals.GetDailyStepGoal();
+                saveInto.additionalActions += () =>
+                {
+                    goalObject.goalProgressbar.loadingBar.color = stepsColour;
+                    goalObject.progressBarBackground.color = new Color(stepsColour.r,
+                        stepsColour.g,
+                        stepsColour.b,
+                        0.07843138f);
+                };
+                saveInto.progressBarMaxValue = UserGoals.GetDailyStepGoal();
 				saveInto.progressBarDecimals = 0;
 			}
 			else
 			{
-				goalObject.icon.sprite = distanceicon;
+				goalObject.icon.sprite = distanceIcon;
 				goalObject.icon.transform.parent.GetComponent<Image>().color = distanceColour;
-				goalObject.dailyGoalTitle.text = "Distance covered today";
+				goalObject.goalTitle.text = "Distance covered today";
 
-				goalObject.dailyGoalProgress.valueLimit = UserGoals.GetDailyDistanceGoal();
-				goalObject.dailyGoalProgress.maxValue = UserGoals.GetDailyDistanceGoal();
-				goalObject.dailyGoalProgress.decimals = 2;
+				goalObject.goalProgressbar.valueLimit = UserGoals.GetDailyDistanceGoal();
+				goalObject.goalProgressbar.maxValue = UserGoals.GetDailyDistanceGoal();
+				goalObject.goalProgressbar.decimals = 2;
+                goalObject.goalProgressbar.loadingBar.color = distanceColour;
+                goalObject.progressBarBackground.color = new Color(distanceColour.r, g: distanceColour.g, distanceColour.b, 0.07843138f);
 
-				goalObject.dailyGoalMaxText.text = UserGoals.GetDailyDistanceGoal().ToString() + " km";
+                goalObject.goalMaxText.text = UserGoals.GetDailyDistanceGoal().ToString();
 
 				goalObject.percentText.text = Math.Round((value / UserGoals.GetDailyDistanceGoal()) * 100, 1).ToString() + "%";
 
-
-				saveInto.progressBarMaxValue = UserGoals.GetDailyDistanceGoal();
+                saveInto.additionalActions += () =>
+                {
+                    goalObject.goalProgressbar.loadingBar.color = distanceColour;
+                    goalObject.progressBarBackground.color = new Color(distanceColour.r,
+                        distanceColour.g,
+                        distanceColour.b,
+                        0.07843138f);
+                };
+                saveInto.progressBarMaxValue = UserGoals.GetDailyDistanceGoal();
 				saveInto.progressBarDecimals = 2;
 			}
 		}
@@ -557,83 +628,123 @@ public class StatisticsWindow : MonoBehaviour
 			{
 				goalObject.icon.sprite = stepsIcon;
 				goalObject.icon.transform.parent.GetComponent<Image>().color = stepsColour;
-				goalObject.dailyGoalTitle.text = "Steps made this week";
+				goalObject.goalTitle.text = "Steps made this week";
 
-				goalObject.dailyGoalProgress.valueLimit = UserGoals.GetWeeklyStepGoal();
-				goalObject.dailyGoalProgress.maxValue = UserGoals.GetWeeklyStepGoal();
-				goalObject.dailyGoalProgress.decimals = 0;
+				goalObject.goalProgressbar.valueLimit = UserGoals.GetWeeklyStepGoal();
+				goalObject.goalProgressbar.maxValue = UserGoals.GetWeeklyStepGoal();
+				goalObject.goalProgressbar.decimals = 0;
+                goalObject.goalProgressbar.loadingBar.color = stepsColour;
+                goalObject.progressBarBackground.color = new Color(stepsColour.r, g: stepsColour.g, stepsColour.b, 0.07843138f);
 
-				goalObject.dailyGoalMaxText.text = UserGoals.GetWeeklyStepGoal().ToString();
+                goalObject.goalMaxText.text = UserGoals.GetWeeklyStepGoal().ToString();
 
 				goalObject.percentText.text = Math.Round((value / UserGoals.GetWeeklyStepGoal()) * 100, 1).ToString() + "%";
 
-
-				saveInto.progressBarMaxValue = UserGoals.GetWeeklyStepGoal();
+                saveInto.additionalActions += () =>
+                {
+                    goalObject.goalProgressbar.loadingBar.color = stepsColour;
+                    goalObject.progressBarBackground.color = new Color(stepsColour.r,
+                        stepsColour.g,
+                        stepsColour.b,
+                        0.07843138f);
+                };
+                saveInto.progressBarMaxValue = UserGoals.GetWeeklyStepGoal();
 				saveInto.progressBarDecimals = 0;
 			}
 			else
 			{
-				goalObject.icon.sprite = distanceicon;
+				goalObject.icon.sprite = distanceIcon;
 				goalObject.icon.transform.parent.GetComponent<Image>().color = distanceColour;
-				goalObject.dailyGoalTitle.text = "Distance covered this week";
+				goalObject.goalTitle.text = "Distance covered this week";
 
-				goalObject.dailyGoalProgress.valueLimit = UserGoals.GetWeeklyDistanceGoal();
-				goalObject.dailyGoalProgress.maxValue = UserGoals.GetWeeklyDistanceGoal();
-				goalObject.dailyGoalProgress.decimals = 2;
+				goalObject.goalProgressbar.valueLimit = UserGoals.GetWeeklyDistanceGoal();
+				goalObject.goalProgressbar.maxValue = UserGoals.GetWeeklyDistanceGoal();
+				goalObject.goalProgressbar.decimals = 2;
+                goalObject.goalProgressbar.loadingBar.color = distanceColour;
+                goalObject.progressBarBackground.color = new Color(distanceColour.r, g: distanceColour.g, distanceColour.b, 0.07843138f);
 
-				goalObject.dailyGoalMaxText.text = UserGoals.GetWeeklyDistanceGoal().ToString() + " km";
+                goalObject.goalMaxText.text = UserGoals.GetWeeklyDistanceGoal().ToString();
 
 				goalObject.percentText.text = Math.Round((value / UserGoals.GetWeeklyDistanceGoal()) * 100, 1).ToString() + "%";
 
-
-				saveInto.progressBarMaxValue = UserGoals.GetWeeklyDistanceGoal();
+                saveInto.additionalActions += () =>
+                {
+                    goalObject.goalProgressbar.loadingBar.color = distanceColour;
+                    goalObject.progressBarBackground.color = new Color(distanceColour.r,
+                        distanceColour.g,
+                        distanceColour.b,
+                        0.07843138f);
+                };
+                saveInto.progressBarMaxValue = UserGoals.GetWeeklyDistanceGoal();
 				saveInto.progressBarDecimals = 2;
 			}
 		}
 
-		goalObject.dailyGoalProgress.ChangeValue((float) value);
+		goalObject.goalProgressbar.ChangeValue((float) value);
 
 
 		saveInto.icon = goalObject.icon.sprite;
 		saveInto.parentColour = goalObject.icon.transform.parent.GetComponent<Image>().color;
 		saveInto.percentText = goalObject.percentText.text;
-		saveInto.goalTitle = goalObject.dailyGoalTitle.text;
-		saveInto.dailyGoalMaxText = goalObject.dailyGoalMaxText.text;
-		
+		saveInto.goalTitle = goalObject.goalTitle.text;
+		saveInto.dailyGoalMaxText = goalObject.goalMaxText.text;
 	}
 
 #endif
 
-	#endregion
+    #endregion
 
 
-	private void LoadSavedData(LoadedData savedData)
+    private void LoadSavedData(LoadedData savedData)
 	{
-		dataOverPeriodChart.SetSerieData(savedData.chartData, 0);
-		savedData.chartActions.Invoke();
+		dataOverPeriodChart.SetSerieData(savedData.chartData, 0);		
 
 		thisWeekValue.text = savedData.valueThisWeek.ToString();
 		lastWeekValue.text = savedData.valueLastWeek.ToString();
 
 		goalObject.icon.sprite = savedData.icon;
 		goalObject.icon.transform.parent.GetComponent<Image>().color = savedData.parentColour;
-		goalObject.dailyGoalTitle.text = savedData.goalTitle;
+		goalObject.goalTitle.text = savedData.goalTitle;
 		goalObject.percentText.text = savedData.percentText;
-		goalObject.dailyGoalMaxText.text = savedData.dailyGoalMaxText;
-		goalObject.dailyGoalProgress.maxValue = savedData.progressBarMaxValue;
-		goalObject.dailyGoalProgress.valueLimit = savedData.progressBarMaxValue;
-		goalObject.dailyGoalProgress.decimals = savedData.progressBarDecimals;
-		goalObject.dailyGoalProgress.ChangeValue((float)savedData.value);
+		goalObject.goalMaxText.text = savedData.dailyGoalMaxText;
+		goalObject.goalProgressbar.maxValue = savedData.progressBarMaxValue;
+		goalObject.goalProgressbar.valueLimit = savedData.progressBarMaxValue;
+		goalObject.goalProgressbar.decimals = savedData.progressBarDecimals;
+		goalObject.goalProgressbar.ChangeValue((float)savedData.value);
 
-		goalObject.dailyGoalProgress.UpdateUI();
+        savedData.additionalActions.Invoke();
+
+        goalObject.goalProgressbar.UpdateUI();
 	}
 
+	private void FormatData(Views dataType)
+	{
+		#region daily/weekly goal
 
-	#region Android statistics
+		TMP_Text progressText = goalObject.goalProgressbar.textPercent;
+		TMP_Text maxProgressText = goalObject.goalMaxText;
+
+        if (dataType == Views.StepsDay || dataType == Views.StepsWeek)
+		{
+			progressText.text = int.Parse(progressText.text).ToString("#,##0");
+            maxProgressText.text = int.Parse(maxProgressText.text).ToString("#,##0");
+        }
+		else if(dataType == Views.DistanceDay || dataType == Views.DistanceWeek)
+		{
+			progressText.text += " km";
+            maxProgressText.text += " km";
+        }
+		else { }
+
+        #endregion
+    }
+
+
+    #region Android statistics
 
 #if UNITY_ANDROID || UNITY_EDITOR
 
-	public class AndroidStatistics
+    public class AndroidStatistics
 	{
 		public async Task<List<double>> LoadGraph(DataTypes dataType, GoogleFit.ApiData APIData)
 		{
@@ -679,7 +790,7 @@ public class StatisticsWindow : MonoBehaviour
 			if(dataType == DataTypes.Steps) json = await GoogleFit.GetStepsBetweenMillis(APIData);
 			else json = await GoogleFit.GetDistanceBetweenMillis(APIData);
 
-			Debug.Log(json.ToJson());
+			//Debug.Log(json.ToJson());
 
 			double value = double.Parse(json["bucket"][0]["dataset"][0]["point"][0]["value"][0][(dataType == DataTypes.Steps ? "intVal" : "fpVal")].ToString());
 
