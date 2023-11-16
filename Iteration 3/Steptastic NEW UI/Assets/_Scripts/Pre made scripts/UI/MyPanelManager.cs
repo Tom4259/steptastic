@@ -28,10 +28,12 @@ public class MyPanelManager : MonoBehaviour
         panels[0].anchoredPosition = new Vector2(0, 725);
         panels[0].GetComponent<Image>().color = currentPanelColour;
         panels[0].sizeDelta = new Vector2(panels[0].sizeDelta.x, 1450);
+        panels[0].gameObject.SetActive(true);
 
         panels[1].anchoredPosition = new Vector2(0, 855);
         panels[1].GetComponent<Image>().color = backgroundPanelColour;
         panels[1].transform.localScale = new Vector3(0.88f, 0.88f, 0.88f);
+        panels[1].gameObject.SetActive(true);
 
         for (int i = 2; i < panels.Length; i++)
         {
@@ -39,6 +41,7 @@ public class MyPanelManager : MonoBehaviour
             panels[i].GetComponent<Image>().color = backgroundPanelColour;
 
             panels[i].transform.localScale = new Vector3(0.88f, 0.88f, 0.88f);
+            panels[i].gameObject.SetActive(true);
         }
     }
 

@@ -118,7 +118,7 @@ public class CanvasManager : MonoBehaviour
         }, -Screen.currentResolution.height, 0, fastWindowAnimationTime).setEaseOutCubic();
 
         mainWindow.gameObject.SetActive(false);
-        navigationBar.gameObject.SetActive(false);
+        navigationBar?.gameObject.SetActive(false);
 
         challengeSetupPanel.PopulateDropdowns();
 
