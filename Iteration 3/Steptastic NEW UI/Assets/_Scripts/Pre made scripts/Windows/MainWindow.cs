@@ -413,7 +413,7 @@ public class MainWindow : MonoBehaviour
     /// <summary>
     /// requests an image from MapQuest displaying the user's challenge data
     /// </summary>
-    private Task GetMapImage()
+    private async void GetMapImage()
     {
         #region variables
 
@@ -454,19 +454,12 @@ public class MainWindow : MonoBehaviour
             imageHeight = (int)Math.Round(mapImage.rectTransform.rect.height),
             imageWidth = (int)Math.Round(mapImage.rectTransform.rect.width),
 
-            zoom = UsefulFunctions.GetMapZoomApproximation(),
-
-            imageToSet = mapImage,
-
-            // runs this section of code when the map image has been loaded
-            callback = () =>
-            {
-                //loadingScreen.SetActive(false);
-            }
+            zoom = UsefulFunctions.GetMapZoomApproximation()
         };
 
-        APIManager.MapQuest.GetMapImage(mData);
-        return Task.CompletedTask;
+        mapImage.sprite = await APIManager.MapQuest.GetMapImage(mData);
+
+        //return Task.CompletedTask;
     }
 
 
