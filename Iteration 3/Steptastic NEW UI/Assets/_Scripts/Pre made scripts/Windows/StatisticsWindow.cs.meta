@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8ae50252eb7e6a341b578addb5371255
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - dataTypeDropdown: {instanceID: 0}
+  - viewPeriodDropdown: {instanceID: 0}
+  - dataOverPeriodChart: {instanceID: 0}
+  - stepsIcon: {fileID: 21300000, guid: 200df2d3c2442664bbd9cb1d53b236ef, type: 3}
+  - distanceIcon: {fileID: 21300000, guid: 5d4d7b3319a44e14280767ecdd357eb8, type: 3}
+  - thisWeekValue: {instanceID: 0}
+  - lastWeekValue: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
