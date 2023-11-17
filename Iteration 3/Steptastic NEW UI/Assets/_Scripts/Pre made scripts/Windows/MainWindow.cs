@@ -23,29 +23,24 @@ public class MainWindow : MonoBehaviour
 
 	[Space(10)]
     [Header("Home screen")]
-    public GameObject homeScreen;
-    [Space(5)]
-    public TMP_Text hiThereText;
+    public TMP_Text usernameText;
     public TMP_Text todayDate;
 
 
-    [Header("Today's summary")]
-	[Header("Progress bar")]
-	public CircleProgressBar progressBar;
+	[Header("Progress bars")]
+	public CircleProgressBar targetProgressBar;
+	public CircleProgressBar stepsProgressBar;
+	public CircleProgressBar distanceProgressBar;
 	private float animationTime = 1;
 
 
-	[Header("Smaller UI blocks")]
-    [Header("Steps")]
-	public TMP_Text stepsTodayText;
-	//public TMP_Text stepsGoalText;
-	public ImageFillController stepsGoalProgressBar;
+    [Header("Graph blocks")]
+    public TMP_Text stepsTodayValue;
+    public EasyChartSettings stepsChart;
 
-
-    [Header("Distance")]
-    public TMP_Text distanceTodayText;
-    //public TMP_Text distanceGoalText;
-    public ImageFillController distanceGoalProgressBar;
+    [Space(2)]
+    public TMP_Text distanceTodayValue;
+    public EasyChartSettings distanceChart;
 
 
     [Header("Map visualisation")]
@@ -67,7 +62,7 @@ public class MainWindow : MonoBehaviour
 	{
 		CanvasManager.instance.loadingScreen.gameObject.SetActive(true);
 
-        hiThereText.text = "Hi " + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Details.nickname, "there") + "!";
+        usernameText.text = "Hi " + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Details.nickname, "there") + "!";
 
         DateTime now = DateTime.Now;
 
@@ -103,46 +98,44 @@ public class MainWindow : MonoBehaviour
 	{
         float percentage = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted);
 
-        int stepsToday = int.Parse(stepsTodayText.text);
-        float distanceToday = float.Parse(distanceTodayText.text);
+        int stepsToday = int.Parse(stepsTodayValue.text);
+        float distanceToday = float.Parse(distanceTodayValue.text);
 
         int stepGoal = UserGoals.GetDailyStepGoal();
         float distanceGoal = UserGoals.GetDailyDistanceGoal();
 
 
-        //animating the main challenge progress bar
+        //animating the main challenge progress bar and daily goal progress bars
         LeanTween.value(gameObject, (float f) =>
         {
-            progressBar.percent = f;
+            targetProgressBar.percent = f;
         }, 0, percentage, animationTime).setEaseInOutCubic();
 
 
-		
+        LeanTween.value(gameObject, (float f) =>
+        {
+            stepsProgressBar.percent = (f / stepGoal) * 100;
+        }, 0, stepsToday, animationTime).setEaseInOutCubic();
 
-		//animating the steps UI block
-		LeanTween.value(gameObject, (float f) =>
+        LeanTween.value(gameObject, (float f) =>
+        {
+            distanceProgressBar.percent = (f / distanceGoal) * 100;
+        }, 0, distanceToday, animationTime).setEaseInOutCubic();
+
+
+
+        //animating the steps UI block
+        LeanTween.value(gameObject, (float f) =>
 		{
-			stepsTodayText.text = f.ToString("#,##0");
+			stepsTodayValue.text = f.ToString("#,##0");
 		}, 0, stepsToday, animationTime).setEaseInOutCubic();
 
 
 		//animating the distance UI block
 		LeanTween.value(gameObject, (float f) =>
 		{
-            distanceTodayText.text = Math.Round(f, 2) + " km";
-		}, 0, distanceToday, animationTime).setEaseInOutCubic();
-
-
-        //animating the small UI object goal progress bars
-        LeanTween.value(gameObject, (float f) =>
-        {
-            stepsGoalProgressBar.percent = f / stepGoal;
-        }, 0, stepsToday, animationTime).setEaseInOutCubic();
-
-        LeanTween.value(gameObject, (float f) =>
-        {
-            distanceGoalProgressBar.percent = f / distanceGoal;
-        }, 0, distanceToday, animationTime).setEaseInOutCubic();
+            distanceTodayValue.text = Math.Round(f, 2) + " km";
+		}, 0, distanceToday, animationTime).setEaseInOutCubic();        
     }
 
 
@@ -166,11 +159,11 @@ public class MainWindow : MonoBehaviour
     #region progress to target
 
     /// <summary>
-    /// calculates the user progress based on the amount of distance the user has covered since the start date
+    /// calculates the user progress based on the amount of distance the user has covered since the start start
     /// </summary>
     private async Task CalculateUserProgress()
     {
-        //if start date is now, then make it beggining of the day
+        //if start start is now, then make it beggining of the day
         DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
         DateTime now = DateTime.Now;
 
@@ -291,8 +284,8 @@ public class MainWindow : MonoBehaviour
     //shows a more professional placeholder
     private void ResetUIBlockText()
     {
-        stepsTodayText.text = "------";
-        distanceTodayText.text = "--- km";
+        stepsTodayValue.text = "------";
+        distanceTodayValue.text = "--- km";
     }
 
     //loads data for the UI blocks
@@ -300,10 +293,11 @@ public class MainWindow : MonoBehaviour
     {
         #region request data
 
-        DateTime date = DateTime.Now;
-        TimeSpan t = new TimeSpan(0, date.Hour, date.Minute, date.Second);
+        DateTime start = DateTime.Today;
+        DateTime end = DateTime.Now;
 
-        API.ApiData body = API.GenerateAPIbody(date.Subtract(t), DateTime.Now, 3600000); //1 hour time gap
+        API.ApiData body = API.GenerateAPIbody(start, DateTime.Now, 3600000); //1 hour time gap
+        //API.ApiData body = API.GenerateAPIbody(start, DateTime.Now, (3600000 / 2)); //30 min time gap
 
         //Debug.Log("[UIBlocksAndroid]", () => body.startTimeMillis);
         //Debug.Log("[UIBlocksAndroid]", () => body.endTimeMillis);
@@ -318,9 +312,6 @@ public class MainWindow : MonoBehaviour
 
         //Debug.Log("[UIBlocksAndroid] " + stepsJson.ToJson());
         //Debug.Log("[UIBlocksAndroid] " + distanceJson.ToJson());
-
-        //creating the graph with the steps
-        //LoadActivityGraph(stepsJson, distanceJson);
 
 
         #region counting up
@@ -359,10 +350,57 @@ public class MainWindow : MonoBehaviour
 
         #endregion
 
+        //visualise the data in a graph
+        ProcessGraph(stepsJson, distanceJson);
+        
+
         double distanceKM = Math.Round((totalMeters / 1000), 2);
 
-        distanceTodayText.text = distanceKM.ToString();
-        stepsTodayText.text = totalSteps.ToString();
+        distanceTodayValue.text = distanceKM.ToString();
+        stepsTodayValue.text = totalSteps.ToString();
+    }
+
+    #endregion
+
+    #region over the day graph
+
+    private void ProcessGraph(JsonData steps, JsonData distance)
+    {
+        List<double> stepsOverDay = new List<double>();
+        List<double> distanceOverDay = new List<double>();
+
+
+        for (int i = 0; i < steps["bucket"].Count; i++)
+        {
+            double value = 0;
+
+            try
+            {
+                value = double.Parse(steps["bucket"][i]["dataset"][0]["point"][0]["value"][0]["intVal"].ToString());
+            }
+            catch (KeyNotFoundException) { }
+            catch (ArgumentOutOfRangeException) { }
+
+            stepsOverDay.Add(value);
+        }
+
+
+        for (int i = 0; i < distance["bucket"].Count; i++)
+        {
+            double value = 0;
+
+            try
+            {
+                value = double.Parse(distance["bucket"][i]["dataset"][0]["point"][0]["value"][0]["fpVal"].ToString());
+            }
+            catch (KeyNotFoundException) { }
+            catch (ArgumentOutOfRangeException) { }
+
+            distanceOverDay.Add(value);
+        }
+
+        stepsChart.SetSerieData(stepsOverDay, 0, true);
+        distanceChart.SetSerieData(distanceOverDay, 0, true);
     }
 
     #endregion
@@ -470,8 +508,8 @@ public class MainWindow : MonoBehaviour
     //shows a more professional placeholder
     private void ResetUIBlockText()
     {
-        stepsTodayText.text = "------";
-        distanceTodayText.text = "--- km";
+        stepsTodayValue.text = "------";
+        distanceTodayValue.text = "--- km";
     }
 
     //loads data for the UI blocks
@@ -488,8 +526,8 @@ public class MainWindow : MonoBehaviour
         Debug.Log("[UIBlocksIOS]", () => stepsToday);
         Debug.Log("[UIBlocksIOS]", () => distanceToday);
 
-        stepsTodayText.text = stepsToday.ToString();
-        distanceTodayText.text = distanceToday.ToString();
+        stepsTodayValue.text = stepsToday.ToString();
+        distanceTodayValue.text = distanceToday.ToString();
     }
 
     #endregion

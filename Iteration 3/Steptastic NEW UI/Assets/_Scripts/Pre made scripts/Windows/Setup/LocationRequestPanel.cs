@@ -136,6 +136,8 @@ public class LocationRequestPanel : MonoBehaviour
         {
             PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
         }
+
+        continueButton.onClick.Invoke();
     }
 
 #elif UNITY_IOS
@@ -154,8 +156,6 @@ public class LocationRequestPanel : MonoBehaviour
     //uses a set location for development purposes
     private void GetLocation()
     {
-        continueButton.Interactable(false);
-
         Debug.Log("[LocationRequest]", () => testWithLocation);
 
         if (testWithLocation)
@@ -178,6 +178,8 @@ public class LocationRequestPanel : MonoBehaviour
         CanvasManager.instance.challengeSetupPanel.SetStartLocationUsingGPS();
 
         PlayerPrefs.Save();
+
+        continueButton.onClick.Invoke();
     }
 
 #endif

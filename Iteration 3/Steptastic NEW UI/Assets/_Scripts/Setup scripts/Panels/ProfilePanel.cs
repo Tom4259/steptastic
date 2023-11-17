@@ -15,6 +15,9 @@ public class ProfilePanel : MonoBehaviour
     public ModalWindowManager enterNicknameWindow;
     public ModalWindowManager selectAvatarWindow;
 
+    [Space(30)]
+    public ButtonManager continueButton;
+
     private int selectedAvatarIndex = -1;
 
     private void Start()
