@@ -794,7 +794,7 @@ public class APIManager : MonoBehaviour
 		}
 
 		/// <summary>
-		/// Downloads image from API using specified data passed into the method
+		/// Downloads image from GF using specified data passed into the method
 		/// </summary>
 		public static async Task<Sprite> GetMapImage(MapData data)
 		{

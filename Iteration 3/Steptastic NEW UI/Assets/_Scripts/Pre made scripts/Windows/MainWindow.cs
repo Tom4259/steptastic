@@ -4,7 +4,8 @@ using UnityEngine;
 using TMPro;
 using System;
 using LitJson;
-using API = APIManager.GoogleFit;
+using GF = APIManager.GoogleFit;
+using HK = APIManager.HealthKit;
 using UnityEngine.UI;
 using Michsky.MUIP;
 using System.Threading.Tasks;
@@ -173,20 +174,20 @@ public class MainWindow : MonoBehaviour
         Debug.Log("[CalculateUserProgressAndroid]", () => now);
         Debug.Log("[CalculateUserProgressAndroid]", () => dif);
 
-        API.ApiData data = new API.ApiData();
+        GF.ApiData data = new GF.ApiData();
 
         //if less than a minute, get data in 30 minute intervals
-        if (dif < 60) data = API.GenerateAPIbody(startDate, now, 1800000);
+        if (dif < 60) data = GF.GenerateAPIbody(startDate, now, 1800000);
 
         //if less than 1 day, get data in hours
-        else if (dif < 1440) data = API.GenerateAPIbody(startDate, now, 3600000);
+        else if (dif < 1440) data = GF.GenerateAPIbody(startDate, now, 3600000);
 
         //if greater than 1 day (in minutes) get data with interval of 1 day
-        else data = API.GenerateAPIbody(startDate, now);
+        else data = GF.GenerateAPIbody(startDate, now);
 
 
 
-        JsonData json = await API.GetDistanceBetweenMillis(data);
+        JsonData json = await GF.GetDistanceBetweenMillis(data);
         //Debug.Log("[CalculateUserProgressAndroid]" + json.ToJson());
 
 
@@ -296,8 +297,8 @@ public class MainWindow : MonoBehaviour
         DateTime start = DateTime.Today;
         DateTime end = DateTime.Now;
 
-        API.ApiData body = API.GenerateAPIbody(start, DateTime.Now, 3600000); //1 hour time gap
-        //API.ApiData body = API.GenerateAPIbody(start, DateTime.Now, (3600000 / 2)); //30 min time gap
+        GF.ApiData body = GF.GenerateAPIbody(start, DateTime.Now, 3600000); //1 hour time gap
+        //GF.ApiData body = GF.GenerateAPIbody(start, DateTime.Now, (3600000 / 2)); //30 min time gap
 
         //Debug.Log("[UIBlocksAndroid]", () => body.startTimeMillis);
         //Debug.Log("[UIBlocksAndroid]", () => body.endTimeMillis);
@@ -306,8 +307,8 @@ public class MainWindow : MonoBehaviour
         #endregion
 
 
-        JsonData stepsJson = await API.GetStepsBetweenMillis(body);
-        JsonData distanceJson = await API.GetDistanceBetweenMillis(body);
+        JsonData stepsJson = await GF.GetStepsBetweenMillis(body);
+        JsonData distanceJson = await GF.GetDistanceBetweenMillis(body);
 
 
         //Debug.Log("[UIBlocksAndroid] " + stepsJson.ToJson());
@@ -351,7 +352,7 @@ public class MainWindow : MonoBehaviour
         #endregion
 
         //visualise the data in a graph
-        ProcessGraph(stepsJson, distanceJson);
+        CreateUIBlockGraph(stepsJson, distanceJson);
         
 
         double distanceKM = Math.Round((totalMeters / 1000), 2);
@@ -364,7 +365,7 @@ public class MainWindow : MonoBehaviour
 
     #region over the day graph
 
-    private void ProcessGraph(JsonData steps, JsonData distance)
+    private void CreateUIBlockGraph(JsonData steps, JsonData distance)
     {
         List<double> stepsOverDay = new List<double>();
         List<double> distanceOverDay = new List<double>();
@@ -427,7 +428,7 @@ public class MainWindow : MonoBehaviour
         DateTime startDate = PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
         DateTime now = DateTime.UtcNow;
 
-        double userDistance = await APIManager.HealthKit.GetDistance(startDate, now);
+        double userDistance = await HK.GetDistance(startDate, now);
         float distanceToTarget = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget, -1);
 
         float percentage = (float)(userDistance / distanceToTarget) * 100;
@@ -518,16 +519,49 @@ public class MainWindow : MonoBehaviour
         DateTime now = DateTime.Now;
         DateTime startOfDay = DateTime.Today;
 
-        double stepsToday = await APIManager.HealthKit.GetSteps(startOfDay, now);
-        double distanceToday = await APIManager.HealthKit.GetDistance(startOfDay, now);
+        double stepsToday = await HK.GetSteps(startOfDay, now);
+        double distanceToday = await HK.GetDistance(startOfDay, now);
 
         distanceToday = Math.Round(distanceToday, 2);
 
-        Debug.Log("[UIBlocksIOS]", () => stepsToday);
-        Debug.Log("[UIBlocksIOS]", () => distanceToday);
+        //Debug.Log("[UIBlocksIOS]", () => stepsToday);
+        //Debug.Log("[UIBlocksIOS]", () => distanceToday);
+
+        CreateUIBlockGraph();
 
         stepsTodayValue.text = stepsToday.ToString();
         distanceTodayValue.text = distanceToday.ToString();
+    }
+
+    #endregion
+
+    #region over the day graph
+
+    private async void CreateUIBlockGraph()
+    {
+        DateTime start = DateTime.Today;
+        DateTime end = DateTime.Now;
+
+        List<HK.OrderedQuantityData> stepsData = HK.OrderQuantityListHour(await HK.GetStepsList(start, end));
+        List<HK.OrderedQuantityData> distanceData = HK.OrderQuantityListHour(await HK.GetDistanceList(start, end));
+
+        List<double> stepValues = new List<double>( new double[24] );
+        List<double> distanceValues = new List<double>( new double[24] );
+
+
+        for (int i = 0; i < stepsData.Count; i++)
+        {
+            stepValues[stepsData[i].timeOfData.Hour] = stepsData[i].value;
+        }
+
+
+        for (int i = 0; i < distanceData.Count; i++)
+        {
+            distanceValues[distanceData[i].timeOfData.Hour] = distanceData[i].value;
+        }
+
+        stepsChart.SetSerieData(stepValues, 0, true);
+        distanceChart.SetSerieData(distanceValues, 0, true);
     }
 
     #endregion
