@@ -77,6 +77,8 @@ public class CanvasManager : MonoBehaviour
 
     private async void Start()
     {
+        Application.targetFrameRate = 60;
+
         //if the user has completed the setup stage
         if(PlayerPrefsX.GetBool(PlayerPrefsLocations.User.CompletedWindows.setup, false))
         {

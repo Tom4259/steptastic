@@ -63,7 +63,8 @@ public class MainWindow : MonoBehaviour
 	{
 		CanvasManager.instance.loadingScreen.gameObject.SetActive(true);
 
-        usernameText.text = "Hi " + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Details.nickname, "there") + "!";
+        //usernameText.text = "Hi " + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Details.nickname, "there") + "!";
+        usernameText.text = PlayerPrefsX.GetString(PlayerPrefsLocations.User.Details.nickname) + "!";
 
         DateTime now = DateTime.Now;
 
