@@ -12,8 +12,8 @@ public class NavigationBar : MonoBehaviour
     [Serializable]
     public class ButtonConfig
     {
-        public ButtonManager buttonObject;
-        public float width;
+        public Button buttonObject;
+        public Image buttonImage;
         public int windowTarget;
     }
 
@@ -26,7 +26,7 @@ public class NavigationBar : MonoBehaviour
 
     [Space]
     public ButtonConfig[] buttons;
-    public ButtonManager startingSelected;
+    public Button startingSelected;
 
     [Space]
     public Color selectedColour;
@@ -35,18 +35,22 @@ public class NavigationBar : MonoBehaviour
 
     private int currentWindowIndex = 0;
     private int minimumIndex = 0;
-    private int maximumIndex = 1;
+    private int maximumIndex = 3;
 
 
-    private void Start()
+    private async void Start()
     {
         SwipeManager.instance.onSwipeLeft += OnSwipeLeft;
         SwipeManager.instance.onSwipeRight += OnSwipeRight;
+
+
+        await System.Threading.Tasks.Task.Delay(100);
+        startingSelected.onClick.Invoke();
     }
 
 
 
-    public void OpenWindow(ButtonManager btn)
+    public void OpenWindow(Button btn)
     {
         for (int i = 0; i < buttons.Length; i++)
         {
@@ -58,7 +62,7 @@ public class NavigationBar : MonoBehaviour
             }
             else
             {
-                if (buttons[i].buttonObject.normalText.color != deselectedColour)
+                if (buttons[i].buttonImage.color != deselectedColour)
                 {
                     FadeColours(buttons[i], selectedColour, deselectedColour);
                 }
@@ -78,8 +82,8 @@ public class NavigationBar : MonoBehaviour
             }
             else
             {
-                if (buttons[i].buttonObject.normalText.color != deselectedColour)
-                {
+                if (buttons[i].buttonImage.color != deselectedColour)
+				{
                     FadeColours(buttons[i], selectedColour, deselectedColour);
                 }
             }
@@ -98,7 +102,7 @@ public class NavigationBar : MonoBehaviour
             }
             else
             {
-                if (buttons[i].buttonObject.normalText.color != deselectedColour)
+                if (buttons[i].buttonImage.color != deselectedColour)
                 {
                     FadeColours(buttons[i], selectedColour, deselectedColour);
                 }
@@ -113,13 +117,6 @@ public class NavigationBar : MonoBehaviour
 
     private void NavBarTransition(ButtonConfig config)
     {
-        //setting window pointers size
-        LeanTween.value(gameObject, (float f) =>
-        {
-            windowPointer.rectTransform.sizeDelta = new Vector2(f, windowPointer.rectTransform.sizeDelta.y);
-        },
-        windowPointer.rectTransform.rect.width, config.width, animationTime).setEaseInOutCubic();
-
         //setting window pointer position
         LeanTween.value(gameObject, (float f) =>
         {
@@ -138,7 +135,7 @@ public class NavigationBar : MonoBehaviour
     {
         LeanTween.value(gameObject, (Color c) =>
         {
-            config.buttonObject.normalText.color = c;
+            config.buttonImage.color = c;
         }, start, end, animationTime).setEaseInOutCubic();
     }
 

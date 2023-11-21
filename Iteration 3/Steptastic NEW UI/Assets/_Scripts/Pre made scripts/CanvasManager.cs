@@ -30,8 +30,7 @@ public class CanvasManager : MonoBehaviour
 
     [Space]
     public MainWindow mainWindow;
-    //public NavigationBar navigationBar;
-    public GameObject navigationBar;
+    public NavigationBar navigationBar;
 
     private Vector2 mainScreenStartLocation;
     public static float animationTime = 1.75f;
@@ -120,7 +119,7 @@ public class CanvasManager : MonoBehaviour
         }, -Screen.currentResolution.height, 0, fastWindowAnimationTime).setEaseOutCubic();
 
         mainWindow.gameObject.SetActive(false);
-        navigationBar?.gameObject.SetActive(false);
+        navigationBar.gameObject.SetActive(false);
 
         challengeSetupPanel.PopulateDropdowns();
 
