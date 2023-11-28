@@ -641,7 +641,7 @@ public class MainWindow : MonoBehaviour
 
         //grow the progress bar for effect here
 
-        targetProgressBar.GetComponent<Animator>().Play("completedGoal");
+        stepsProgressBar.GetComponent<Animator>().Play("completedGoal");
     }
 
     private async void UserHitDistanceGoal(float distancePercentage)
@@ -657,7 +657,7 @@ public class MainWindow : MonoBehaviour
 
         //grow the progress bar for effect here
 
-        targetProgressBar.GetComponent<Animator>().Play("completedGoal");
+        distanceProgressBar.GetComponent<Animator>().Play("completedGoal");
     }
 
     #endregion
