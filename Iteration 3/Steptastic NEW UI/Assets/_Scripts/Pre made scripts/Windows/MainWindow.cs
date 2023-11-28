@@ -98,8 +98,6 @@ public class MainWindow : MonoBehaviour
 	//animates the screen
 	private void AnimateScreen()
 	{
-        float percentage = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted);
-
         int stepsToday = int.Parse(stepsTodayValue.text);
         float distanceToday = float.Parse(distanceTodayValue.text);
 
@@ -107,22 +105,57 @@ public class MainWindow : MonoBehaviour
         float distanceGoal = UserGoals.GetDailyDistanceGoal();
 
 
-        //animating the main challenge progress bar and daily goal progress bars
-        LeanTween.value(gameObject, (float f) =>
-        {
-            targetProgressBar.percent = f;
-        }, 0, percentage, animationTime).setEaseInOutCubic();
+        float targetPercentage = PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted);
+        float stepsPercentage = (float)((float)stepsToday / (float)stepGoal) * 100;
+        float distancePercentage = (float)(distanceToday / distanceGoal) * 100;
 
 
-        LeanTween.value(gameObject, (float f) =>
-        {
-            stepsProgressBar.percent = (f / stepGoal) * 100;
-        }, 0, stepsToday, animationTime).setEaseInOutCubic();
+        #region checking for goal completion
 
-        LeanTween.value(gameObject, (float f) =>
+        if (targetPercentage >= 100)
         {
-            distanceProgressBar.percent = (f / distanceGoal) * 100;
-        }, 0, distanceToday, animationTime).setEaseInOutCubic();
+            targetPercentage = 100;
+
+            UserCompletedChallenge(targetPercentage);
+        }
+        else
+        {
+            //animating the main challenge progress bar and daily goal progress bars
+            LeanTween.value(gameObject, (float f) =>
+            {
+                targetProgressBar.percent = f;
+            }, 0, targetPercentage, animationTime).setEaseInOutCubic();
+        }
+
+        if(stepsPercentage >= 100)
+        {
+            stepsPercentage = 100;
+
+            UserHitStepGoal(stepsPercentage);
+        }
+        else
+        {
+            LeanTween.value(gameObject, (float f) =>
+            {
+                stepsProgressBar.percent = f;
+            }, 0, stepsPercentage, animationTime).setEaseInOutCubic();
+        }
+
+        if (distancePercentage >= 100)
+        {
+            distancePercentage = 100;
+
+            UserHitDistanceGoal(distancePercentage);
+        }
+        else
+        {
+            LeanTween.value(gameObject, (float f) =>
+            {
+                distanceProgressBar.percent = f;
+            }, 0, distancePercentage, animationTime).setEaseInOutCubic();
+        }
+
+        #endregion
 
 
 
@@ -137,7 +170,7 @@ public class MainWindow : MonoBehaviour
 		LeanTween.value(gameObject, (float f) =>
 		{
             distanceTodayValue.text = Math.Round(f, 2) + " km";
-		}, 0, distanceToday, animationTime).setEaseInOutCubic();        
+		}, 0, distanceToday, animationTime).setEaseInOutCubic();
     }
 
 
@@ -571,4 +604,64 @@ public class MainWindow : MonoBehaviour
 
 
     #endregion
+
+
+
+    #region completing goals
+
+    private async void UserCompletedChallenge(float targetPercentage)
+    {
+        Debug.Log("[ChallengeInfo] User completed challenge");
+
+        //animating the main challenge progress bar and daily goal progress bars
+        LeanTween.value(gameObject, (float f) =>
+        {
+            targetProgressBar.percent = f;
+        }, 0, targetPercentage, animationTime).setEaseInOutCubic();
+
+        await Task.Delay((int)animationTime * 1000);
+
+        //grow the progress bar for effect here
+
+        //make new 'completedChallenge' animation
+        //targetProgressBar.GetComponent<Animator>().Play("completedChallenge");
+        targetProgressBar.GetComponent<Animator>().Play("completedGoal");
+    }
+
+    private async void UserHitStepGoal(float stepsPercentage)
+    {
+        Debug.Log("[ChallengeInfo] User hit step goal");
+
+        LeanTween.value(gameObject, (float f) =>
+        {
+            stepsProgressBar.percent = f;
+        }, 0, stepsPercentage, animationTime).setEaseInOutCubic();
+
+        await Task.Delay((int)animationTime * 1000);
+
+        //grow the progress bar for effect here
+
+        targetProgressBar.GetComponent<Animator>().Play("completedGoal");
+    }
+
+    private async void UserHitDistanceGoal(float distancePercentage)
+    {
+        Debug.Log("[ChallengeInfo] User hit distance goal");
+
+        LeanTween.value(gameObject, (float f) =>
+        {
+            distanceProgressBar.percent = f;
+        }, 0, distancePercentage, animationTime).setEaseInOutCubic();
+
+        await Task.Delay((int)animationTime * 1000);
+
+        //grow the progress bar for effect here
+
+        targetProgressBar.GetComponent<Animator>().Play("completedGoal");
+    }
+
+    #endregion
+
+
+
 }

@@ -372,6 +372,7 @@ GameObject:
   - component: {fileID: 1051678498931691683}
   - component: {fileID: 7103148365987786398}
   - component: {fileID: 5317992842408048514}
+  - component: {fileID: 7886536099694712831}
   m_Layer: 5
   m_Name: CircularProgressBar
   m_TagString: Untagged
@@ -478,6 +479,27 @@ MonoBehaviour:
   - {fileID: 1507596947939301201}
   - {fileID: 9131867930025416239}
   - {fileID: 6872936153074749115}
+--- !u!95 &7886536099694712831
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5174263217087377957}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ac6ff90ab5b082e42b23cb163819dbc8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8338488069305719308
 GameObject:
   m_ObjectHideFlags: 0
