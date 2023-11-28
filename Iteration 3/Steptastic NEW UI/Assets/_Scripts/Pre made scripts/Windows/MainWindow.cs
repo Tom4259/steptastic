@@ -619,7 +619,7 @@ public class MainWindow : MonoBehaviour
             targetProgressBar.percent = f;
         }, 0, targetPercentage, animationTime).setEaseInOutCubic();
 
-        await Task.Delay((int)animationTime * 1000);
+        await Task.Delay((int)animationTime * 2000);
 
         //grow the progress bar for effect here
 
@@ -637,7 +637,7 @@ public class MainWindow : MonoBehaviour
             stepsProgressBar.percent = f;
         }, 0, stepsPercentage, animationTime).setEaseInOutCubic();
 
-        await Task.Delay((int)animationTime * 1000);
+        await Task.Delay((int)animationTime * 2000);
 
         //grow the progress bar for effect here
 
@@ -653,7 +653,7 @@ public class MainWindow : MonoBehaviour
             distanceProgressBar.percent = f;
         }, 0, distancePercentage, animationTime).setEaseInOutCubic();
 
-        await Task.Delay((int)animationTime * 1000);
+        await Task.Delay((int)animationTime * 2000);
 
         //grow the progress bar for effect here
 
