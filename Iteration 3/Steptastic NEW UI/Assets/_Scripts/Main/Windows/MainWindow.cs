@@ -644,6 +644,7 @@ public class MainWindow : MonoBehaviour
 
         //open completed challenge window
         completedChallengeWindow.OpenWindow(true);
+        completedChallengeWindow.LoadChallengeInfo();
     }
 
 
