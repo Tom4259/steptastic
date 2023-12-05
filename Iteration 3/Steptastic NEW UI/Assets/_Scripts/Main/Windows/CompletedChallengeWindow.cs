@@ -60,8 +60,8 @@ public class CompletedChallengeWindow : MonoBehaviour
 		double totalSteps = await GetTotalSteps();
 		float totalDistance = GetTotalDistance();
 
-		Debug.Log(() => totalSteps);
-		Debug.Log(() => totalDistance);
+		Debug.Log("[ChallengeInfo]", () => totalSteps);
+		Debug.Log("[ChallengeInfo]", () => totalDistance);
 
 		APIManager.MapQuest.MapData mData = new APIManager.MapQuest.MapData
 		{
@@ -131,7 +131,6 @@ public class CompletedChallengeWindow : MonoBehaviour
 		return steps;
 
 #endif
-
 	}
 
 	private float GetTotalDistance()
