@@ -7,14 +7,14 @@ public class CompletedChallengeWindow : MonoBehaviour
 	private RectTransform rect;
 
 
-	private void Start()
+	private void Awake()
 	{
 		rect = GetComponent<RectTransform>();
 	}
 
 
 
-	public void OpenWindow(bool animation)
+	public void OpenWindow(bool animation = true)
     {
 		if (animation)
 		{
@@ -29,7 +29,7 @@ public class CompletedChallengeWindow : MonoBehaviour
 		}
 	}
 
-    public void CloseWindow(bool animation)
+    public void CloseWindow(bool animation = true)
     {
 		if (animation)
 		{
