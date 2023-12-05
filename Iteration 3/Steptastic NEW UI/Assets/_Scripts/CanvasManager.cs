@@ -23,13 +23,16 @@ public class CanvasManager : MonoBehaviour
     public MyPanelManager setupPanelManager;
 
     [Space]
+    [Header("Setup panels")]
     public ProfilePanel profilePanel;
     public AuthenticatePanel authenticatePanel;
     public LocationRequestPanel locationRequestPanel;
     public ChallengeSetupPanel challengeSetupPanel;
 
     [Space]
+    [Header("Main windows")]
     public MainWindow mainWindow;
+    public CompletedChallengeWindow completedChallengeWindow;
     public NavigationBar navigationBar;
 
     private Vector2 mainScreenStartLocation;
@@ -72,6 +75,8 @@ public class CanvasManager : MonoBehaviour
 
         setupWindow.gameObject.SetActive(true);
         mainWindow.gameObject.SetActive(false);
+        completedChallengeWindow.CloseWindow(false);
+        completedChallengeWindow.gameObject.SetActive(true);
     }
 
     private async void Start()

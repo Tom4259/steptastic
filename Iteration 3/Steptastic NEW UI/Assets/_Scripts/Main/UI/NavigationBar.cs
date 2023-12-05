@@ -9,6 +9,9 @@ using UnityEngine.UI;
 
 public class NavigationBar : MonoBehaviour
 {
+    private RectTransform rect;
+
+
     [Serializable]
     public class ButtonConfig
     {
@@ -38,7 +41,16 @@ public class NavigationBar : MonoBehaviour
     private int maximumIndex = 3;
 
 
-    private async void Start()
+    private Vector2 startPosition;
+
+
+	private void Awake()
+	{
+        startPosition = GetComponent<RectTransform>().anchoredPosition;
+        rect = GetComponent<RectTransform>();
+	}
+
+	private async void Start()
     {
         SwipeManager.instance.onSwipeLeft += OnSwipeLeft;
         SwipeManager.instance.onSwipeRight += OnSwipeRight;
@@ -138,6 +150,22 @@ public class NavigationBar : MonoBehaviour
             config.buttonImage.color = c;
         }, start, end, animationTime).setEaseInOutCubic();
     }
+
+    public void ShowNavigationBar()
+    {
+        LeanTween.value(gameObject, (Vector2 p) =>
+        {
+            rect.anchoredPosition = p;
+        }, new Vector2(0, -25), startPosition, animationTime);
+    }
+
+    public void HideNavigationBar()
+    {
+		LeanTween.value(gameObject, (Vector2 p) =>
+		{
+			rect.anchoredPosition = p;
+		}, startPosition, new Vector2(0, -25), animationTime);
+	}
 
     #endregion
 

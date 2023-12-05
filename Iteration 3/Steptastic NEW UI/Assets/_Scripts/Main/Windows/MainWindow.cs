@@ -20,7 +20,8 @@ public class MainWindow : MonoBehaviour
 	[Space(5)]
 	public StatisticsWindow statisticsWindow;
 
-
+    [Space]
+    public CompletedChallengeWindow completedChallengeWindow;
 
 	[Space(10)]
     [Header("Home screen")]
@@ -98,7 +99,7 @@ public class MainWindow : MonoBehaviour
 	//animates the screen
 	private void AnimateScreen()
 	{
-        int stepsToday = int.Parse(stepsTodayValue.text);
+		int stepsToday = int.Parse(stepsTodayValue.text);
         float distanceToday = float.Parse(distanceTodayValue.text);
 
         int stepGoal = UserGoals.GetDailyStepGoal();
@@ -110,9 +111,23 @@ public class MainWindow : MonoBehaviour
         float distancePercentage = (float)(distanceToday / distanceGoal) * 100;
 
 
-        #region checking for goal completion
+        #region Setting the percent text to the right size
 
-        if (targetPercentage >= 100)
+        targetProgressBar.percentText.text = targetPercentage + " %";
+		stepsProgressBar.percentText.text = stepsPercentage + " %";
+		distanceProgressBar.percentText.text = distancePercentage + " %";
+
+		targetProgressBar.percentText.enableAutoSizing = false;
+		stepsProgressBar.percentText.enableAutoSizing = false;
+		distanceProgressBar.percentText.enableAutoSizing = false;
+
+		#endregion
+
+
+
+		#region checking for goal completion
+
+		if (targetPercentage >= 100)
         {
             targetPercentage = 100;
 
@@ -607,7 +622,7 @@ public class MainWindow : MonoBehaviour
 
 
 
-    #region completing goals
+    #region Completing goals
 
     private async void UserCompletedChallenge(float targetPercentage)
     {
@@ -626,7 +641,11 @@ public class MainWindow : MonoBehaviour
         //make new 'completedChallenge' animation
         //targetProgressBar.GetComponent<Animator>().Play("completedChallenge");
         targetProgressBar.GetComponent<Animator>().Play("completedGoal");
+
+        //open completed challenge window
+        completedChallengeWindow.OpenWindow(true);
     }
+
 
     private async void UserHitStepGoal(float stepsPercentage)
     {
@@ -643,6 +662,7 @@ public class MainWindow : MonoBehaviour
 
         stepsProgressBar.GetComponent<Animator>().Play("completedGoal");
     }
+
 
     private async void UserHitDistanceGoal(float distancePercentage)
     {
@@ -661,7 +681,6 @@ public class MainWindow : MonoBehaviour
     }
 
     #endregion
-
 
 
 }
