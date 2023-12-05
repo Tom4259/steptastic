@@ -784,6 +784,7 @@ public class APIManager : MonoBehaviour
 			public string location1;
 			public string location2;
 
+			public bool addCurrentLocation = true;
 			public float currentLattitude;
 			public float currentLongitude;
 
@@ -798,12 +799,26 @@ public class APIManager : MonoBehaviour
 		/// </summary>
 		public static async Task<Sprite> GetMapImage(MapData data)
 		{
-			string URL = "https://www.mapquestapi.com/staticmap/v5/map?key=frXZBd4uCdYXhcwhVMPsug3yjf6oXQ5b";
-			URL += "&shape=" + data.startLocation + "|" + data.endLocation;
-			URL += "&locations=" + data.location1 + "|flag-start-md||" + data.location2 + "|flag-end-md||" + data.currentLattitude + "," + data.currentLongitude + "|flag-you-sm";
-			URL += "&size=" + data.imageWidth + "," + data.imageHeight + "@2x";
-			URL += "&zoom=" + data.zoom;
-			URL += "&routeArc=true";
+            string URL = "https://www.mapquestapi.com/staticmap/v5/map?key=frXZBd4uCdYXhcwhVMPsug3yjf6oXQ5b";
+
+            if (data.addCurrentLocation)
+			{                
+                URL += "&shape=" + data.startLocation + "|" + data.endLocation;
+                URL += "&locations=" + data.location1 + "|flag-start-md||" + data.location2 + "|flag-end-md||" + data.currentLattitude + "," + data.currentLongitude + "|flag-you-sm";
+                URL += "&size=" + data.imageWidth + "," + data.imageHeight + "@2x";
+                URL += "&zoom=" + data.zoom;
+                URL += "&routeArc=true";
+            }
+			else
+			{
+                URL += "&shape=" + data.startLocation + "|" + data.endLocation;
+                URL += "&locations=" + data.location1 + "|flag-start-md||" + data.location2 + "|flag-end-md";
+                URL += "&size=" + data.imageWidth + "," + data.imageHeight + "@2x";
+                URL += "&zoom=" + data.zoom;
+                URL += "&routeArc=true";
+            }
+
+			
 
 			//Debug.Log("[MapQuestAPI]", () => URL);
 

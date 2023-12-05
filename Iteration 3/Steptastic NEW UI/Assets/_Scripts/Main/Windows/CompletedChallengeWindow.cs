@@ -4,10 +4,16 @@ using UnityEngine;
 using System;
 using System.Threading.Tasks;
 using LitJson;
+using TMPro;
+using UnityEngine.UI;
 
 public class CompletedChallengeWindow : MonoBehaviour
 {
 	private RectTransform rect;
+
+	[Space]
+	public TMP_Text challengeDescriptionText;
+	public Image mapImage;
 
 
 	private void Awake()
@@ -50,9 +56,34 @@ public class CompletedChallengeWindow : MonoBehaviour
 
 	public async void LoadChallengeInfo()
 	{
-		Debug.Log("Total steps: " + await GetTotalSteps());
-		Debug.Log("Total distance: " + GetTotalDistance());
-	}
+		double totalSteps = await GetTotalSteps();
+		float totalDistance = GetTotalDistance();
+
+		Debug.Log(() => totalSteps);
+		Debug.Log(() => totalDistance);
+
+		APIManager.MapQuest.MapData mData = new APIManager.MapQuest.MapData
+		{
+			startLocation = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong),
+			endLocation = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong),
+
+			location1 = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong),
+			location2 = PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong),
+
+			addCurrentLocation = false,
+
+            imageHeight = (int)Math.Round(mapImage.rectTransform.rect.height),
+            imageWidth = (int)Math.Round(mapImage.rectTransform.rect.width),
+
+            zoom = UsefulFunctions.GetMapZoomApproximation() + 1
+        };
+
+        mapImage.sprite = await APIManager.MapQuest.GetMapImage(mData);
+
+		challengeDescriptionText.text = challengeDescriptionText.text.Replace("{{steps}}", totalSteps.ToString())
+			.Replace("{{distance}}", totalDistance.ToString());
+
+    }
 
 
 

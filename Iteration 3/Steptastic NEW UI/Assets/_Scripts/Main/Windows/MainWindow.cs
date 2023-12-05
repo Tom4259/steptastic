@@ -628,6 +628,9 @@ public class MainWindow : MonoBehaviour
     {
         Debug.Log("[ChallengeInfo] User completed challenge");
 
+        //preloading the challenge data
+        completedChallengeWindow.LoadChallengeInfo();
+
         //animating the main challenge progress bar and daily goal progress bars
         LeanTween.value(gameObject, (float f) =>
         {
@@ -636,15 +639,13 @@ public class MainWindow : MonoBehaviour
 
         await Task.Delay((int)animationTime * 2000);
 
-        //grow the progress bar for effect here
-
+        //grow the progress bar for effect
         //make new 'completedChallenge' animation
         //targetProgressBar.GetComponent<Animator>().Play("completedChallenge");
         targetProgressBar.GetComponent<Animator>().Play("completedGoal");
 
         //open completed challenge window
-        completedChallengeWindow.OpenWindow(true);
-        completedChallengeWindow.LoadChallengeInfo();
+        completedChallengeWindow.OpenWindow(true);        
     }
 
 
@@ -659,8 +660,7 @@ public class MainWindow : MonoBehaviour
 
         await Task.Delay((int)animationTime * 2000);
 
-        //grow the progress bar for effect here
-
+        //grow the progress bar for effect
         stepsProgressBar.GetComponent<Animator>().Play("completedGoal");
     }
 
@@ -676,8 +676,7 @@ public class MainWindow : MonoBehaviour
 
         await Task.Delay((int)animationTime * 2000);
 
-        //grow the progress bar for effect here
-
+        //grow the progress bar for effect
         distanceProgressBar.GetComponent<Animator>().Play("completedGoal");
     }
 
