@@ -12,7 +12,8 @@ public class CompletedChallengeWindow : MonoBehaviour
 	private RectTransform rect;
 
 	[Space]
-	public TMP_Text challengeDescriptionText;
+	public TMP_Text challengeDescription1Text;
+	public TMP_Text challengeDescription2Text;
 	public Image mapImage;
 
 
@@ -80,8 +81,17 @@ public class CompletedChallengeWindow : MonoBehaviour
 
         mapImage.sprite = await APIManager.MapQuest.GetMapImage(mData);
 
-		challengeDescriptionText.text = challengeDescriptionText.text.Replace("{{steps}}", totalSteps.ToString())
-			.Replace("{{distance}}", totalDistance.ToString());
+		double daysToCompletion = (DateTime.Today - PlayerPrefsX.GetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate)).TotalDays;
+
+
+        challengeDescription1Text.text = challengeDescription1Text.text.Replace("{{steps}}", totalSteps.ToString("#,##0"))
+			.Replace("{{distance}}", Math.Round(totalDistance, 2).ToString())
+			.Replace("{{startLocation}}", PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationCapital) + ", " + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationName))
+			.Replace("{{endLocation}}", PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationCapital) + ", " + PlayerPrefsX.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationName))
+			.Replace("{{days}}", daysToCompletion.ToString());
+
+		challengeDescription2Text.text = challengeDescription2Text.text.Replace("{{stepsAverageDay}}", Math.Round((float)totalSteps / (float)daysToCompletion, 0).ToString("#,##0"))
+			.Replace("{{distanceAverageDay}}", Math.Round(totalDistance / (float)daysToCompletion, 0).ToString());
 
     }
 
