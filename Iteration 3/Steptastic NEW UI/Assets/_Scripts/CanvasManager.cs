@@ -170,7 +170,7 @@ public class CanvasManager : MonoBehaviour
         isMainWindowOpen = true;
 
         mainWindow.gameObject.SetActive(true);
-        navigationBar.gameObject.SetActive(true);
+        //navigationBar.gameObject.SetActive(true);
 
         if (animation)
         {
