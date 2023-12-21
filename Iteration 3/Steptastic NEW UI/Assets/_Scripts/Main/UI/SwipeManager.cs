@@ -46,6 +46,7 @@ public class SwipeManager : MonoBehaviour
 
     private void Update()
     {
+        //checking for a touch input
         if(Input.touchCount > 0)
         {
             if(Input.GetTouch(0).phase == TouchPhase.Began)
@@ -56,7 +57,7 @@ public class SwipeManager : MonoBehaviour
             {
                 endPosition = Input.GetTouch(0).position;
                 
-
+                //checking the distance of the swipe to make usre it wasn't accidental
                 if(DistanceOfSwipe(startPosition.x, endPosition.x) > DistanceOfSwipe(startPosition.y, endPosition.y))
                 {
                     if ((DistanceOfSwipe(startPosition.x, endPosition.x) >= swipeThreshhold))
@@ -89,6 +90,7 @@ public class SwipeManager : MonoBehaviour
         }
     }
 
+    //calculates the distance of the swipe
     private float DistanceOfSwipe(float start, float end)
     {
         return (end - start) > 0 ? (end - start) : ((end - start) * -1);

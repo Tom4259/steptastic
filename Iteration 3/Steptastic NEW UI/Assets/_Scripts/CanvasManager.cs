@@ -81,6 +81,7 @@ public class CanvasManager : MonoBehaviour
 
     private async void Start()
     {
+        //allows for smooth scrolling
         Application.targetFrameRate = 60;
 
         //if the user has completed the setup stage

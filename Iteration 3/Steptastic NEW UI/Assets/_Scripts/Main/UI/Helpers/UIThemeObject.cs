@@ -24,6 +24,7 @@ public class UIThemeObject : MonoBehaviour
     {
         manager = FindObjectOfType<UIThemeManager>();
 
+        //adding callback for when the device theme changes
         manager.onDarkMode += SetDarkMode;
         manager.onLightMode += SetLightMode;
 

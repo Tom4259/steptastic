@@ -25,6 +25,8 @@ public class ProfilePanel : MonoBehaviour
         setupManager = GetComponentInParent<SetupManager>();
     }
 
+
+    //updates the avater indicator to show the selected choice
     public void SetNewAvatarIndex(int index)
     {
         avatarSelectionMarker.gameObject.SetActive(true);

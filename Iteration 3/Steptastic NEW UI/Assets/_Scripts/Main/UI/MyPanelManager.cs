@@ -20,6 +20,7 @@ public class MyPanelManager : MonoBehaviour
 
 
 
+    //puts all of the panels in the right order, makes them visible, and sets the correct position
     private void Start()
     {
         maxPanels = panels.Length - 1;
@@ -45,7 +46,7 @@ public class MyPanelManager : MonoBehaviour
         }
     }
 
-
+    //called on button press, updates the current panel, next panel, and animates then animates the screen
     public void NextPanel()
     {
         if(currentPanelIndex < maxPanels)
@@ -81,6 +82,7 @@ public class MyPanelManager : MonoBehaviour
     }
 
 
+    //animates all of the visible panels
     private async void AnimatePanels(RectTransform currentPanel, RectTransform secondPanel, RectTransform thirdPanel)
     {
         //setting current panel position
@@ -111,7 +113,7 @@ public class MyPanelManager : MonoBehaviour
             currentPanelColour,
             0.75f).setEaseOutQuint();
 
-
+            //setting panel size
             LeanTween.value(gameObject, (float f) =>
             {
                 secondPanel.transform.localScale = new Vector3(f, f, f);
@@ -123,6 +125,7 @@ public class MyPanelManager : MonoBehaviour
         {
             await Task.Delay(450);
 
+            //setting panel position
             LeanTween.value(gameObject, (float f) =>
             {
                 thirdPanel.anchoredPosition = new Vector2(0, f);

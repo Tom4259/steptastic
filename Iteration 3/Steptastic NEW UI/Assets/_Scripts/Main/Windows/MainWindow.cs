@@ -123,7 +123,7 @@ public class MainWindow : MonoBehaviour
 		#endregion
 
 
-
+        //making sure if the percentage is over 100%, then 100% is displayed, not anything over
 		#region checking for goal completion
 
 		if (targetPercentage >= 100)

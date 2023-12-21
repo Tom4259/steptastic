@@ -43,10 +43,11 @@ public class DebugCanvas : MonoBehaviour
             Destroy(this);
         }
 
-        //if the build is a development build, then show the debug options
+        //if the build is a development build, then show the debug options, didn't allow publishing a development build to test on Google Play
         //gameObject.SetActive(Debug.isDebugBuild);
         //logManager.gameObject.SetActive(Debug.isDebugBuild);        
 
+//depending on the platform, show/hide relevant debug items
 #if UNITY_ANDROID || UNITY_EDITOR
 
         for (int i = 0; i < iosOnlyObjects.Length; i++)
@@ -136,6 +137,7 @@ public class DebugCanvas : MonoBehaviour
     }
 
 
+    //resets the app to the default state, as if it was just installed
     public void ResetApp()
     {
         PlayerPrefs.DeleteAll();
@@ -143,6 +145,7 @@ public class DebugCanvas : MonoBehaviour
     }
 
 
+    //setting the start dat (debug controls)
     #region start date
 
     private void LoadDate()
@@ -164,6 +167,7 @@ public class DebugCanvas : MonoBehaviour
     #endregion
 
 
+    //setting/getting auth codes
     #region codes
 
     public void ReloadTokens()

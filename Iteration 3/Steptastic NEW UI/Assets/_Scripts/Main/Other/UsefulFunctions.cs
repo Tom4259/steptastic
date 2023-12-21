@@ -11,6 +11,7 @@ public class UsefulFunctions
     }
 
 
+    //calculates the distance between 2 lat-longs and returns in given units, default is kilometer
     public static double DistanceTo(double lat1, double lon1, double lat2, double lon2, char unit = 'K')
     {
         double rlat1 = Math.PI*lat1/180;
@@ -37,6 +38,7 @@ public class UsefulFunctions
         return dist;
     }
 
+    //calculates the distance between 2 lat-longs and returns in given units, default is kilometer, but using an object for cleaner code
     public static double DistanceTo(Coordinates location1, Coordinates location2, char unit = 'K')
     {
         double rlat1 = Math.PI*location1.Lat/180;
@@ -65,6 +67,7 @@ public class UsefulFunctions
 
 
     //may need to update these values. test more
+    //calculates a value for the zoom size of the map image
     public static int GetMapZoomApproximation()
     {
         int dist = (int)PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.ChallengeData.totalDistanceToTarget);
@@ -97,6 +100,7 @@ public class UsefulFunctions
         }
     }
 
+    //returns a lat-long from a percentage between 2 lat longs
     public static Tuple<float, float> LatLongBetweenTwoLatLongs(float lat1, float long1, float lat2, float long2, float per)
     {
         per /= 100;
@@ -110,7 +114,7 @@ public class UsefulFunctions
     }
 
 
-
+    //calculates the average datetime between 2 date times
     public static DateTime AverageDateBetweenDateTimes(List<DateTime> dates)
     {
         var count = dates.Count;
@@ -125,11 +129,13 @@ public class UsefulFunctions
         return new DateTime((long)temp);
     }
 
+    //maps a float between 1 range to a different range
     public static float Map(float value, float a1, float a2, float b1, float b2)
     {
         return b1 + (value - a1) * (b2 - b1) / (a2 - a1);
     }
 
+    //adds an ordinal onto a number
     public static string AddOrdinal(int num)
     {
         if (num <= 0) return num.ToString();
@@ -155,12 +161,14 @@ public class UsefulFunctions
         }
     }
 
+    //formats a number into a more readable number
     public static string ThousandToK(int num)
     {
 		return((double)num / 1000).ToString("0.#k");
 	}
 
 
+    //returns the start of the week datetime
     public static DateTime StartOfWeek()
     {
         return DateTime.Today.AddDays(-((int)DateTime.Today.DayOfWeek - 1));

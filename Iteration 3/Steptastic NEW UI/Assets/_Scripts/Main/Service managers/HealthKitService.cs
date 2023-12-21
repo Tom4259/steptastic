@@ -38,7 +38,7 @@ public class HealthKitService : MonoBehaviour
         }
 
 #if UNITY_IOS || UNITY_EDITOR
-
+        //sets the local variables to components on the gameobject
         healthStore = GetComponent<HealthStore>();
         dataTypes = GetComponent<HealthKitDataTypes>();
 #endif

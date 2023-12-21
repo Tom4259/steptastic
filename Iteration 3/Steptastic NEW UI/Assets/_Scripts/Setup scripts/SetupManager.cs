@@ -19,6 +19,7 @@ public class SetupManager : MonoBehaviour
         panelManager = GetComponentInChildren<MyPanelManager>();
     }
 
+    //opens the next panel for the user to complete
     public void NextPanel()
     {
         if(panelManager.currentPanelIndex != 3)

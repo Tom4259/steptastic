@@ -110,6 +110,7 @@ public class AuthenticatePanel : MonoBehaviour
 
 #endif
 
+    //shows an error, if the user hasn't authorised all scopes
     public void ShowScopeError()
     {
 #if UNITY_ANDROID || UNITY_EDITOR

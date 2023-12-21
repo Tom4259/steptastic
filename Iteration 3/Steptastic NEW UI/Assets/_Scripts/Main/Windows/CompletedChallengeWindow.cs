@@ -54,7 +54,7 @@ public class CompletedChallengeWindow : MonoBehaviour
 		}
 	}
 
-
+	//shows the user some information of their completed challenge
 	public async void LoadChallengeInfo()
 	{
 		double totalSteps = await GetTotalSteps();

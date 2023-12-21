@@ -19,6 +19,7 @@ public class LoadingScreen : MonoBehaviour
     {
         JsonData json = JsonMapper.ToObject(Resources.Load<TextAsset>(loadingLinesFile).ToString());
 
+        //adds all of the lines into a list of strings
         for (int i = 0; i < json.Count; i++)
         {
             loadingLines.Add(json[i].ToString());
@@ -27,6 +28,7 @@ public class LoadingScreen : MonoBehaviour
         RefreshLoadingLine();
     }
 
+    //changes the entertainment line while the main page is loading
     private async void RefreshLoadingLine()
     {
         while (true)

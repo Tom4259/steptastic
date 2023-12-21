@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//a script to control a collection of buttons to work as a tab group
 public class TabGroup : MonoBehaviour
 {
     public int selectedTabIndex = 0;

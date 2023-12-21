@@ -362,7 +362,8 @@ public class APIManager : MonoBehaviour
 		static HealthKitService HK = HealthKitService.Instance;
 
 
-
+		//when making a request to HealthKit, there is a small delay, if there is a request that is still currently being executed, then it will throw an error
+		//this is used to limit the number of requests to 1 until it has completed
 		private static SemaphoreSlim HKFree = new SemaphoreSlim(1, 1);
 
 
@@ -386,7 +387,7 @@ public class APIManager : MonoBehaviour
 					authorisationWindowCompleted = true;
 				});
 
-
+				//waits for the user to authorise Steptastic, as it is an async operation, cannot be run procedurally
 				while (!authorisationWindowCompleted)
 				{
 					//Debug.Log("[HealthKitAPI] Waiting for authorisation to finish...");
@@ -431,7 +432,7 @@ public class APIManager : MonoBehaviour
 
 		#region values
 
-
+		//gets the number of steps the user has done between 2 datetimes
 		public static async Task<double> GetSteps(DateTime startPoint, DateTime endPoint)
 		{
 			await HKFree.WaitAsync();
@@ -442,6 +443,7 @@ public class APIManager : MonoBehaviour
 
 			try
 			{
+				//making the request to healthkit
                 HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
                 {
                     if (samplesW.Count > 0)
@@ -462,6 +464,7 @@ public class APIManager : MonoBehaviour
                     }
                 });
 
+				//waiting for the request to complete
                 while (!done)
                 {
                     await Task.Delay(100);
@@ -469,6 +472,7 @@ public class APIManager : MonoBehaviour
             }
 			finally
 			{
+				//telling the queue that the task has completed
                 HKFree.Release();
             }
 			
@@ -477,6 +481,7 @@ public class APIManager : MonoBehaviour
 		}
 
 
+		//returns the amount of meters the user has covered between the 2 datetimes
 		public static async Task<double> GetDistance(DateTimeOffset startPoint, DateTimeOffset endPoint)
 		{
 			await HKFree.WaitAsync();
@@ -487,6 +492,7 @@ public class APIManager : MonoBehaviour
 
 			try
 			{
+				//making the request to healthkit
                 HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
                 {
                     if (samplesW.Count > 0)
@@ -509,7 +515,7 @@ public class APIManager : MonoBehaviour
                     }
                 });
 
-
+				//waiting for the request to complete
                 while (!done)
                 {
                     await Task.Delay(100);
@@ -528,6 +534,7 @@ public class APIManager : MonoBehaviour
 
 		#region lists
 
+		//returns a list of items, containing the datetime, and amount of steps from healthkit
 		public static async Task<List<QuantityData>> GetStepsList(DateTime startPoint, DateTime endPoint)
 		{
 			await HKFree.WaitAsync();
@@ -538,6 +545,7 @@ public class APIManager : MonoBehaviour
 
 			try
 			{
+				//making the request to healthkit
                 HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierStepCount, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
                 {
                     if (samplesW.Count > 0)
@@ -566,6 +574,7 @@ public class APIManager : MonoBehaviour
                     }
                 });
 
+				//waiting for the request to complete
                 while (!done)
                 {
                     await Task.Delay(100);
@@ -580,7 +589,7 @@ public class APIManager : MonoBehaviour
 			return stepsList;
 		}
 
-
+		//returns a list of items, containing the datetime, and amount of meters covered from healthkit
 		public static async Task<List<QuantityData>> GetDistanceList(DateTime startPoint, DateTime endPoint)
 		{
 			await HKFree.WaitAsync();
@@ -591,6 +600,7 @@ public class APIManager : MonoBehaviour
 
 			try
 			{
+				//making the request to healthkit
                 HK.healthStore.ReadQuantitySamples(HKDataType.HKQuantityTypeIdentifierDistanceWalkingRunning, startPoint, endPoint, delegate (List<QuantitySample> samplesW, Error e)
                 {
                     if (samplesW.Count > 0)
@@ -696,6 +706,7 @@ public class APIManager : MonoBehaviour
 				cleanedData.Add(newItem);
 			}
 
+			//looks through the list for items where the hour is the same, then combines them, and adds the values to make a total for the hour
 			cleanedData = cleanedData
 				.GroupBy(item => item.timeOfData.Hour)
 				.Select(group => group.First())
@@ -762,6 +773,8 @@ public class APIManager : MonoBehaviour
 				cleanedData.Add(newItem);
 			}
 
+			//cleans the list of duplicates, combining the two values
+			//can add checks to make it check if the values are in the same month, which allows it to work over multiple months
 			cleanedData = cleanedData
 				.GroupBy(item => item.timeOfData.Day)
 				.Select(group => group.First())

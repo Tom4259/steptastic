@@ -61,7 +61,7 @@ public class NavigationBar : MonoBehaviour
     }
 
 
-
+    //opens the window determined by which button was clicked
     public void OpenWindow(Button btn)
     {
         for (int i = 0; i < buttons.Length; i++)
@@ -82,6 +82,7 @@ public class NavigationBar : MonoBehaviour
         }
     }
 
+    //opens the window determined by which button was clicked
     public void OpenWindow(int index)
     {
         for (int i = 0; i < buttons.Length; i++)
@@ -102,6 +103,7 @@ public class NavigationBar : MonoBehaviour
         }
     }
 
+    //opens the window determined by which button was clicked and calls any additional actions that need to be run
     public void OpenWindow(int index, UnityAction additionalAction)
     {
         for (int i = 0; i < buttons.Length; i++)
@@ -127,6 +129,7 @@ public class NavigationBar : MonoBehaviour
 
     #region nav bar changes
 
+    //animates the navigation bar
     private void NavBarTransition(ButtonConfig config)
     {
         //setting window pointer position
@@ -182,7 +185,7 @@ public class NavigationBar : MonoBehaviour
     }
 
 
-
+    //when a swipe is detected, open the window to the right
     public void OnSwipeLeft()
     {
         if(currentWindowIndex + 1 <= maximumIndex && CanvasManager.instance.isMainWindowOpen)
@@ -191,6 +194,7 @@ public class NavigationBar : MonoBehaviour
         }
     }
 
+    //when a swipe is detected, open the window to the left
     public void OnSwipeRight()
     {
         if (currentWindowIndex - 1 >= minimumIndex && CanvasManager.instance.isMainWindowOpen)
