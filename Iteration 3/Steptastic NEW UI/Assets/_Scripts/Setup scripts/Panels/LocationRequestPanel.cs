@@ -39,8 +39,8 @@ public class LocationRequestPanel : MonoBehaviour
     {
         continueButton.Interactable(false);
 
-        useLocationToggle.isOn = true;
-        useLocationToggle.GetComponent<CustomToggle>().UpdateState();
+        //useLocationToggle.isOn = true;
+        //useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
         AndroidRuntimePermissions.Permission[] result = await AndroidRuntimePermissions.RequestPermissionsAsync("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION");
 
@@ -55,8 +55,8 @@ public class LocationRequestPanel : MonoBehaviour
                 Debug.Log("[LocationRequest] " + "Location not enabled on device or app does not have permission to access location");
                 PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
 
-                useLocationToggle.isOn = false;
-                useLocationToggle.GetComponent<CustomToggle>().UpdateState();
+                //useLocationToggle.isOn = false;
+                //useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
                 continueButton.Interactable(true);
             }
@@ -72,7 +72,7 @@ public class LocationRequestPanel : MonoBehaviour
 
                 //Debug.Log("[LocationRequest] " + "Location services are initializing: maxWait " + maxWait);
 
-                useLocationToggle.GetComponent<CustomToggle>().UpdateState();
+                //useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
                 maxWait--;
             }
@@ -84,8 +84,8 @@ public class LocationRequestPanel : MonoBehaviour
 
                 PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
 
-                useLocationToggle.isOn = false;
-                useLocationToggle.GetComponent<CustomToggle>().UpdateState();
+                //useLocationToggle.isOn = false;
+                //useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
                 continueButton.Interactable(true);
 
@@ -99,8 +99,8 @@ public class LocationRequestPanel : MonoBehaviour
 
                 PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, false);
 
-                useLocationToggle.isOn = false;
-                useLocationToggle.GetComponent<CustomToggle>().UpdateState();
+                //useLocationToggle.isOn = false;
+                //useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
                 continueButton.Interactable(true);
 
@@ -108,7 +108,7 @@ public class LocationRequestPanel : MonoBehaviour
             }
             else
             {
-                useLocationToggle.GetComponent<CustomToggle>().UpdateState();
+                //useLocationToggle.GetComponent<CustomToggle>().UpdateState();
 
                 float lat = Input.location.lastData.latitude;
                 float lon = Input.location.lastData.longitude;
@@ -122,7 +122,7 @@ public class LocationRequestPanel : MonoBehaviour
 
                 PlayerPrefsX.SetBool(PlayerPrefsLocations.User.Permissions.Location, true);
 
-                CanvasManager.instance.challengeSetupWindow.SetStartLocationUsingGPS();
+                CanvasManager.instance.challengeSetupPanel.SetStartLocationUsingGPS();
             }
 
             continueButton.Interactable(true);

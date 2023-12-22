@@ -5,7 +5,13 @@ using TMPro;
 using System;
 using LitJson;
 using GF = APIManager.GoogleFit;
+
+#if UNITY_IOS
+
 using HK = APIManager.HealthKit;
+
+#endif
+
 using UnityEngine.UI;
 using Michsky.MUIP;
 using System.Threading.Tasks;
@@ -120,11 +126,11 @@ public class MainWindow : MonoBehaviour
 		stepsProgressBar.percentText.enableAutoSizing = false;
 		distanceProgressBar.percentText.enableAutoSizing = false;
 
-		#endregion
+        #endregion
 
 
         //making sure if the percentage is over 100%, then 100% is displayed, not anything over
-		#region checking for goal completion
+        #region checking for goal completion
 
 		if (targetPercentage >= 100)
         {
