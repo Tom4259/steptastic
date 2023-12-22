@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class SetupManager : MonoBehaviour
 {
@@ -35,6 +36,8 @@ public class SetupManager : MonoBehaviour
     public void CompleteSetup()
     {
         Debug.Log("[SetupManager] Completed setup");
+
+        PlayerPrefsX.SetDateTime(PlayerPrefsLocations.User.Challenge.ChallengeData.startDate, DateTime.Today);
 
         canvasManager.SetupCompleted();
     }

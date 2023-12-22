@@ -298,6 +298,8 @@ public class ChallengeSetupPanel : MonoBehaviour
 
     public void NextPanel()
     {
+        SaveChallengeData();
+
         setupManager.NextPanel();
     }
 }

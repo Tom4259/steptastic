@@ -458,20 +458,20 @@ public class MainWindow : MonoBehaviour
         distanceChart.SetSerieData(distanceOverDay, 0, true);
     }
 
-    #endregion
+	#endregion
 
 #endif
 
-    #endregion
+	#endregion
 
 
 
-    #region Health Kit
+	#region Health Kit
 
 
 #if UNITY_IOS && !UNITY_EDITOR
 
-    #region progress to target
+	#region progress to target
 
     /// <summary>
     /// calculates the user progress based on the amount of distance the user has covered since the start date
@@ -498,9 +498,9 @@ public class MainWindow : MonoBehaviour
         return;
     }
 
-    #endregion
+	#endregion
 
-    #region map image
+	#region map image
 
 
     /// <summary>
@@ -508,19 +508,23 @@ public class MainWindow : MonoBehaviour
     /// </summary>
     private async void GetMapImage()
     {
-        #region variables
+		#region variables
+
+        //Debug.Log(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong));
+        //Debug.Log(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong));
 
         float startLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[0]);
         float startLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.startLocationLatLong).Split(',')[1]);
+
         float endLat = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[0]);
         float endLong = float.Parse(PlayerPrefs.GetString(PlayerPrefsLocations.User.Challenge.ChallengeData.endLocationLatLong).Split(',')[1]);
 
         float currentPointLat = UsefulFunctions.LatLongBetweenTwoLatLongs(startLat, startLong, endLat, endLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item1;
         float currentPointLong = UsefulFunctions.LatLongBetweenTwoLatLongs(startLat, startLong, endLat, endLong, PlayerPrefsX.GetFloat(PlayerPrefsLocations.User.Challenge.UserData.percentCompleted)).Item2;
 
-        #endregion
+		#endregion
 
-        #region debugging variables
+		#region debugging variables
 
         Debug.Log("[MapImageIOS]", () => startLat);
         Debug.Log("[MapImageIOS]", () => startLong);
@@ -530,7 +534,7 @@ public class MainWindow : MonoBehaviour
         Debug.Log("[MapImageIOS]", () => currentPointLat);
         Debug.Log("[MapImageIOS]", () => currentPointLong);
 
-        #endregion
+		#endregion
 
         //can possible optimise more
         APIManager.MapQuest.MapData mData = new APIManager.MapQuest.MapData
@@ -556,9 +560,9 @@ public class MainWindow : MonoBehaviour
     }
 
 
-    #endregion
+	#endregion
 
-    #region UI blocks
+	#region UI blocks
 
     //shows a more professional placeholder
     private void ResetUIBlockText()
@@ -587,9 +591,9 @@ public class MainWindow : MonoBehaviour
         distanceTodayValue.text = distanceToday.ToString();
     }
 
-    #endregion
+	#endregion
 
-    #region over the day graph
+	#region over the day graph
 
     private async void CreateUIBlockGraph()
     {
@@ -618,18 +622,18 @@ public class MainWindow : MonoBehaviour
         distanceChart.SetSerieData(distanceValues, 0, true);
     }
 
-    #endregion
+	#endregion
 
 #endif
 
 
-    #endregion
+	#endregion
 
 
 
-    #region Completing goals
+	#region Completing goals
 
-    private async void UserCompletedChallenge(float targetPercentage)
+	private async void UserCompletedChallenge(float targetPercentage)
     {
         Debug.Log("[ChallengeInfo] User completed challenge");
 
